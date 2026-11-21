@@ -1,0 +1,66 @@
+{
+  "schema": "eog.wetland_duplicate_publication_cohort_sensitivity.receipt.v1",
+  "status": "SOURCE_VERIFIED_DESCRIPTIVE_INVARIANCE_OCCUPANCY_BLOCKED",
+  "analyzed": "2026-11-14",
+  "analysis_kind": "post-exposure exploratory sensitivity; not a new preregistered or independent endpoint",
+  "original_authors": "Mizsei and Wenner (2025)",
+  "source_doi": "10.5281/zenodo.15044115",
+  "source_repo_commit": "zuizui0223/frogcs@5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+  "source_sha256": {
+    "survey": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319"
+  },
+  "original_r_code_md5": {
+    "Q1": "fcab406cd8a192a07cc97582c19011ad",
+    "Q2": "a2b2f6a30b7243c4b9ece3b5eb75dba6"
+  },
+  "original_r_code_sha256": {
+    "Q1": "35afcfd2525e2a84ad7792ddf2fbd25f31f189d4d77a3f80d9662182323f89d7",
+    "Q2": "5ed4b214f314c8c5fb1bfeb7b058a4cd662a36b5c47b193e9b5c0def385fd9af"
+  },
+  "publication_source_cohorts": {
+    "archived_all": {
+      "sites": 29,
+      "raw_survey_rows": 381,
+      "unique_survey_ids": 379,
+      "site_species_ambiguous": 0,
+      "site_method_species_ambiguous": 1,
+      "survey_species_ambiguous": 5
+    },
+    "published_q1": {
+      "sites": 27,
+      "raw_survey_rows": 351,
+      "unique_survey_ids": 349,
+      "excluded_sites": [
+        "kis-banyato",
+        "vadasz-turjan"
+      ],
+      "site_species_ambiguous": 0,
+      "site_method_species_ambiguous": 1,
+      "survey_species_ambiguous": 5
+    },
+    "published_q2": {
+      "sites": 13,
+      "raw_survey_rows": 188,
+      "unique_survey_ids": 186,
+      "filter": "ci == intervention",
+      "site_species_ambiguous": 0,
+      "site_method_species_ambiguous": 1,
+      "survey_species_ambiguous": 5
+    }
+  },
+  "result_fingerprint": "8bc1571ca5e952a76bfea2fa4f8acb3857de8677ef03449d82135c1175a9b51e",
+  "authoritative_action": {
+    "run_id": 43584443106,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43584443106",
+    "conclusion": "success",
+    "artifact_id": 14109359085,
+    "artifact_zip_sha256": "9fbf68759be38f3744c15d1b3f5f8bf4bdf93d5785f884b81bc6a769f9b79eac"
+  },
+  "inference_boundary": [
+    "These are conditional four-scenario sensitivity bounds on observed binary detections, not occupancy probabilities.",
+    "Same-ID row source semantics remain unresolved; original R scripts resample rows to 20 per site.",
+    "No verified independent replicate effort, detection closure, abiotic-biotic-movement causal identification or novel EOG-WF endpoint.",
+    "The original Q1 and Q2 site rosters are verified from official R code; verification does not establish physical survey unit independence."
+  ]
+}

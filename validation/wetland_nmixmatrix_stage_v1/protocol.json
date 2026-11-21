@@ -1,0 +1,35 @@
+{
+  "schema": "eog.wetland_nmixmatrix_stage_v1.protocol",
+  "status": "POST_EXPOSURE_EXACT_STAGE_AUDIT",
+  "fixed_before_scoring_this_stage": true,
+  "question": "Do R hunviphab::nmixmatrix counts at the 20 pseudo-occasion columns faithfully encode the selected raw source row, and what duplicate-weight concentration and method/date representation remain?",
+  "source": {
+    "dataset": "Mizsei and Wenner 2025 Zenodo 10.5281/zenodo.15044115",
+    "raw_source_repo": "zuizui0223/frogcs",
+    "raw_commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "R_package_source_repo": "edvardmizsei/hunviphab",
+    "source_commit": "25d4c64da289ffcc14679619bb3b18bd494de872",
+    "nmixmatrix_git_blob_sha1": "40e0f5547cd67729e1c6d46d29a0ce2b75712a3a",
+    "survreps_git_blob_sha1": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+  },
+  "input_contract": "use unchanged source SHA and R4.4.3 seed123 source row mapping from the already-authenticated replay without replacement or normalization",
+  "outputs": [
+    "per site x pseudo-repeat x species, native selected row count versus nmixmatrix cell count, exact parity",
+    "observed_count>0 detection indicator as a derived audit label, not asserting the original paper's final y transformation",
+    "raw count>1 matrix-cell frequency; sum of raw counts",
+    "per-site distinct source rows and Kish duplicate-weight concentration nK=(sum w)^2/(sum w^2); explicitly NOT true independent detection sample size",
+    "method/date/group-key representation in selected pseudo-occasion rows",
+    "full auditable long table and fingerprint"
+  ],
+  "stop_rules": [
+    "do not fit unmarked or other occupancy model",
+    "do not overwrite raw data or infer trap independence",
+    "do not treat nK as statistical inferential ESS",
+    "no new EOG-WF prediction endpoint",
+    "no inference of causal A/B/M or true absence",
+    "do not claim source R4.4.3 matches authors' historical runtime"
+  ],
+  "interpretation": "a faithful source-stage diagnostic conditional on pinned public R functions and previously exposed seed123 selection; does not reproduce complete published model pipeline"
+}

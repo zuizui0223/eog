@@ -1,0 +1,39 @@
+{
+  "schema": "eog.wetland_seed_ensemble_v1.protocol",
+  "status": "POST_EXPOSURE_FIXED_BEFORE_SEED_ENSEMBLE_EXECUTION",
+  "purpose": "Quantify algorithmic pseudo-detection instability across fixed R seeds under exactly the archived native observations, without refitting occupancy or treating seeds as ecological replicates.",
+  "original_data": {
+    "source": "Mizsei and Wenner (2025), Zenodo 10.5281/zenodo.15044115 (CC BY 4.0)",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_q1_md5": "fcab406cd8a192a07cc97582c19011ad",
+    "original_q2_md5": "a2b2f6a30b7243c4b9ece3b5eb75dba6",
+    "survreps_repo": "edvardmizsei/hunviphab",
+    "survreps_commit": "25d4c64da289ffcc14679619bb3b18bd494de872",
+    "survreps_blob_sha1": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+  },
+  "design": {
+    "r_version": "4.4.3",
+    "rngkind": "Mersenne-Twister;Inversion;Rejection",
+    "seed_roster": "ALL consecutive integers 1..256 inclusive, no replacement, filtering, or post-result retry",
+    "embedded_original_seed": 123,
+    "cohorts": {
+      "q1": "exclude kis-banyato, vadasz-turjan; 27 wetland sites / 351 native rows",
+      "q2": "ci == intervention; 13 wetland sites / 188 native rows"
+    },
+    "original_r_preprocessing": "X0=1; season=1; reps=20; call pinned survreps once separately within each cohort after set.seed(seed)",
+    "raw_source_unit": "CSV row; no assumption that rows or surv group keys are independent physical traps",
+    "target": "per-site species recorded positivity, not latent occupancy or a causal effect",
+    "metrics": [
+      "lost raw-positive site×species pairs per cohort per seed",
+      "number of repeated selections and distinct source rows per cohort",
+      "number of pseudo-detection disagreements on the same 13 native-positive Q2 sites between Q1 and Q2 at the same seed",
+      "frequency with which each native-positive site×species pair is lost across seeds, compared with exact probability from n native site rows and k positive rows",
+      "overall means, medians, ranges and 5%-95% seed quantiles, descriptive Monte Carlo SE, not field uncertainty"
+    ],
+    "fixed_regressions": "seed=123 reproduces Q1 3 lost, 287 unique raw rows, Q2 6 lost, 153 unique raw rows, and seven cross-cohort disagreements using previous authenticated source mapping",
+    "stop": "No historical installed R package certification; no mainline EOG-WF fourth endpoint, occupancy likelihood, ecological A/B/M causality, or seed-based scientific replication."
+  }
+}

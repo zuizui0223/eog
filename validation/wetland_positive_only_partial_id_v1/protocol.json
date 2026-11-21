@@ -1,0 +1,47 @@
+{
+  "schema": "eog.wetland_positive_only_partial_identification_v1.protocol",
+  "status": "POST_EXPOSURE_THEORETICAL_SOURCE_CONTRACT_FROZEN_BEFORE_NEW_CI_RESULT",
+  "goal": "Turn the previously observed wetland method-induced prevalence sign reversals into explicit source-positive-only partial-identification intervals for a hypothetical static binary site-species status, without treating non-detection as biological absence.",
+  "original_source": {
+    "study": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837, source data Zenodo 10.5281/zenodo.15044115 CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_Q1": "27 sites, 13 intervention, 6 control, 8 artificial; nine species; 243 possible site-species binary statuses",
+    "previous_authenticated_lattice_result_fingerprint": "d9ce91154c34abc1e0619feb803b0a39b7721ef18dcd01c85279d3b6c581f254"
+  },
+  "logical_assumptions": {
+    "perfect_specificity_conditional": "Assume every source-recorded positive biological count indicates a genuinely positive site-species state; this assumption itself is not externally verified.",
+    "static_binary_site_status": "Hypothetical fixed site×species status over the source survey, solely to calculate set-theoretic identified bounds; not a claim of real biological closure over up to 91 days.",
+    "nondetection_uninformative": "Every original native site×species without a positive source record can be either present or absent; no validated negatives or detection probabilities.",
+    "no_additional_world_constraints": "No spatial interactions, ecological dynamics, richness constraints, phylogeny, joint occupancy dependence, prior odds, or A/B/M movement/viability restriction is imposed."
+  },
+  "fixed_design": {
+    "source_cohort": "exact original paper Q1 27 site IDs and categories; do not delete or duplicate source rows",
+    "method_panels": "all 15 nonempty subsets of acoustic, visual, dipnet, bottletrap (same fixed enumeration as method_channel_lattice_v1)",
+    "sign_contrasts": "9 source species × 3 pairs: intervention-control, intervention-artificial, artificial-control",
+    "record_definition": "positive within a selected method panel if any original CSV count>0 for that site×species on a method included in that panel",
+    "categorical_bounds": {
+      "for_group": "pi_g in [k_g / n_g, 1], conditional on zero false-positive recorded occurrences",
+      "for_contrast": "Delta_(A-B) in [k_A/n_A - 1, 1 - k_B/n_B], attainable extremes for independent unconstrained static site-status assignments",
+      "classify": "two_sided_strict_signs_possible | nonnegative_only | nonpositive_only | exact_zero; zero is always feasible"
+    }
+  },
+  "preregistered_endpoints": [
+    "all 15 method panels × 27 recorded taxon/category comparisons: observed positive-rate difference, exact conditional lower/upper possible true-rate difference, status class, attainable negative/zero/positive sign flags",
+    "for all five original full-vs-AV observed-strict-sign-reversal cases, display both full and AV conditional interval, verified containment and observed-sign versus latent-sign nonidentification",
+    "number of full versus AV contrasts that are two-sided, weakly one-sided, or exactly zero, with no strict ecological sign identification",
+    "site×species binary mask bookkeeping: 27×9=243 possible statuses, full positives 144, AV positives 104; free/unfixed count and 2^free unconstrained assignments, NOT actual EOG ecological worlds or probability/entropy claims",
+    "for all nested method panels P⊆Q, positive witness O_P⊆O_Q and conditional contrast interval I_Q ⊆ I_P, checked for all original 27 contrasts",
+    "full source positive constraints always supersede any restricted method panel (assuming perfect positive specificity): return full-source intervals as authoritative conditional bounds even if method-restricted observed rate reverses",
+    "record exact whole-panel source-positive site-species denominators and categories; SHA-stamped result/CSV source receipts"
+  ],
+  "hard_stop": [
+    "No true occupancy estimates, occupancy probabilities, verified absences, detection model, p-values, confidence intervals, independent ecological replicates, original R-unmarked coefficient refit, or causal treatment effect",
+    "2^free is a count of unconstrained Boolean static site×species completions, NOT counts of EOG finite transition worlds, not evidence of process identifiability, and not information entropy in a probabilistic sense",
+    "With no verified absences and all-present completion compatible, a strictly positive or strictly negative category-rate difference cannot be identified using source positives alone",
+    "Results conditional on recorded positives being correct; no assumption that the survey species status is closed over up to 91 days is verified",
+    "No model attribution to A, B or M, additional scored EOG-WF endpoint or merge of Draft PR #697"
+  ]
+}

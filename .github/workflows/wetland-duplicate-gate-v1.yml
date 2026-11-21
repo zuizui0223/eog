@@ -1,0 +1,724 @@
+name: Wetland amphibian survey identity conflict gate v1
+on:
+  pull_request:
+    paths:
+      - "benchmarks/wetland_duplicate_gate_v1.py"
+      - "tests/test_wetland_duplicate_gate_v1.py"
+      - "benchmarks/wetland_survey_grain_v1.py"
+      - "tests/test_wetland_survey_grain_v1.py"
+      - "docs/wetland_composite_key_grain_v1.md"
+      - "validation/wetland_survey_grain_v1/**"
+      - "benchmarks/wetland_duplicate_bounds_v1.py"
+      - "tests/test_wetland_duplicate_bounds_v1.py"
+      - "docs/wetland_duplicate_sensitivity_v1.md"
+      - "benchmarks/wetland_original_code_preflight_v1.py"
+      - "tests/test_wetland_original_code_preflight_v1.py"
+      - "benchmarks/wetland_survreps_evidence_loss_v1.py"
+      - "tests/test_wetland_survreps_evidence_loss_v1.py"
+      - "validation/wetland_survreps_evidence_v1/**"
+      - "validation/wetland_duplicate_gate_v1/**"
+      - "benchmarks/wetland_native_visit_ledger_v1.py"
+      - "tests/test_wetland_native_visit_ledger_v1.py"
+      - "docs/wetland_native_visit_ledger_v1.md"
+      - "validation/wetland_native_visit_ledger_v1/**"
+      - "benchmarks/wetland_temporal_window_feasibility_v1.py"
+      - "tests/test_wetland_temporal_window_feasibility_v1.py"
+      - "docs/wetland_temporal_window_feasibility_v1.md"
+      - "validation/wetland_temporal_window_feasibility_v1/**"
+      - "benchmarks/wetland_paired_method_core_v1.py"
+      - "tests/test_wetland_paired_method_core_v1.py"
+      - "docs/wetland_paired_method_core_v1.md"
+      - "validation/wetland_paired_method_core_v1/**"
+      - "benchmarks/wetland_method_group_contrast_v1.py"
+      - "tests/test_wetland_method_group_contrast_v1.py"
+      - "docs/wetland_method_group_contrast_v1.md"
+      - "validation/wetland_method_group_contrast_v1/**"
+      - "benchmarks/wetland_method_channel_lattice_v1.py"
+      - "tests/test_wetland_method_channel_lattice_v1.py"
+      - "docs/wetland_method_channel_lattice_v1.md"
+      - "validation/wetland_method_channel_lattice_v1/**"
+      - "benchmarks/wetland_method_site_jackknife_v1.py"
+      - "tests/test_wetland_method_site_jackknife_v1.py"
+      - "docs/wetland_method_site_jackknife_v1.md"
+      - "validation/wetland_method_site_jackknife_v1/**"
+      - "benchmarks/wetland_positive_only_partial_id_v1.py"
+      - "tests/test_wetland_positive_only_partial_id_v1.py"
+      - "docs/wetland_positive_only_partial_id_v1.md"
+      - "validation/wetland_positive_only_partial_id_v1/**"
+      - "benchmarks/wetland_negative_witness_plan_v1.py"
+      - "tests/test_wetland_negative_witness_plan_v1.py"
+      - "docs/wetland_negative_witness_plan_v1.md"
+      - "validation/wetland_negative_witness_plan_v1/**"
+      - "benchmarks/wetland_chronological_discovery_v1.py"
+      - "tests/test_wetland_chronological_discovery_v1.py"
+      - "docs/wetland_chronological_discovery_v1.md"
+      - "validation/wetland_chronological_discovery_v1/**"
+      - "benchmarks/wetland_joint_method_calendar_gate_v1.py"
+      - "tests/test_wetland_joint_method_calendar_gate_v1.py"
+      - "docs/wetland_joint_method_calendar_gate_v1.md"
+      - "validation/wetland_joint_method_calendar_gate_v1/**"
+      - "benchmarks/wetland_observation_source_policy_bridge_v1.py"
+      - "tests/test_wetland_observation_source_policy_bridge_v1.py"
+      - "docs/wetland_observation_source_policy_bridge_v1.md"
+      - "validation/wetland_observation_source_policy_bridge_v1/**"
+      - "benchmarks/exhaustive_three_node_source_policy_v1.py"
+      - "tests/test_exhaustive_three_node_source_policy_v1.py"
+      - "docs/exhaustive_three_node_source_policy_v1.md"
+      - "validation/exhaustive_three_node_source_policy_v1/**"
+      - ".github/workflows/wetland-duplicate-gate-v1.yml"
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -e ".[dev]"
+      - run: python -m pytest -q tests/test_wetland_duplicate_gate_v1.py tests/test_wetland_duplicate_bounds_v1.py tests/test_wetland_original_code_preflight_v1.py tests/test_wetland_survreps_evidence_loss_v1.py tests/test_wetland_survey_grain_v1.py tests/test_wetland_native_visit_ledger_v1.py tests/test_wetland_temporal_window_feasibility_v1.py tests/test_wetland_paired_method_core_v1.py tests/test_wetland_method_group_contrast_v1.py tests/test_wetland_method_channel_lattice_v1.py tests/test_wetland_method_site_jackknife_v1.py tests/test_wetland_positive_only_partial_id_v1.py tests/test_wetland_negative_witness_plan_v1.py tests/test_wetland_chronological_discovery_v1.py tests/test_wetland_joint_method_calendar_gate_v1.py tests/test_wetland_observation_source_policy_bridge_v1.py tests/test_exhaustive_three_node_source_policy_v1.py
+      - name: Retrieve original pinned source
+        run: |
+          mkdir -p /tmp/wetland_gate
+          curl --fail --location --retry 2 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_site_data.csv \
+            -o /tmp/wetland_gate/sites.csv
+          curl --fail --location --retry 2 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_surv_data.csv \
+            -o /tmp/wetland_gate/surveys.csv
+          echo "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319  /tmp/wetland_gate/sites.csv" | sha256sum -c -
+          echo "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd  /tmp/wetland_gate/surveys.csv" | sha256sum -c -
+      - name: Reconstruct authentic site-date and method-preserving visits without 20 pseudo-repeats
+        run: |
+          python benchmarks/wetland_native_visit_ledger_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/native_visit_ledger.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/native_visit_ledger.json').read_text())
+          assert r['status']=='ORIGINAL_VISIT_DATE_AND_METHOD_GRAIN_RECONSTRUCTED_NOT_OCCUPANCY'
+          expected={
+            'archived_all':(29,381,129,379,153,365),
+            'published_q1':(27,351,117,349,144,346),
+            'published_q2':(13,188,64,186,77,207)
+          }
+          for cohort,counts in expected.items():
+              d=r['cohorts'][cohort]
+              assert (d['sites'],d['native_csv_rows'],d['distinct_site_dates'],d['distinct_site_date_methods'],d['recorded_positive_site_species_pairs'],d['positive_site_date_species_records'])==counts
+              assert d['daily_union_preserves_every_native_site_species_positive']
+              assert d['within_site_calendar_span_days']['max']>=60
+          q1=r['cohorts']['published_q1'];q2=r['cohorts']['published_q2']
+          assert q1['native_site_species_positive_at_single_recorded_date']==59
+          assert q2['native_site_species_positive_at_single_recorded_date']==25
+          assert q1['native_site_species_positive_in_single_recorded_method']==57
+          assert q2['native_site_species_positive_in_single_recorded_method']==22
+          for cohort,(total,observed,na) in {
+              'archived_all':(1827,1161,666),
+              'published_q1':(1701,1053,648),
+              'published_q2':(819,576,243)
+          }.items():
+              p=r['cohorts'][cohort]['padded_date_history']
+              assert (p['padded_site_visit_species_cells'],p['recorded_site_visit_species_cells'],p['nonexistent_visit_cells_preserved_as_NA'])==(total,observed,na)
+              assert p['site_species_positive_union_preserved']
+              assert r['outputs'][cohort+'_padded_history']['row_count']==total
+          assert q1['site_date_method_count_histogram']=={'1':0,'2':24,'3':71,'4':22}
+          assert q2['site_date_method_count_histogram']=={'1':0,'2':14,'3':42,'4':8}
+          assert len(q1['duplicated_group_keys_not_resolved'])==2
+          assert len(q2['duplicated_group_keys_not_resolved'])==2
+          print('WETLAND_REAL_SITE_DATE_METHOD_LEDGER_SOURCE_OR_PRESERVED_UNKNOWN_NOT_ZERO')
+          PY
+      - name: Audit first/last anchored 7–91-day real visit coverage without occupancy fitting
+        run: |
+          python benchmarks/wetland_temporal_window_feasibility_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/temporal_window_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/temporal_window_result.json').read_text())
+          assert r['status']=='ORIGINAL_DATE_WINDOW_REPRESENTATION_SENSITIVITY_NOT_CLOSURE_CERTIFICATE'
+          assert r['windows_days']==[7,14,21,30,45,60,91]
+          assert not r['historical_R_model_fitted']
+          assert not r['ecological_season_closure_verified']
+          for cohort,(sites,origdates,positives) in {
+              'published_q1':(27,117,144),'published_q2':(13,64,77)
+          }.items():
+              p=r['cohorts'][cohort]
+              assert (p['source_site_count'],p['source_native_date_count'],p['source_positive_site_species'])==(sites,origdates,positives)
+              assert len(p['window_summaries'])==14
+              assert r['detail_outputs'][cohort]['rows']==7*positives
+              for entry in p['window_summaries']:
+                  assert entry['source_positive_pairs_retained']+entry['source_positive_pairs_not_seen_in_window']==positives
+                  assert entry['eligible_sites_positive_pairs_retained']+entry['eligible_sites_positive_pairs_not_seen']==entry['eligible_sites_source_positive_pairs']
+                  if entry['window_calendar_days']==91:
+                      assert entry['source_positive_pairs_retained']==positives
+                      assert entry['source_positive_pairs_not_seen_in_window']==0
+                      assert entry['sites_with_two_or_more_selected_dates']==sites
+          print('REAL_DATE_WINDOW_ANCHOR_AND_COHORT_COVERAGE_SOURCE_CERTIFIED')
+          PY
+      - name: Authenticate fully paired acoustic/visual date coverage and noncore taxon witnesses
+        run: |
+          python benchmarks/wetland_paired_method_core_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/paired_method_core_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          z=json.loads(Path('/tmp/wetland_gate/paired_method_core_result.json').read_text())
+          assert not z['equal_field_effort_verified']
+          assert not z['historical_R_occupancy_model_fitted']
+          assert z['recorded_method_not_present_equals_not_deployed'] is False
+          for cohort,(days,full,core,day_full,day_core,method_dipnet) in {
+              'archived_all':(129,153,110,365,249,59),
+              'published_q1':(117,144,104,346,234,57),
+              'published_q2':(64,77,61,207,148,27)
+          }.items():
+              d=z['cohorts'][cohort]
+              assert d['source_site_dates']==days
+              assert d['paired_method_dates_with_exactly_one_row_each']==days
+              assert d['paired_method_native_rows']==2*days
+              assert (d['native_positive_site_species'],d['paired_core_positive_site_species'])==(full,core)
+              assert (d['daily_full_method_positive_site_date_species'],d['daily_paired_core_positive_site_date_species'])==(day_full,day_core)
+              assert d['site_date_groups_with_method_row']['dipnet']==method_dipnet
+              assert d['site_date_groups_without_method_row']['acoustic']==0
+              assert d['site_date_groups_without_method_row']['visual']==0
+              assert z['output_files'][cohort+'_site_date_species']['rows']==days*9
+              assert z['output_files'][cohort+'_site_species_positive_registry']['rows']==full
+          q1=z['cohorts']['published_q1']
+          assert q1['per_species']['Lissotriton vulgaris']['positive_sites_undetected_by_paired_core']==15
+          assert q1['per_species']['Triturus dobrogicus']['positive_sites_undetected_by_paired_core']==6
+          assert q1['per_species']['Hyla arborea']['positive_sites_undetected_by_paired_core']==2
+          assert q1['per_species']['Pelophylax ridibundus']['positive_sites_undetected_by_paired_core']==0
+          print('PAIRED_ACOUSTIC_VISUAL_CORE_COMPLETE_ALL_DATES_EVIDENCE_BIAS_VERIFIED')
+          PY
+      - name: Audit wetland category prevalence reversals caused solely by native method-record selection
+        run: |
+          python benchmarks/wetland_method_group_contrast_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/method_group_contrast.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/wetland_gate/method_group_contrast.json').read_text())
+          assert x['status']=='OBSERVATIONAL_CATEGORY_CONTRAST_SENSITIVE_TO_RECORDED_METHOD_RESTRICTION_NOT_CAUSAL'
+          assert (x['source_q1_rows'],x['source_site_days'])==(351,117)
+          c=x['category_summary']
+          assert {
+              category:(v['site_count'],v['native_full_source_positive_site_species'],
+                        v['paired_core_positive_site_species'])
+              for category,v in c.items()
+          }=={
+              'intervention':(13,77,61),'control':(6,23,15),'artificial':(8,44,28)
+          }
+          for v in c.values():
+              assert v['site_dates_with_native_method_row']['acoustic']==v['site_date_groups']
+              assert v['site_dates_with_native_method_row']['visual']==v['site_date_groups']
+          d=x['direction_reversal_diagnostics']
+          assert d['total_species_by_category_contrasts']==27
+          assert d['strict_nonzero_direction_reversals']==5
+          assert d['strict_reversals_by_comparison']=={
+              'intervention_minus_control':2,
+              'intervention_minus_artificial':1,
+              'artificial_minus_control':2
+          }
+          assert {(z['comparison'],z['species']) for z in d['explicit_strict_reversals']}=={
+              ('intervention_minus_control','Lissotriton vulgaris'),
+              ('intervention_minus_control','Bufo bufo'),
+              ('intervention_minus_artificial','Lissotriton vulgaris'),
+              ('artificial_minus_control','Lissotriton vulgaris'),
+              ('artificial_minus_control','Bufotes viridis'),
+          }
+          assert x['source_detail_files']['source_site_richness']['rows']==27
+          assert x['source_detail_files']['source_species_by_category']['rows']==27
+          assert x['source_detail_files']['source_category_species_contrasts']['rows']==27
+          print('WETLAND_NATIVE_CATEGORY_METHOD_RECORD_REVERSAL_5_OF_27_SOURCE_VERIFIED_NO_CAUSAL_CLAIM')
+          PY
+      - name: Enumerate all 15 original method-channel masks and 405 category contrasts
+        run: |
+          python benchmarks/wetland_method_channel_lattice_v1.py \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/method_channel_lattice.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/method_channel_lattice.json').read_text())
+          assert r['status']=='PINNED_SOURCE_EXHAUSTIVE_15_METHOD_SUBSETS_OBSERVATION_ONLY'
+          assert r['full_source_positive_site_species_pairs']==144
+          assert r['positive_evidence_monotone_over_every_nested_subset']
+          assert len(r['method_panels'])==15
+          assert len(r['subset_results'])==15
+          assert r['output_files']['method_subsets']['rows']==15
+          assert r['output_files']['method_subset_contrasts']['rows']==405
+          assert r['output_files']['native_positive_site_species_witnesses']['rows']==144
+          by={x['subset']:x for x in r['subset_results']}
+          assert by['acoustic+visual']['subset_recorded_positive_pairs']==104
+          assert by['acoustic+visual']['strict_reversals_vs_native_27_contrasts']==5
+          assert by['acoustic+visual']['site_date_groups_with_every_selected_method_record']==117
+          assert by['acoustic+visual+dipnet+bottletrap']['subset_recorded_positive_pairs']==144
+          assert by['acoustic+visual+dipnet+bottletrap']['strict_reversals_vs_native_27_contrasts']==0
+          assert r['boolean_or_witness_allocation_sum']==144 or abs(r['boolean_or_witness_allocation_sum']-144)<1e-8
+          assert len(r['leave_one_method_out'])==4
+          for method,row in r['leave_one_method_out'].items():
+              assert row['exclusive_source_positive_site_species_lost']==sum(row['exclusive_lost_by_category'].values())
+          print('WETLAND_SOURCE_ALL_15_METHOD_CHANNEL_SUBSETS_AND_405_CONTRASTS_CERTIFIED')
+          PY
+      - name: Exhaustive 27-site drop x 15 native method panels x 27 contrasts
+        run: |
+          python -m benchmarks.wetland_method_site_jackknife_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/method_site_jackknife.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/method_site_jackknife.json').read_text())
+          assert r['status']=='POST_EXPOSURE_SOURCE_SITE_DELETION_METHOD_REVERSAL_ROBUSTNESS_NOT_ECOLOGICAL_SE'
+          assert r['source_site_count']==27
+          assert r['native_full_positive_site_species']==144
+          assert r['method_panel_count']==15
+          assert r['site_deletion_cases']==27
+          assert r['contrast_count_per_panel_site_drop']==27
+          assert r['output_files']['method_panel_site_drop_summary']['rows']==405
+          assert r['output_files']['method_panel_site_drop_contrasts']['rows']==10935
+          assert r['output_files']['original_five_acoustic_visual_site_drop_details']['rows']==135
+          assert r['full_27_baseline_strict_reversals_by_panel']['acoustic+visual']==5
+          assert r['panel_summary']['acoustic+visual+dipnet+bottletrap']['max']==0
+          assert len(r['original_five_acoustic_visual_reversal_persistence'])==5
+          for item in r['original_five_acoustic_visual_reversal_persistence']:
+              assert item['leave_one_site_out_cases']==27
+              assert (item['strict_reversal_persists_count']+
+                      item['source_or_panel_tie_count']+
+                      item['becomes_same_nonzero_sign_count'])==27
+              assert sum(x['number_of_deletions'] for x in item['by_deleted_site_category'].values())==27
+          assert not r['original_occupancy_model_fitted']
+          assert not r['latent_effect_confidence_interval_estimated']
+          print('WETLAND_NATIVE_27_SITE_DELETIONS_X_15_PANELS_X_27_CONTRASTS_CERTIFIED')
+          PY
+      - name: Certify source-positive-only conditional prevalence bounds without turning zeros into absences
+        run: |
+          python -m benchmarks.wetland_positive_only_partial_id_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/positive_only_partial_id.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/positive_only_partial_id.json').read_text())
+          assert r['status']=='CONDITIONAL_SOURCE_POSITIVE_PARTIAL_IDENTIFICATION_NOT_OCCUPANCY'
+          assert (r['source_Q1_sites'],r['taxa'],r['source_binary_site_species_cells'])==(27,9,243)
+          assert (r['full_source_positive_site_species'],r['paired_AV_positive_site_species'])==(144,104)
+          assert (r['full_source_unfixed_binary_status_cells'],r['AV_unfixed_binary_status_cells'])==(99,139)
+          assert r['AV_vs_full_extra_unfixed_binary_status_cells']==40
+          assert r['hypothetical_completion_count_multiplier_AV_vs_full']=='2^40'
+          assert r['all_conditional_identification_intervals_include_zero']
+          assert r['nested_method_panel_positive_constraints_and_intervals_verified']
+          assert r['no_strict_biological_contrast_direction_identified_from_positive_only_data']
+          assert len(r['method_panel_summaries'])==15
+          assert len(r['five_original_recorded_method_sign_reversals'])==5
+          assert r['output_files']['method_panel_identification_intervals']['rows']==405
+          assert r['output_files']['method_panel_positive_only_summary']['rows']==15
+          assert r['output_files']['native_site_species_recording_mask']['rows']==243
+          assert r['output_files']['five_method_reversals_identification_bounds']['rows']==5
+          assert sum(f['strict_paired_observed_sign_ruled_out_by_full_source_bounds']
+                     for f in r['five_original_recorded_method_sign_reversals'])==2
+          assert all(f['full_constraints_imply_interval_inside_paired_av_interval']
+                     for f in r['five_original_recorded_method_sign_reversals'])
+          assert not r['completions_are_not_EOG_ecological_transition_worlds'] is False
+          print('SOURCE_CONDITIONAL_15_PANELS_405_INTERVALS_ALL_INCLUDE_ZERO_SOURCE_SPECIFICITY_ASSUMED')
+          PY
+      - name: Identify minimum counterfactual independently verified absence witnesses without claiming field absence
+        run: |
+          python -m benchmarks.wetland_negative_witness_plan_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/negative_witness_plan.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/negative_witness_plan.json').read_text())
+          assert r['status']=='COUNTERFACTUAL_CERTIFIED_NEGATIVE_WITNESS_TARGETS_NOT_ACTUAL_FIELD_ABSENCES'
+          assert r['native_sites']==27 and r['source_positive_site_species']==144
+          assert r['original_full_source_weak_one_sided_contrast_targets']==4
+          assert r['source_unconfirmed_site_species_certificate_candidates']==9
+          assert len(r['candidate_site_records'])==7
+          assert r['source_verified_biological_absence_certificates']==0
+          assert r['new_biological_data_collected'] is False
+          plan=r['minimum_joint_counterfactual_design']
+          assert plan['minimum_distinct_site_visit_count_in_counterfactual_ideal']==2
+          assert plan['all_minimum_site_visit_sets']==[['nyarfas-turjan-laperdo','rachaz_2']]
+          assert plan['minimum_independent_true_negative_site_species_certificates']==4
+          assert r['all_target_conditional_strict_directions_possible_with_one_valid_negative']
+          for key,count in {'weak_one_sided_target_list':4,
+                            'source_unconfirmed_candidate_site_species':9,
+                            'site_visit_joint_target_coverage':7}.items():
+              assert r['csv_artifacts'][key]['rows']==count
+          assert r['no_occupancy_likelihood_fitted'] and r['no_causal_restoration_effect_estimated']
+          print('WETLAND_SOURCE_MINIMUM_COUNTERFACTUAL_CERTIFIED_NEGATIVE_WITNESS_PLAN_VERIFIED_NO_ABSENCES_OBSERVED')
+          PY
+      - name: Authenticate first native recorded date versus later site species positive witnesses
+        run: |
+          python -m benchmarks.wetland_chronological_discovery_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/chronological_discovery.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/chronological_discovery.json').read_text())
+          assert r['status']=='SOURCE_PINNED_FIRST_DATE_LATER_POSITIVE_RECORDS_NOT_BIOLOGICAL_FALSE_NEGATIVES'
+          assert r['date_horizons_days']==[7,14,21,30,45,60,91]
+          assert r['original_Q2_intervention_history_exact_Q1_subset_verified']
+          expected={
+            'published_q1':(27,351,117,243,144,104,62,50,82,54,4),
+            'published_q2':(13,188,64,117,77,61,28,26,49,35,2)
+          }
+          for c,stats in expected.items():
+              v=r['cohorts'][c]
+              observed=(v['sites'],v['source_native_rows'],v['site_dates'],
+                v['site_species_slots'],v['source_full_positive_site_species'],
+                v['source_AV_positive_site_species'],
+                v['first_full_date_positive_site_species'],
+                v['first_AV_date_positive_site_species'],
+                v['first_full_nonpositive_later_full_positive_site_species'],
+                v['first_AV_nonpositive_later_AV_positive_site_species'],
+                v['counterfactual_witness_target_rows'])
+              assert observed==stats,(c,observed)
+              assert v['source_chronology_partition_reconciled']
+              assert sum(v['chronology_categories'].values())==v['site_species_slots']
+              assert v['horizon_first_later_positive_counts']['91']['first_full_nonpositive_later_full_positive_by_horizon']==stats[8]
+              assert v['first_recorded_date_zero_is_NOT_a_true_biological_absence']
+              assert r['outputs'][c+'_site_species_chronology']['rows']==stats[3]
+              assert r['outputs'][c+'_site_species_horizon']['rows']==stats[3]*7
+              assert r['outputs'][c+'_candidate_site_species_chronology']['rows']==stats[10]
+          assert r['cohorts']['published_q1']['chronology_categories']=={
+            'av_detected_first':50,
+            'same_day_extra_method_only':12,
+            'later_AV_first_discovery':54,
+            'later_additional_only_discovery':28,
+            'never_source_positive':99
+          }
+          assert r['cohorts']['published_q2']['chronology_categories']=={
+            'av_detected_first':26,
+            'same_day_extra_method_only':2,
+            'later_AV_first_discovery':35,
+            'later_additional_only_discovery':14,
+            'never_source_positive':40
+          }
+          assert r['cohorts']['published_q1']['horizon_first_later_positive_counts']['14']['first_full_nonpositive_later_full_positive_by_horizon']==34
+          assert r['cohorts']['published_q2']['horizon_first_later_positive_counts']['14']['first_full_nonpositive_later_full_positive_by_horizon']==13
+          print('WETLAND_NATIVE_FIRST_DATE_TO_LATER_POSITIVITY_NOT_TRUE_ABSENCE_VERIFIED')
+          PY
+      - name: Audit joint method/calendar source witness support and wetland-contrast signs
+        run: |
+          python -m benchmarks.wetland_joint_method_calendar_gate_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/joint_method_calendar_gate.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/joint_method_calendar_gate.json').read_text())
+          assert r['status']=='SOURCE_PINNED_METHOD_TIME_JOINT_WITNESS_PARTITION_NOT_OCCUPANCY'
+          assert r['anchors']==['first','last']
+          assert r['horizon_days']==[7,14,21,30,45,60,91]
+          assert r['original_intervention_Q2_witnesses_identical_to_Q1_source_subset']
+          assert r['no_biological_absence_inferred'] and r['no_new_EOG_WF_scored_endpoint']
+          expected={'published_q1':(27,351,117,144,104),'published_q2':(13,188,64,77,61)}
+          for name,(sites,rows,days,full,av) in expected.items():
+              x=r['cohorts'][name]
+              assert (x['source_site_count'],x['original_csv_rows'],
+                      x['source_site_calendar_dates'],x['original_native_full_positive_pairs'],
+                      x['original_native_AV_positive_pairs'])==(sites,rows,days,full,av)
+              assert x['anchor_horizon_combinations']==14
+              assert x['source_full_91_day_positive_recovery_exact']
+              assert r['outputs'][name+'_window_summary']['rows']==14
+              assert r['outputs'][name+'_positive_pair_window_detail']['rows']==14*full
+              for w in x['windows']:
+                  assert sum(w['class_'+c] for c in [
+                      'joint_survives','method_only_marginal','time_only_marginal',
+                      'split_witness_interaction','excluded_by_either_gate_alone'
+                  ])==full
+                  assert w['class_joint_survives']==w['native_AV_window_positive_pairs']
+                  assert w['native_AV_window_positive_pairs']<=w['native_full_window_positive_pairs']
+              last91=next(w for w in x['windows'] if w['anchor']=='last' and w['horizon_calendar_days']==91)
+              assert (last91['native_full_window_positive_pairs'],
+                      last91['native_AV_window_positive_pairs'])==(full,av)
+              assert last91['method_time_split_witness_pairs']==0
+          assert r['outputs']['published_q1_category_method_calendar_contrasts']['rows']==756
+          cases={
+              ('published_q1','first',14):(96,73,1,11,10,5),
+              ('published_q1','last',14):(94,48,16,7,9,5),
+              ('published_q2','first',14):(41,34,1,None,None,None),
+              ('published_q2','last',14):(44,25,9,None,None,None),
+          }
+          for (name,anchor,h),(full,av,split,ff,aa,within) in cases.items():
+              v=next(w for w in r['cohorts'][name]['windows']
+                     if w['anchor']==anchor and w['horizon_calendar_days']==h)
+              assert (v['native_full_window_positive_pairs'],
+                      v['native_AV_window_positive_pairs'],
+                      v['method_time_split_witness_pairs'])==(full,av,split)
+              if ff is not None:
+                  assert (
+                    v['full_window_strict_reversals_vs_original_27'],
+                    v['AV_window_strict_reversals_vs_original_27'],
+                    v['AV_vs_full_matched_window_strict_reversals']
+                  )==(ff,aa,within)
+          print('WETLAND_JOINT_METHOD_CALENDAR_SOURCE_SUPPORT_PARTITION_AND_756_CONTRASTS_VERIFIED')
+          PY
+      - name: Verify authentic split witness and native EOG fixed-vs-self-excluded policy counterexample
+        run: |
+          python -m benchmarks.wetland_observation_source_policy_bridge_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --output /tmp/wetland_gate/observation_source_policy_bridge.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/observation_source_policy_bridge.json').read_text())
+          assert r['status']=='PINNED_ORIGINAL_WETLAND_WITNESS_AND_REAL_EOG_FINITE_SYNTHETIC_POLICY_CONTRAST'
+          e=r['original_wetland_positive_witness']
+          assert (e['site'],e['species'])==('orditoi-zsilip','Hyla arborea')
+          assert e['last14_site_species_witness_class']=='split_witness_interaction'
+          assert (e['original_source_full_positive'],
+                  e['original_source_AV_all_dates_positive'],
+                  e['original_source_full_last14_positive'],
+                  e['original_source_AV_last14_positive'])==(True,True,True,False)
+          assert {(x['date'],x['method'],x['native_original_CSV_line'])
+                  for x in e['source_positive_rows']}=={
+                      ('2024-03-24','visual',6),
+                      ('2024-05-30','dipnet',368)
+                  }
+          assert (e['Q1_last14_split_witness_pairs'],e['Q2_last14_split_witness_pairs'])==(16,9)
+          f=r['native_EOG_policy_counterexample']['fixed_source']
+          assert f['compatibility_before_all_occurrences']==['complete']
+          assert f['compatibility_after_dropping_C']==['complete','isolated_C']
+          assert f['positive_constraint_loss_expands_compatible_set']
+          selfx=r['native_EOG_policy_counterexample']['self_excluded']
+          assert selfx['compatible_sets']=={
+              'all_three':['complete','hub'],
+              'gated_two':['complete','isolated_C']
+          }
+          assert selfx['gained_compatible_worlds_after_dropping_C']==['isolated_C']
+          assert selfx['lost_compatible_worlds_after_dropping_C']==['hub']
+          assert selfx['NOT_eligible_for_EOG_fixed_source_compare_reconstructions']
+          assert r['native_EOG_policy_counterexample']['world_operator_fingerprints_frozen_across_both_observation_sets']
+          assert not r['observed_field_world_mapping_or_geographic_graph_constructed']
+          assert not r['real_ecological_movement_worlds_evaluated']
+          assert not r['new_EOG_WF_scored_empirical_endpoint_added']
+          print('NATIVE_EOG_FIXED_SOURCE_MONOTONE_SELF_EXCLUDED_NONMONOTONE_AND_REAL_WETLAND_WITNESS_CERTIFIED')
+          PY
+      - name: Certify all 64 native EOG directed graph source-policy compatibilities against independent edge logic
+        run: |
+          python -m benchmarks.exhaustive_three_node_source_policy_v1 \
+            --surveys /tmp/wetland_gate/surveys.csv \
+            --sites /tmp/wetland_gate/sites.csv \
+            --out-dir /tmp/wetland_gate \
+            --output /tmp/wetland_gate/exhaustive_three_node_source_policy.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/exhaustive_three_node_source_policy.json').read_text())
+          assert r['status']=='COMPLETE_64_SYNTHETIC_EOG_WORLD_SOURCE_POLICY_EXHAUSTION_NOT_REAL_ECOLOGY'
+          assert r['graph_count']==64
+          assert r['native_EOG_decisions_agree_with_independent_analytic_edge_predicates_for_all_worlds']
+          assert r['output_csv']['rows']==64
+          assert r['edge_bit_order']==['A>B','A>C','B>A','B>C','C>A','C>B']
+          assert r['native_fixed_policy']['source_policy']=='fixed'
+          f=r['native_fixed_policy']
+          assert (f['full_count'],f['gated_count'],f['shared_count'],
+                  f['lost_count'],f['gained_count'])==(16,32,16,0,16)
+          assert f['full_subset_gated'] is True
+          assert f['added_positive_eliminated_worlds']==16
+          assert f['added_positive_contraction_fraction']==0.5
+          s=r['native_self_excluded_policy']
+          assert s['source_policy']=='self_excluded'
+          assert (s['full_count'],s['gated_count'],s['shared_count'],
+                  s['lost_count'],s['gained_count'],s['neither_count'])==(27,16,12,15,4,33)
+          assert s['full_subset_gated'] is False
+          assert s['gated_subset_full'] is False
+          assert 'mask_58' in s['lost_world_ids_after_dropping_C']
+          assert 'mask_05' in s['gained_world_ids_after_dropping_C']
+          assert 'mask_63' in s['shared_world_ids']
+          assert s['NOT_eligible_for_fixed_source_compare_reconstructions']
+          o=r['authenticated_real_wetland_record_provenance']
+          assert o['site']=='orditoi-zsilip' and o['species']=='Hyla arborea'
+          assert {(z['date'],z['method'],z['native_original_CSV_line']) for z in o['source_positive_rows']}=={
+              ('2024-03-24','visual',6),('2024-05-30','dipnet',368)}
+          assert (o['Q1_last14_split_witness_pairs'],o['Q2_last14_split_witness_pairs'])==(16,9)
+          assert o['actual_wetland_nodes_are_NOT_synthetic_A_B_C']
+          assert not r['real_EOG_ecological_worlds_enumerated']
+          print('EOG_ALL_64_NATIVE_FIXED_VS_SELF_EXCLUDED_WORLD_MEMBERSHIPS_AND_SOURCE_PROVENANCE_CERTIFIED')
+          PY
+      - name: Identify source conflicts, block occupancy
+        run: |
+          python benchmarks/wetland_duplicate_gate_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/result.json').read_text())
+          assert r['site_rows']==29 and r['survey_rows']==381
+          assert r['duplicate_survey_ids']==2 and r['conflicting_duplicate_ids']==2
+          assert r['status']=='BLOCKED_CONFLICTING_SURVEY_IDENTIFIERS'
+          assert not r['readiness']['occupancy_model_permitted']
+          print('WETLAND_CONFLICTS_DETECTED_AND_BLOCKED')
+          PY
+      - name: Verify surv is a non-unique site-method-DOY grouping key
+        run: |
+          python benchmarks/wetland_survey_grain_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/survey_grain.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('/tmp/wetland_gate/survey_grain.json').read_text())
+          p=x['profile']
+          assert x['status']=='COMPOSITE_OCCASION_KEY_NOT_PHYSICAL_ROW_ID'
+          assert p['rows_matching_site_method_doy_composite_key']==381
+          assert p['distinct_composite_occasion_keys']==379
+          assert p['repeated_occasion_keys']==2
+          assert p['by_method']['bottletrap']=={'native_rows':64,'distinct_occasion_keys':62}
+          print('WETLAND_COMPOSITE_GROUPING_KEY_VERIFIED_NOT_ROW_ID')
+          PY
+      - name: Bound descriptive detection outcomes under four row identities
+        run: |
+          python benchmarks/wetland_duplicate_bounds_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --output /tmp/wetland_gate/duplicate_bounds.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/duplicate_bounds.json').read_text())
+          counts={key: val['positive_in_some_resolution_only'] for key,val in r['bounds']['grains'].items()}
+          assert r['bounds']['scenarios']==4
+          assert counts == {'site_species':0,'site_method_species':1,'survey_species':5}, counts
+          assert r['readiness']['occupancy_model']=='BLOCKED'
+          expected={'archived_all':(29,381),'published_q1':(27,351),'published_q2':(13,188)}
+          for name,(sites,rows) in expected.items():
+              cohort=r['publication_cohort_bounds'][name]
+              assert (cohort['site_count'],cohort['survey_rows'])==(sites,rows), (name,cohort)
+              counts={g: v['positive_in_some_resolution_only'] for g,v in cohort['sensitivity']['grains'].items()}
+              assert counts=={'site_species':0,'site_method_species':1,'survey_species':5},(name,counts)
+          print('PUBLISHED_COHORTS_Q1_27_Q2_13_BOUNDS_INVARIANT')
+          print('WETLAND_DETECTION_BOUNDS_0_1_5_OCCUPANCY_BLOCKED')
+          PY
+      - name: Check official published R preparation scripts without executing them
+        run: |
+          python benchmarks/wetland_original_code_preflight_v1.py --output /tmp/wetland_gate/published_code_preflight.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/published_code_preflight.json').read_text())
+          assert len(r['files'])==2
+          assert not r['occupancy_fitting_permitted']
+          assert not r['duplicate_identity_adjudicated']
+          assert not r['published_27_vs_archived_29_sites_adjudicated']
+          assert r['status'] in ('ORIGINAL_SOURCE_CODE_VERIFIED_NOT_INTERPRETED','ORIGINAL_SOURCE_CODE_GATE_INCOMPLETE')
+          assert r['status']=='ORIGINAL_SOURCE_CODE_VERIFIED_NOT_INTERPRETED'
+          for original in r['files']:
+              assert original['evidence']['original_binary_model_input_contract']['all_nine_converted_before_unmarked']
+          print('ORIGINAL_NINE_SPECIES_YLIST_BINARY_INPUT_CONFIRMED')
+          print('WETLAND_R_PROVENANCE_ATTEMPT_AUDITED_NO_OCCUPANCY')
+          PY
+      - name: Authenticate public hunviphab sampling code and quantify native-positive loss
+        run: |
+          curl --fail --location --retry 1 --max-time 30 --silent --show-error \
+            https://raw.githubusercontent.com/edvardmizsei/hunviphab/25d4c64da289ffcc14679619bb3b18bd494de872/R/survreps.R \
+            -o /tmp/wetland_gate/hunviphab_survreps.R
+          test "$(git hash-object /tmp/wetland_gate/hunviphab_survreps.R)" = "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+          python benchmarks/wetland_survreps_evidence_loss_v1.py --surveys /tmp/wetland_gate/surveys.csv --sites /tmp/wetland_gate/sites.csv --survreps-source /tmp/wetland_gate/hunviphab_survreps.R --output /tmp/wetland_gate/survreps_evidence.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/wetland_gate/survreps_evidence.json').read_text())
+          fixed={
+              'published_q1': (27,351,540,144,9.475863116344188,26,11),
+              'published_q2': (13,188,260,77,4.871441193156649,12,9),
+          }
+          for name,(sites,rows,norm,positive,expected,repl,risk25) in fixed.items():
+              a=r['cohorts'][name]
+              assert (a['source_site_count'],a['source_survey_rows'],a['20_row_normalized_total'],a['observed_positive_site_species_pairs'])==(sites,rows,norm,positive)
+              assert (a['resample_with_replacement_sites'],a['positive_pairs_at_least_25pct_drop_risk'])==(repl,risk25)
+              assert abs(a['expected_lost_positive_site_species_pairs']-expected)<1e-9
+          assert r['upstream']['historical_package_runtime_confirmed'] is False
+          print('WETLAND_SOURCE_CODE_CONDITIONAL_POSITIVE_LOSS_CERTIFIED_Q1_Q2')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wetland-duplicate-gate-v1
+          path: |
+            /tmp/wetland_gate/result.json
+            /tmp/wetland_gate/duplicate_bounds.json
+            /tmp/wetland_gate/survey_grain.json
+            /tmp/wetland_gate/native_visit_ledger.json
+            /tmp/wetland_gate/temporal_window_result.json
+            /tmp/wetland_gate/paired_method_core_result.json
+            /tmp/wetland_gate/method_group_contrast.json
+            /tmp/wetland_gate/method_channel_lattice.json
+            /tmp/wetland_gate/method_site_jackknife.json
+            /tmp/wetland_gate/positive_only_partial_id.json
+            /tmp/wetland_gate/negative_witness_plan.json
+            /tmp/wetland_gate/chronological_discovery.json
+            /tmp/wetland_gate/joint_method_calendar_gate.json
+            /tmp/wetland_gate/observation_source_policy_bridge.json
+            /tmp/wetland_gate/exhaustive_three_node_source_policy.json
+            /tmp/wetland_gate/synthetic_64_eog_graph_source_policy_results.csv
+            /tmp/wetland_gate/published_q1_window_summary.csv
+            /tmp/wetland_gate/published_q1_positive_pair_window_detail.csv
+            /tmp/wetland_gate/published_q2_window_summary.csv
+            /tmp/wetland_gate/published_q2_positive_pair_window_detail.csv
+            /tmp/wetland_gate/published_q1_category_method_calendar_contrasts.csv
+            /tmp/wetland_gate/published_q1_site_species_chronology.csv
+            /tmp/wetland_gate/published_q1_site_species_horizon.csv
+            /tmp/wetland_gate/published_q1_candidate_site_species_chronology.csv
+            /tmp/wetland_gate/published_q2_site_species_chronology.csv
+            /tmp/wetland_gate/published_q2_site_species_horizon.csv
+            /tmp/wetland_gate/published_q2_candidate_site_species_chronology.csv
+            /tmp/wetland_gate/weak_one_sided_target_list.csv
+            /tmp/wetland_gate/source_unconfirmed_candidate_site_species.csv
+            /tmp/wetland_gate/site_visit_joint_target_coverage.csv
+            /tmp/wetland_gate/method_panel_identification_intervals.csv
+            /tmp/wetland_gate/method_panel_positive_only_summary.csv
+            /tmp/wetland_gate/native_site_species_recording_mask.csv
+            /tmp/wetland_gate/five_method_reversals_identification_bounds.csv
+            /tmp/wetland_gate/method_panel_site_drop_summary.csv
+            /tmp/wetland_gate/method_panel_site_drop_contrasts.csv
+            /tmp/wetland_gate/original_five_acoustic_visual_site_drop_details.csv
+            /tmp/wetland_gate/method_subsets.csv
+            /tmp/wetland_gate/method_subset_contrasts.csv
+            /tmp/wetland_gate/native_positive_site_species_witnesses.csv
+            /tmp/wetland_gate/source_site_richness.csv
+            /tmp/wetland_gate/source_species_by_category.csv
+            /tmp/wetland_gate/source_category_species_contrasts.csv
+            /tmp/wetland_gate/archived_all_paired_core_site_date_species.csv
+            /tmp/wetland_gate/archived_all_paired_core_site_species_positive_registry.csv
+            /tmp/wetland_gate/published_q1_paired_core_site_date_species.csv
+            /tmp/wetland_gate/published_q1_paired_core_site_species_positive_registry.csv
+            /tmp/wetland_gate/published_q2_paired_core_site_date_species.csv
+            /tmp/wetland_gate/published_q2_paired_core_site_species_positive_registry.csv
+            /tmp/wetland_gate/published_q1_window_source_positive_detail.csv
+            /tmp/wetland_gate/published_q2_window_source_positive_detail.csv
+            /tmp/wetland_gate/archived_all_method_status.csv
+            /tmp/wetland_gate/archived_all_daily_detected.csv
+            /tmp/wetland_gate/published_q1_method_status.csv
+            /tmp/wetland_gate/published_q1_daily_detected.csv
+            /tmp/wetland_gate/published_q2_method_status.csv
+            /tmp/wetland_gate/published_q2_daily_detected.csv
+            /tmp/wetland_gate/archived_all_padded_history.csv
+            /tmp/wetland_gate/published_q1_padded_history.csv
+            /tmp/wetland_gate/published_q2_padded_history.csv
+            /tmp/wetland_gate/published_code_preflight.json
+            /tmp/wetland_gate/survreps_evidence.json

@@ -1,0 +1,70 @@
+{
+  "schema": "eog.wetland_chronological_discovery_v1.protocol",
+  "status": "POST_EXPOSURE_ORIGINAL_SOURCE_DATE_DISCOVERY_AUDIT_FIXED_BEFORE_FIRST_COMPUTATION",
+  "goal": "Measure exactly how many source site×species positive records first appear AFTER a source-recorded first-visit nondetection and distinguish within-date omitted survey methods from later-date new recorded positives. Do not infer validated absence, occupancy change or field temporal closure.",
+  "original_source": {
+    "study": "Wenner et al. 2025; Global Ecology and Conservation 62 e03837; Zenodo 10.5281/zenodo.15044115, CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "prior_native_visit_ledger_fingerprint": "4c487bb1b00579cbff22be30ae056615708abb275f82eb5091f5df61c4c1b533",
+    "prior_positive_only_bounds_fingerprint": "864b741974f0b8f12347825516eceab2232b3cd16291e998f18368416b2d9247"
+  },
+  "cohorts": {
+    "published_q1": "Original Q1 27 sites excluding kis-banyato and vadasz-turjan; 351 original rows, 117 distinct site×dates, 144 site×species source positives (243 possible slots)",
+    "published_q2": "Original Q2 13 sites where ci==intervention; 188 original rows, 64 distinct site×dates, 77 source positives (117 possible slots); subset of Q1"
+  },
+  "chronological_rule": {
+    "first_visit": "Each site's earliest ISO recorded calendar date from original source, irrespective of method; first-date positive means any count>0 on that same date by included method.",
+    "later_visit": "One or more STRICTLY LATER recorded dates at SAME site; records aggregated by Boolean OR, not independent trap detection; no 20-occasion source resampling or source-row selection.",
+    "panels": [
+      "full_four_recorded_methods",
+      "acoustic_plus_visual"
+    ],
+    "full_positive_source": "any recorded original count >0 for a species at a site across all site dates and all four method rows",
+    "AV_recorded_method_pair": "one acoustic and one visual CSV record on every original site×date; presence of row not equal effort, p(detection), deployment or closure",
+    "first_AV_negative_decomposition": [
+      "av_detected_first: first date acoustic or visual positive",
+      "same_day_extra_method_only: first-date AV negative but first-date dipnet or bottletrap source-positive (full positive)",
+      "later_AV_first_discovery: first-date full four-methods negative and at least one later actual date AV positive",
+      "later_additional_only_discovery: first-date full negative, later full positive, no later AV positive",
+      "never_source_positive: original full site×species all dates zero/no recorded positives (UNKNOWN true status)"
+    ],
+    "date_horizons_days": [
+      7,
+      14,
+      21,
+      30,
+      45,
+      60,
+      91
+    ],
+    "horizon_time_basis": "days after earliest recorded site date inclusive; count first full-nonpositive site×species with later full evidence first observed within horizon. These are observations, not temporal incidence or closure tests.",
+    "originally_proposed_counterfactual_sites": [
+      "rachaz_2",
+      "nyarfas-turjan-laperdo"
+    ],
+    "proposed_taxa": [
+      "Lissotriton vulgaris",
+      "Hyla arborea"
+    ]
+  },
+  "fixed_metrics": [
+    "For Q1 and Q2, all sites × all 9 species: first-visit AV/full source-positive pair counts, ever-positive full/AV counts, first-full-nonpositive later-full-positive counts, first-AV-nonpositive later-AV-positive counts, and 5 disjoint decomposition categories.",
+    "Per taxon, date horizon, and wetland category, counts of later source-positive discoveries after first full nonpositive, and duration in days to earliest full and AV witness; preserve exact source dates in an auditable CSV.",
+    "Compare same site/taxon first-AV negative but first full positive versus first full negative then later full positive, without calling either a true field false negative.",
+    "Summarize proposed 2 source site×2 target species statuses (all full dates; explicit no source positives) and, on those sites, any non-target taxa which have first-date nonpositive later-source-positive evidence.",
+    "Prove exact source restoration Q1 full positive 144, Q2 full positive 77 and AV positive 104/61; zero source-invented positives; Q2 positive pairs and exact source site roster nested in Q1.",
+    "Positive witness recovery by day horizon is nondecreasing; long horizon 91 includes all later source witnesses; source first-day evidence + delayed first-full-nonpositive evidence + same-day method-only evidence exactly partitions full native site×taxon positives.",
+    "Save source-anchored JSON plus site×taxon CSV, site×species×horizon CSV, targeted-source-site CSV, with exact SHA256 and CI tests."
+  ],
+  "inference_limits": [
+    "Post-exposure retrospective split within a previously explored public dataset: not independent prospective out-of-sample validation or a new frozen EOG-WF endpoint.",
+    "A later recorded positive after first recorded zero proves only that first-date source non-detection did not capture the later positive; it does NOT prove an organism was truly present on the first day, because temporal colonization, phenology, emergence and changing detectability are unseparated.",
+    "First-date recorded absence of method row is not proof of that method not deployed. Repeated full zero does not certify ecological absence.",
+    "Native method rows are groups not authenticated physical traps, no equal effort or visit independence; duration between first and last can be 91 days and biological closure is unverified.",
+    "Never label source zeros as verified true negative or calculate occupancy, p-values, causal restoration effects, actual EOG transition-world counts, A/B/M mechanisms, or fourth EOG-WF predictive score.",
+    "Draft PR #697 remains unmerged; original closed EOG-WF 3 scored/31 scientific STOP/3 administrative exclusion denominator unchanged."
+  ]
+}

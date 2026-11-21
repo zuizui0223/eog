@@ -1,0 +1,127 @@
+{
+  "schema": "eog.wetland_survreps_seed123_r_replay.receipt.v1",
+  "status": "SOURCE_VERIFIED_PINNED_R_STAGE_REPLAY_VALIDATED",
+  "analysis_role": "POST_EXPOSURE_METHOD_SENSITIVITY_NOT_HISTORICAL_OCCUPANCY_REPLICATION",
+  "source": {
+    "attribution": "Mizsei, Edvard & Wenner, Balint (2025), Zenodo DOI 10.5281/zenodo.15044115, CC BY 4.0",
+    "repository": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_q1_r_md5": "fcab406cd8a192a07cc97582c19011ad",
+    "original_q2_r_md5": "a2b2f6a30b7243c4b9ece3b5eb75dba6",
+    "upstream_repository": "edvardmizsei/hunviphab",
+    "upstream_commit": "25d4c64da289ffcc14679619bb3b18bd494de872",
+    "upstream_survreps_git_blob_sha1": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+  },
+  "replay_conditions": {
+    "R_version": "R version 4.4.3 (2025-02-28)",
+    "RNGkind": "Mersenne-Twister;Inversion;Rejection",
+    "seed": 123,
+    "reps": 20,
+    "q1_site_filter": "Exclude kis-banyato and vadasz-turjan",
+    "q2_site_filter": "ci == intervention",
+    "X0_equals_one_for_every_native_row": true,
+    "observation_grain": "one original CSV source row (not an independently verified physical field occasion)",
+    "original_publication_runtime_verified": false
+  },
+  "observed_results": {
+    "published_q1": {
+      "sites": 27,
+      "original_survey_rows": 351,
+      "sampled_rows": 540,
+      "distinct_source_rows_selected": 287,
+      "repeated_row_positions": 253,
+      "native_positive_site_species_pairs": 144,
+      "replay_positive_site_species_pairs": 141,
+      "lost_positive_site_species_pairs": 3,
+      "lost": [
+        [
+          "alsopeszer_3",
+          "Pelobates fuscus"
+        ],
+        [
+          "baracsi-csatorna",
+          "Bombina bombina"
+        ],
+        [
+          "baracsi-csatorna",
+          "Lissotriton vulgaris"
+        ]
+      ],
+      "mapping_sha256": "06554191c02c94d1f08a0d0bf88b1383db633de2785e59e295f69ee6e01821ff"
+    },
+    "published_q2": {
+      "sites": 13,
+      "original_survey_rows": 188,
+      "sampled_rows": 260,
+      "distinct_source_rows_selected": 153,
+      "repeated_row_positions": 107,
+      "native_positive_site_species_pairs": 77,
+      "replay_positive_site_species_pairs": 71,
+      "lost_positive_site_species_pairs": 6,
+      "lost": [
+        [
+          "alsopeszer_2",
+          "Bufotes viridis"
+        ],
+        [
+          "alsopeszer_2",
+          "Pelophylax ridibundus"
+        ],
+        [
+          "hancsik-also",
+          "Bufotes viridis"
+        ],
+        [
+          "hancsik-felso",
+          "Bombina bombina"
+        ],
+        [
+          "hancsik-felso",
+          "Bufotes viridis"
+        ],
+        [
+          "lato-hegy",
+          "Bombina bombina"
+        ]
+      ],
+      "mapping_sha256": "bb2c6cd855ab9bb1d72c0380a86edd90a78c8e02cf466208fce6cd392398dc26"
+    },
+    "cohort_overlap": {
+      "shared_original_source_sites": 13,
+      "same_ordered_source_row_sequences": 0,
+      "same_unique_source_row_sets": 0,
+      "differing_replay_site_species_detections": 7,
+      "Q1_lost_among_shared": 1,
+      "Q2_lost_among_shared": 6,
+      "condition": "Same raw source, same original seed, changed cohort filter alters RNG call sequence; no ecological change"
+    }
+  },
+  "verification": {
+    "first_run": {
+      "id": 43671382565,
+      "url": "https://github.com/zuizui0223/eog/actions/runs/43671382565",
+      "conclusion": "success",
+      "artifact_id": 14144356728,
+      "artifact_zip_sha256": "166bb71adb6e921508b496c4e5ca1fe454db3d6d766bd2cc9c517ea9ee671442"
+    },
+    "final_cross_cohort_run": {
+      "id": 43671749950,
+      "url": "https://github.com/zuizui0223/eog/actions/runs/43671749950",
+      "conclusion": "success",
+      "artifact_id": 14144014887,
+      "artifact_zip_sha256": "2e477412063c4fbf98abe8108a547aa9ce20964d59933eba36af61ad1b9dc1dd"
+    },
+    "two_replay_runs_byte_identical_R_mapping_and_metadata": true,
+    "final_result_fingerprint": "0eae2061fc082031402122759c5ef1b9a76d6373839a86132d8ad71ef60983f0"
+  },
+  "caveats": [
+    "Both published original scripts declare set.seed(123), but their exact R/hunviphab installed environment was not independently verified.",
+    "The two original duplicate survey IDs with conflicting counts were not source-adjudicated.",
+    "This analysis is post-exposure; later regression assertions are not new preregistered tests.",
+    "No occupancy model, coefficient, AIC or field treatment effect was fitted or validated.",
+    "Do not infer natural absences or survey-effort equivalence from pseudo-occasion row duplication.",
+    "No causal A/B/M inference, unique history identification or fourth EOG-WF evaluation was added."
+  ]
+}

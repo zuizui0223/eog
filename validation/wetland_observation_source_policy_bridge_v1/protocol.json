@@ -1,0 +1,103 @@
+{
+  "schema": "eog.wetland_observation_source_policy_bridge_v1.protocol",
+  "status": "POST_EXPOSURE_SYNTHETIC_EOG_RULE_AND_AUTHENTIC_SOURCE_CROSSCHECK_FROZEN_BEFORE_EXECUTION",
+  "goal": "Use EOG's actual occurrence_constraints.py and world_reconstruction.py operators, not a separate invented compatibility formula, to show why fixed-source positive-only world-set monotonicity MUST NOT be asserted for self-excluded peer-source diagnostics when authentic observation gates drop a recorded-positive site/species witness.",
+  "scientific_layers": {
+    "authentic_source": "One specific method×time split positive witness (orditoi-zsilip|Hyla arborea) is authenticated from pinned original wetland CSV; original full/Q1 counts unchanged and the last-14-day AV positive witness is dropped although positive source rows exist at different times/methods.",
+    "synthetic_finite_universe": "Precisely three synthetic graph operators on abstract A,B,C nodes are independently declared and frozen. They are NOT Hungarian sites, observed dispersal routes, fitted movement probabilities or true alternative wetland ecological worlds.",
+    "policy_separation": "Fixed-source reconstruction holds source node A and graph universe unchanged, and requires A in all observation sets. Self-excluded occurrence-rule diagnostic instead treats each remaining occurrence as a peer source and changes those peer sources whenever a recorded-positive node is removed.",
+    "observation_labels": "O_full=('A','B','C'), O_gated=('A','B') remove abstract C, only an analogy to losing a genuine source-positive observation under the real wetland date+method gate; DO NOT map any graph node to geographic wetland or species."
+  },
+  "frozen_worlds": [
+    {
+      "id": "hub",
+      "edges": [
+        "A>C",
+        "C>A",
+        "B>C",
+        "C>B"
+      ],
+      "source": [
+        "A"
+      ],
+      "role": "Every occurrence supported by peer C within one step; without C, A and B cannot support one another."
+    },
+    {
+      "id": "isolated_C",
+      "edges": [
+        "A>B",
+        "B>A"
+      ],
+      "source": [
+        "A"
+      ],
+      "role": "A and B support one another, but C is inaccessible."
+    },
+    {
+      "id": "complete",
+      "edges": [
+        "A>B",
+        "B>A",
+        "A>C",
+        "C>A",
+        "B>C",
+        "C>B"
+      ],
+      "source": [
+        "A"
+      ],
+      "role": "All support all other occurrences."
+    }
+  ],
+  "frozen_EOG_contract": {
+    "max_steps": 1,
+    "support_tolerance": 1e-15,
+    "loss_support": 1,
+    "all_raw_edge_geographic_support": 1,
+    "same_node_universe_and_world_fingerprints": true,
+    "fixed_policy_function": "eog.v2.world_reconstruction.reconstruct_compatible_worlds",
+    "self_excluded_policy_function": "eog.v2.occurrence_constraints.evaluate_occurrence_rule_compatibility",
+    "fixed_world_comparison": "eog.v2.world_reconstruction.compare_reconstructions",
+    "never_call_fixed_world_compare_on_self_excluded_results": true
+  },
+  "predeclared_expected_results": {
+    "fixed_source_full_ABC_compatible_worlds": [
+      "complete"
+    ],
+    "fixed_source_gated_AB_compatible_worlds": [
+      "complete",
+      "isolated_C"
+    ],
+    "fixed_evidence_loss_can_only_expand_or_preserve_frozen_compatible_world_set": true,
+    "self_excluded_full_ABC_compatible_worlds": [
+      "complete",
+      "hub"
+    ],
+    "self_excluded_gated_AB_compatible_worlds": [
+      "complete",
+      "isolated_C"
+    ],
+    "self_excluded_can_gain_AND_lose_world_compatibility_on_same_occurence_filter": true,
+    "self_excluded_compatible_world_count_may_remain_2_but_membership_swaps": true,
+    "actual_wetland_example": {
+      "site": "orditoi-zsilip",
+      "species": "Hyla arborea",
+      "AV_outside_last14_date": "2024-03-24",
+      "method": "dipnet",
+      "csv_line": 368,
+      "additional_inside_last14_date": "2024-05-30",
+      "Q1_original_full_positive_site_species": 144,
+      "Q1_last14_split_recorded_witnesses": 16,
+      "Q2_last14_split_recorded_witnesses": 9
+    }
+  },
+  "fail_closed_checks": [
+    "Source original SHA256 authenticated before reading any dates or recorded methods, first/last 14-day window computed from real dated source rows, and synthetic world nodes prohibited from real-world habitat IDs.",
+    "Use actual EOG v2 fixed-source reconstruction, exact three-world finite graph enumeration and exact EOG self-excluded target support outputs.",
+    "Preserve all three graph operator fingerprints between full and gated observations.",
+    "Monotone fixed source compatible worlds under positive evidence loss verified by compare_reconstructions in direction gated -> full.",
+    "Self-excluded gain and loss both independently reproduced with mutually unchanged graph operators; prohibit silent application of fixed-source theorem to self-excluded sets.",
+    "No false inference that source row absence equals biological absence; do not convert the synthetic world compatibility result into an empirical Hungarian wetland EOG world count.",
+    "No original unmarked refit, true occupancy, dispersal M, A/B ecological mechanism, restoration causal effect, fourth EOG-WF scored endpoint, or PR merge."
+  ]
+}

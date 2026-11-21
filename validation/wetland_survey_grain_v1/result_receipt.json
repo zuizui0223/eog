@@ -1,0 +1,54 @@
+{
+  "schema": "eog.wetland_survey_composite_grain.source_receipt.v1",
+  "status": "SOURCE_EXACT_COMPOSITE_OCCASION_KEY_VERIFIED",
+  "scientific_role": "POST_EXPOSURE_SOURCE_KEY_GRAIN_CORRECTION_NOT_FIELD_UNIT_ADJUDICATION",
+  "source": {
+    "citation": "Wenner et al. 2025, Global Ecology and Conservation, https://doi.org/10.1016/j.gecco.2025.e03837",
+    "dataset_doi": "10.5281/zenodo.15044115",
+    "credit": "Original Zenodo data/code CC BY 4.0",
+    "repository": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319"
+  },
+  "evidence": {
+    "raw_rows": 381,
+    "raw_rows_exactly_matching_surv_site_colon_method_colon_doy": 381,
+    "unique_site_method_doy_keys": 379,
+    "repeated_group_keys": 2,
+    "rows_in_repeated_group_keys": 4,
+    "rows_by_method": {
+      "acoustic": 129,
+      "visual": 129,
+      "dipnet": 59,
+      "bottletrap": 64
+    },
+    "unique_groups_by_method": {
+      "acoustic": 129,
+      "visual": 129,
+      "dipnet": 59,
+      "bottletrap": 62
+    },
+    "repeated_groups": [
+      "feneketlen-turjan:bottletrap:89",
+      "tengelyut-2:bottletrap:118"
+    ],
+    "original_field_protocol": "Paper Methods describe 15-50 bottle traps per site, two nights; physical trap identities per native row not verified."
+  },
+  "validation": {
+    "run_id": 43672383482,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43672383482",
+    "conclusion": "success",
+    "artifact_id": 14144617405,
+    "artifact_zip_sha256": "ba7a4cbd1cfcd542f3182171f9271889bd544f164a1f1cda927a12713b97612c",
+    "result_fingerprint": "dc5cce351df332c14027c2af3d1e7b33c1728807c3ef798c4f7a8226f776dea1"
+  },
+  "claim_boundary": [
+    "surv identifies a composite site-method-day grouping key; it is not a proven physical unique visit or trap ID.",
+    "Group-key repetition alone does not prove data entry errors; two recorded species-count vectors differ within those groups.",
+    "Separate physical trap observations, corrections and source inconsistencies cannot be distinguished without field logs.",
+    "Do not deduplicate without a source-supported physical sampling-unit rule.",
+    "Existing rowwise occupancy STOP is conditional on an unsupported unique survey-key assumption, not a published ecological refutation.",
+    "Do not reopen three locked EOG-WF endpoints or claim ecological A/B/M, occupancy or causal effects."
+  ]
+}

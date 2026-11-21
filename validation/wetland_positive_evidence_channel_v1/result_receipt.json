@@ -1,0 +1,101 @@
+{
+  "schema": "eog.wetland_positive_evidence_channel_v1.result_receipt",
+  "status": "SOURCE_ANCHORED_POSITIVE_ONLY_MONOTONICITY_VERIFIED",
+  "analysis_role": "POST_EXPOSURE_DATA_PROVENANCE_AND_FIXED_SUPPORT_WORLD_SET_LEMMA_NOT_INDEPENDENT_ECOLOGICAL_WORLD_TEST",
+  "source": {
+    "study": "Mizsei and Wenner (2025), Zenodo 10.5281/zenodo.15044115; CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "seed_ensemble_positive_pair_csv_sha256": "3ba582b5fbbdaa0e6c6f89cb70bb640cba9e56e50bc0ca187a223f81c0a45ae6",
+    "seed_ensemble_summary_csv_sha256": "0ed9b0f74ea4da5580a35ddfeada709cc6dfac5804bb1a9c916a71dd7b16b7cd",
+    "R_processing": "R4.4.3; fixed seeds 1..256; public hunviphab@25d4c64da289ffcc14679619bb3b18bd494de872; original historical environment not verified"
+  },
+  "reported": {
+    "Q1": {
+      "sites": 27,
+      "native_positive_site_species": 144,
+      "stable_in_all_256": 59,
+      "variable_across_256": 85,
+      "missing_in_all_256": 0,
+      "seed_count_with_any_positive_loss": 256,
+      "top_fragile_species": [
+        {
+          "taxon": "Triturus dobrogicus",
+          "native_positive_sites": 7,
+          "variable_sites": 6
+        },
+        {
+          "taxon": "Bufotes viridis",
+          "native_positive_sites": 11,
+          "variable_sites": 10
+        },
+        {
+          "taxon": "Pelophylax ridibundus",
+          "native_positive_sites": 18,
+          "variable_sites": 15
+        }
+      ],
+      "stable_Hyla_arborea_sites": 20,
+      "positive_Hyla_arborea_sites": 24
+    },
+    "Q2": {
+      "sites": 13,
+      "native_positive_site_species": 77,
+      "stable_in_all_256": 35,
+      "variable_across_256": 42,
+      "missing_in_all_256": 0,
+      "seed_count_with_any_positive_loss": 254,
+      "top_fragile_species": [
+        {
+          "taxon": "Triturus dobrogicus",
+          "native_positive_sites": 4,
+          "variable_sites": 3
+        },
+        {
+          "taxon": "Bufotes viridis",
+          "native_positive_sites": 7,
+          "variable_sites": 6
+        },
+        {
+          "taxon": "Pelophylax ridibundus",
+          "native_positive_sites": 10,
+          "variable_sites": 9
+        }
+      ],
+      "stable_Hyla_arborea_sites": 12,
+      "positive_Hyla_arborea_sites": 12
+    },
+    "all_256_reconciled_to_source_positives": true,
+    "observed_seed_union_covers_source_positives": true,
+    "seed_intersection_not_universal_out_of_sample": true
+  },
+  "mathematical_contract": {
+    "fixed_sources_and_support_masks": true,
+    "source_evidence_O_contains_sampled_evidence_S_in_every_seed": true,
+    "positive_only_admissible_worlds": "W(O_raw) subseteq W(S_r) for each r in [1..256], provided unchanged fixed world universe, sources, support masks and compatibility rules",
+    "source_repair": "S_r union (O_raw minus S_r) == O_raw",
+    "untrusted_absence_error": "Only potential source-positive contradictions are counted, not falsely eliminated biological worlds",
+    "evidence_dependent_source_policy_not_certified": true,
+    "no_real_ecological_worlds_enumerated": true
+  },
+  "validation": {
+    "run_id": 43675880722,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43675880722",
+    "conclusion": "success",
+    "artifact_id": 14146397548,
+    "artifact_zip_sha256": "5832468923bb8c1243b88850e47e02bba1135ee974d260e94cfeeaa1a02f1974",
+    "result_fingerprint": "2920331b3510e48cffb5420bf17984cd3c6d67bf8bb46af8c32cac54f74f062b",
+    "preexisting_full_seed_run_id": 43674891349
+  },
+  "scope_limits": [
+    "Post-exposure source-anchored processing check; not independent biological replication or a new EOG-WF endpoint.",
+    "Seed-frequency stability within fixed 256 is not a proof across all seeds.",
+    "Source positive is based on recorded counts, not externally verified true occupancy or field trap identity.",
+    "Zero after resampling is unknown at source-positive site, not confirmed biological absence.",
+    "Fixed-world positive-only monotonicity assumes worlds, sources and support rules do not adapt to evidence; it does not automatically transfer to EOG self-excluded-source reconstruction.",
+    "No causal A/B/M, dispersal, field population uncertainty or exact number of ecological worlds is inferred.",
+    "Original site/detection effort and closure as well as historical R runtime remain unverified."
+  ]
+}

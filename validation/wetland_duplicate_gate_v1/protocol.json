@@ -1,0 +1,20 @@
+{
+  "schema": "eog.wetland_duplicate_gate_v1.protocol",
+  "status": "PRE_SCORE_SOURCE_IDENTITY_GATE",
+  "source": {
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319"
+  },
+  "predeclared_checks": [
+    "group rows by survey identifier",
+    "compare date/site/method/num and all nine species columns within duplicates",
+    "classify identical duplicate versus conflicting species count",
+    "compute site-date-method grouping multiplicity and distinguish from unique survey ID",
+    "check site×method repeated unique dates and species zero/positive opportunities",
+    "report effort metadata gap without inferring num as duration"
+  ],
+  "decision": "If any duplicate survey ID has conflicting species counts, source is BLOCKED for row-wise likelihood until primary-source adjudication; do not silently drop, sum or take max. No occupancy fitting.",
+  "boundary": "No EOG-WF endpoint, no A/B/M inference."
+}

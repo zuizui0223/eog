@@ -1,0 +1,139 @@
+{
+  "schema": "eog.exhaustive_three_node_source_policy_v1.result_receipt",
+  "status": "COMPLETE_64_NATIVE_EOG_SYNTHETIC_GRAPH_SOURCE_POLICY_EXHAUSTIVE_CI_VERIFIED",
+  "analysis_role": "POST_EXPOSURE_SYNTHETIC_FINITE_WORLD_THEOREM_CERTIFICATE_PLUS_SEPARATE_AUTHENTIC_SOURCE_RECORD",
+  "source": {
+    "study": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837; Zenodo 10.5281/zenodo.15044115 CC BY 4.0",
+    "mirror_repository": "zuizui0223/frogcs",
+    "pin_commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "pre_execution_protocol_commit": "8bbb1cb6cee5f60523bc745220af06bcf9184d12"
+  },
+  "actual_observation_record": {
+    "original_site": "orditoi-zsilip",
+    "original_species": "Hyla arborea",
+    "authentic_source_positive_rows": [
+      {
+        "date": "2024-03-24",
+        "recorded_method": "visual",
+        "original_CSV_line": 6,
+        "inside_last14": false
+      },
+      {
+        "date": "2024-05-30",
+        "recorded_method": "dipnet",
+        "original_CSV_line": 368,
+        "inside_last14": true
+      }
+    ],
+    "native_Q1_last14_split_method_and_calendar_source_positive_pairs": 16,
+    "native_Q2_last14_split_method_and_calendar_source_positive_pairs": 9,
+    "recorded_AV_positive_all_period": true,
+    "recorded_full_positive_last14": true,
+    "recorded_AV_positive_last14": false,
+    "actual_biological_absence_certified": false,
+    "mapped_into_abstract_A_B_C_graph": false
+  },
+  "synthetic_finite_universe": {
+    "graph_status": "EXHAUSTIVE_ONLY_ALL_SIMPLE_DIRECTED_THREE_NODE_GRAPHS",
+    "node_ids": [
+      "A",
+      "B",
+      "C"
+    ],
+    "directed_nonself_edge_bit_order": [
+      "A>B",
+      "A>C",
+      "B>A",
+      "B>C",
+      "C>A",
+      "C>B"
+    ],
+    "possible_directed_edges": 6,
+    "full_graph_universe_count": 64,
+    "unique_world_ids": "mask_00 to mask_63",
+    "all_existing_edges_have_geographic_support": 1,
+    "absent_edges_have_no_direct_transition": true,
+    "loss_support": 1,
+    "max_steps": 1,
+    "fixed_world_source": [
+      "A"
+    ],
+    "full_positive_observation_set": [
+      "A",
+      "B",
+      "C"
+    ],
+    "filtered_positive_observation_set": [
+      "A",
+      "B"
+    ],
+    "same_world_fingerprints_across_observations": true,
+    "actual_native_EOG_APIs": {
+      "fixed": "eog.v2.world_reconstruction.reconstruct_compatible_worlds",
+      "fixed_comparison": "eog.v2.world_reconstruction.compare_reconstructions",
+      "self_excluded": "eog.v2.occurrence_constraints.evaluate_occurrence_rule_compatibility"
+    }
+  },
+  "complete_exact_results": {
+    "fixed_source": {
+      "compatible_original_all_three": 16,
+      "compatible_filtered_AB": 32,
+      "shared": 16,
+      "lost_after_C_removed": 0,
+      "gained_after_C_removed": 16,
+      "full_compatible_set_nested_in_filtered": true,
+      "native_fixed_EOG_added_positive_C_eliminates": 16,
+      "native_fixed_EOG_added_positive_C_retains": 16,
+      "native_fixed_EOG_added_positive_C_contraction_fraction": 0.5,
+      "independent_bit_proof": "A>B and A>C for all-three: 2^4=16; A>B for gated-two: 2^5=32"
+    },
+    "self_excluded_peer_source": {
+      "compatible_original_all_three": 27,
+      "compatible_filtered_AB": 16,
+      "shared": 12,
+      "lost_after_C_removed": 15,
+      "gained_after_C_removed": 4,
+      "neither_compatible": 33,
+      "full_compatible_set_nested_in_filtered": false,
+      "filtered_compatible_set_nested_in_full": false,
+      "independent_bit_proof": "3^3=27 each ABC target needs ≥1 of two incoming positive-source edges; gated AB needs A>B and B>A, giving 2^4=16; intersection 3×4=12.",
+      "EOG_fixed_world_comparator_not_valid_for_self_excluded": true
+    },
+    "original_three_selected_worlds_as_64_graph_masks": {
+      "hub": 58,
+      "isolated_C": 5,
+      "complete": 63
+    },
+    "native_EOG_compatibility_decisions": 256,
+    "independent_graph_predicate_decisions": 256,
+    "all_decisions_agree": true,
+    "authentic_hungarian_wetland_ecological_worlds_inferred": 0,
+    "conclusion": "Self-excluded compatible rule-world memberships can BOTH gain and lose candidates under positive observation removal, even with fixed transition operators, unlike frozen-source reconstruction."
+  },
+  "verification": {
+    "primary_source_authenticated_CI_run_id": 43901604978,
+    "run_url": "https://github.com/zuizui0223/eog/actions/runs/43901604978",
+    "CI_conclusion": "success",
+    "result_json_fingerprint": "159e5ea6ea86e307b909a7d626b2ce74074472765b82edafd57d023af1d6b5f0",
+    "CI_artifact_id": 14242021759,
+    "CI_artifact_zip_sha256": "95a9c81f51848b30178ae688e97f95dd494b51b65fbaec4ad22bbc9e88448320",
+    "output_CSV": "synthetic_64_eog_graph_source_policy_results.csv",
+    "output_CSV_rows": 64,
+    "output_CSV_sha256": "a0aa5f9d24ce0a61182ec351645260cb6a3b255d453d22ea7a31a7025eed51d9",
+    "executable": "benchmarks/exhaustive_three_node_source_policy_v1.py",
+    "tests": "tests/test_exhaustive_three_node_source_policy_v1.py",
+    "independent_bit_enumeration_and_actual_EOG_API_results_match": true,
+    "native_source_SHA_before_record_witness_read_verified": true,
+    "source_real_wetland_IDs_not_confused_with_graph_nodes": true
+  },
+  "limitations": [
+    "64 exhaustive graphs are only the declared three-node directed one-step synthetic universe, not a general empirical ecological world count or universal dispersal conclusion.",
+    "EOG source-policy monotonicity under evidence loss is true for fixed-source/unchanged-world positive support but false for evidence-dependent self-excluded peer sources; the latter are rule diagnostics, not native fixed-source reconstructions.",
+    "The original wetland method×date positive witness is source-authenticated but provides no calibrated movement topology or historical source and is not modeled on synthetic graph A/B/C.",
+    "Undetected species are not verified absent; source method row absence is not evidence field method was not deployed, and original seasonal closure and effort are unknown.",
+    "No original unmarked occupancy model, biological A/B/M causal partition, field true-negative certificate, restoration causal effect, fresh EOG-WF scored endpoint or merge of Draft PR 697.",
+    "Original frozen EOG-WF 3 scored endpoints, 31 scientific STOPs and 3 administrative exclusions unchanged."
+  ]
+}
