@@ -28,6 +28,26 @@ For each of 5 time windows, 3 fixed pages x100 records, the [v3 script](../scrip
 
 The [synthetic tests](../tests/test_eog_tern_dof_official_behavior_code_gate_v3.py) cover secure-source codebook, identity mismatch, altered sample, unknown labels, DOF positional uncertainty, no individual values escaping, and no EOG-WF scoring. [Dedicated CI](../.github/workflows/eog-tern-dof-official-behavior-codes-v3.yml) retains only source-category aggregates.
 
+## Result: an independent source-vocabulary STOP, not evidence that birds did not breed
+
+The original source-only [Actions run #44855176485](https://github.com/zuizui0223/eog/actions/runs/44855176485) succeeded in re-reading the same **15 frozen GBIF historical pages**. The results were **1,500/1,500 nonempty `behavior`** again, and the original positional-uncertainty distribution was reproduced; **1,001/1,500** records still report ≤2km uncertainty. Individual records, observation IDs, coordinates, notes and raw `behavior` values were not uploaded.
+
+**However, not a single one of the 1,500 actual GBIF `behavior` strings was an exact match to any of the 31 prespecified original [DOF primary/secondary codes](https://dofbasen.dk/opslag/behaviour.php).**
+
+| Frozen semantic comparison | DOF/GBIF count in source sample |
+| --- | ---: |
+| `behavior` field nonempty | **1,500 / 1,500** |
+| Match to any of the 31 frozen DOF code/primary label strings | **0 / 1,500** |
+| Unknown original GBIF behavior value format | **1,500 / 1,500** |
+| Nest/incubation codes `YF B`, `YF BR`, `YF UR` recognized in the frozen mapping | **0** (not evidence the real breeding count is zero) |
+| Original independent DOF breeding source colonies matched to 115 catalogue sites | **0 (not attempted)** |
+
+**Scientific gate: `STOP_GBIF_ALL_BEHAVIOR_VALUES_OUTSIDE_FROZEN_CODEBOOK`.** The official DOF observation code table is not by itself a documented mapping to the **indexed GBIF `behavior` field serialization**. We cannot assume that an unrecognized string means rest, migration or breeding. Consequently, **the current source provides no certified historic breeding site-year despite the 18,456 coordinate-bearing occurrences**.
+
+The recorded failure is on the source encoding/crosswalk, *not* the original 20km tern marked-origin geometry or the ecological presence of the population. Exact CI receipt SHA256 `9c9c1581a23359e5cfb12a3ba01227e445dfc5b9d00f0d415025597e3ce5f8b1`; artifact ID `14686788696`, ZIP SHA256 `d574de09377a8ffb081f8367608adc2b0eda8137e087c06a4e6afc690212bedf`. The [frozen explicit STOP certificate](../validation/tern_independent_dofbasen_behavior_semantics_v3/frozen_vocabulary_stop_v3.json) preserves source provenance, sample size, original mapping and missing evidence without exposing individual records.
+
+**What could resolve it:** independent official DOF/GBIF mapping or publisher Darwin Core archive field dictionary describing exactly how the GBIF `behavior` field is exported from the original DOF primary/secondary `ADF` codes, combined with a separately frozen semantic source gate. This is a documentation/source qualification requirement, **not permission** to expand the 31-code whitelist after seeing an unknown result or to infer source-colony occupancy.
+
 ## Remaining boundary
 
 Even if a large number of DOF observations have nesting-associated codes and ≤2km positional uncertainty, this is **not yet a matched colony-source**. Only a separately precommitted record-level spatial/temporal link from independently attested same-species breeding evidence to a particular original colony, with appropriate original historical date and source independence, could support the next ecological claim. Even then **observation year** is not guaranteed to be a database-as-of timestamp, and **marked bird source/route** would remain unchanged.
