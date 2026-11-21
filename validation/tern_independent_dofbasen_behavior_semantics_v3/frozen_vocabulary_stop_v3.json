@@ -1,0 +1,73 @@
+{
+  "schema": "eog.dof_tern_official_behavior_code_v3.frozen_source_semantics_result",
+  "status": "STOP_GBIF_ALL_BEHAVIOR_VALUES_OUTSIDE_FROZEN_CODEBOOK",
+  "interpretive_class": "SCIENTIFIC_SOURCE_VOCABULARY_STOP_NOT_A_NEGATIVE_BREEDING_RESULT",
+  "protocol_first_commit": "7d231fbc540a51ac045635a14654bad57978f61e",
+  "protocol_pre_read_duplicate_code_amendment": "da711c1deb525db4a21c3498f84ea185ffcc6a4d",
+  "official_codebook_url": "https://dofbasen.dk/opslag/behaviour.php",
+  "official_original_breeding_guideline_url": "https://dofbasen.dk/IBA/artsvejledninger.php?lokid=36",
+  "provider_source": {
+    "dataset_uuid": "95db4db8-f762-11e1-a439-00145eb45e9a",
+    "dataset_doi": "10.15468/tww7cj",
+    "species": "Sterna paradisaea",
+    "gbif_speciesKey": 5229230
+  },
+  "experimental_unit": "The same 15 nonrandom GBIF source pages and exactly the same 1,500 historical occurrence records as preceding field-presence stage",
+  "source_schema_from_prior_stage": {
+    "behavior_nonempty": 1500,
+    "reproductiveCondition_nonempty": 0,
+    "occurrenceRemarks_nonempty": 0,
+    "lifeStage_nonempty": 403,
+    "location_uncertainty_LE_2km": 1001
+  },
+  "predeclared_codebook": {
+    "code_count": 31,
+    "direct_nest_relevant_codes": [
+      "YF B",
+      "YF BR",
+      "YF UR"
+    ],
+    "normalization": "NFC, whitespace collapse, casefold uppercase; exact official DOF code strings only; no substring/fuzzy code interpretation"
+  },
+  "v3_result": {
+    "source_records_ephemerally_read": 1500,
+    "official_frozen_code_exact_matches": 0,
+    "official_code_unrecognized": 1500,
+    "missing_behavior_values": 0,
+    "official_nesting_codes_mapped": 0,
+    "unrecognized_with_uncertainty_LE_2km": 1001,
+    "source_colonies_or_site_years_verified": 0,
+    "gbif_record_IDs_or_lat_lons_saved": 0,
+    "original_tern_movement_events_reopened": 0
+  },
+  "source_CI": {
+    "run_id": 44855176485,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/44855176485",
+    "conclusion": "success_CI_execution_with_SCIENTIFIC_STOP",
+    "artifact_id": 14686788696,
+    "artifact_name": "eog-dofbasen-tern-publisher-behavior-codes-v3",
+    "artifact_zip_sha256": "d574de09377a8ffb081f8367608adc2b0eda8137e087c06a4e6afc690212bedf",
+    "original_result_receipt_sha256_without_self": "9c9c1581a23359e5cfb12a3ba01227e445dfc5b9d00f0d415025597e3ce5f8b1"
+  },
+  "interpretation": {
+    "what_failed": "None of the 1,500 GBIF behavior strings matched the 31 exact original published DOF primary/secondary behavior codes and primary names. This is a vocabulary/serialization crosswalk failure, NOT verification of zero breeding.",
+    "what_was_independently_grounded": "GBIF species and source data were previously confirmed; numeric uncertainty and original behavior field presence reproduced in v3; source official codebook exists but does not specify how those codes are exported through this GBIF field.",
+    "why_not_repair": "Any new normalization or additional behavior labels after inspecting results must use a new documented source mapping and separate post-exposure diagnostic, cannot retrofit preregistered v3.",
+    "needed_external_evidence": "GBIF indexed behavior field transformation / publisher occurrence DwC-A behavior value vocabulary and original DOF coding dictionary/version mapping, plus breeding pair/nest fields, exact locality and uncertainty, historical record entry chronology.",
+    "no_claims": [
+      "Zero breeding colonies in 1976-2005",
+      "GBIF behavior means non-breeding",
+      "115 original tern alternative source colonies independently verified",
+      "historical as-of availability",
+      "prospective MRR prediction or causal source mechanism"
+    ]
+  },
+  "original_tern_20km_false_assurance_not_recomputed": 198,
+  "tern_no_exact_rounded_candidate_false_assurance_not_recomputed": 171,
+  "original_eogwf_closed": {
+    "scored": 3,
+    "scientific_STOP": 31,
+    "administrative_exclusions": 3
+  },
+  "new_eogwf_endpoint": 0
+}
