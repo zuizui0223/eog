@@ -80,6 +80,8 @@ def _enforce_source_frozen(spec: dict[str, Any], old: dict[str, Any], old_result
         raise SourceSensitivityStop("STOP_SCENARIO_DEFINITION_CHANGED")
     if spec["frozen_metrics"]["R_km"] != old["frozen_estimands"]["prespecified_thresholds_km"]:
         raise SourceSensitivityStop("STOP_RADIUS_LIST_CHANGED")
+    if float(old["frozen_estimands"]["earth_radius_km"]) != 6371.0088:
+        raise SourceSensitivityStop("STOP_PARENT_EARTH_RADIUS_CHANGED")
 
 
 def _candidate_sources(
@@ -111,7 +113,7 @@ def _summary_for_group(
     H=prot["frozen_metrics"]["geographic_distance"]
     if not H.startswith("same parent"):
         raise SourceSensitivityStop("STOP_DISTANCE_DEFINITION_DRIFT")
-    R=float(prot["frozen_metrics"]["earth_radius_km"])
+    R=6371.0088  # pinned to parent v1; checked by _enforce_source_frozen
     threshold=prot["frozen_metrics"]["R_km"]
     included = [row for row in source if row["year"] >= prot["frozen_sample"]["evaluation_event_year_min"]]
     exact_candidate_with_source_infeasible=Counter()
