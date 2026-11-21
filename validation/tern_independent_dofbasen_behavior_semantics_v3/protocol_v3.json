@@ -1,0 +1,204 @@
+{
+  "schema": "eog.dof_tern_behavior_code_semantic_gate_v3.protocol",
+  "status": "FROZEN_BEFORE_V3_BEHAVIOR_VALUE_READ",
+  "base_main_sha": "a7b696519c22d22812e758600715e7eff6121888",
+  "question": "Do the official DOF/GBIF Arctic Tern behavior field values in the same predeclared 1500 fixed record pages map to publisher-documented primary/secondary breeding codes, especially nest or incubation evidence, and how does precision differ by such codes? No site-year claims or original tern movement crosswalk.",
+  "sources": {
+    "gbif_dataset_uuid": "95db4db8-f762-11e1-a439-00145eb45e9a",
+    "dataset_doi": "10.15468/tww7cj",
+    "accepted_species_key": 5229230,
+    "original_species": "Sterna paradisaea",
+    "parent_stage1_count_sha": "40e1a0798aa01dc69106a2ec29d5c276a2032d8940bfbe2ea67b7d7fc4ca4e30",
+    "parent_stage2_schema_sha": "dcbc86fadf6b2bdd3a27e605f906f118a079af1f57e3bcde7df1df703894ca3e",
+    "stage2_receipt_path": "validation/tern_independent_dofbasen_breeding_field_gate_v2/frozen_field_receipt_v2.json",
+    "stage2_protocol_path": "validation/tern_independent_dofbasen_breeding_field_gate_v2/protocol_v2.json",
+    "publisher_official_behavior_code_url": "https://dofbasen.dk/opslag/behaviour.php",
+    "publisher_colony_breeding_criteria_url": "https://dofbasen.dk/IBA/artsvejledninger.php?lokid=36",
+    "no_ebird": true,
+    "no_tinyfish": true
+  },
+  "sample": {
+    "same_15_frozen_URLS_as_stage2": true,
+    "same_offset_page_size_and_count_revalidation": true,
+    "max_rows": 1500,
+    "windows_count": 5,
+    "field_access_allowlist": [
+      "behavior",
+      "coordinateUncertaintyInMeters",
+      "datasetKey",
+      "speciesKey",
+      "gbifID"
+    ],
+    "no_original_natal_breeding_move_rows": true,
+    "no_observer_IDs_coords_location_names_or_notes_export": true,
+    "count_only_vocabulary_histogram_with_public_official_whitelist": true,
+    "return_unknown_behavior_only_as_UNRECOGNIZED_COUNT": true
+  },
+  "codebook": {
+    "normalization": "strip, collapse whitespace, uppercase, replace Unicode nonbreaking space; preserve Danish Ø. Never fuzzy interpret an unknown behavior as breeding.",
+    "official_codes_to_report": [
+      {
+        "code": "R",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "RI",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "FU",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "FU T",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "R NAT",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "R T",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "SY",
+        "tier": "NOT_DIRECT_BREEDING"
+      },
+      {
+        "code": "TH",
+        "tier": "NOT_DIRECT_BREEDING"
+      },
+      {
+        "code": "T",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "TF",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "T NAT",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "T FU",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "T R",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "OF",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "YF",
+        "tier": "BREEDING_LABELED_NOT_CERTIFIED_SITE"
+      },
+      {
+        "code": "YF EN",
+        "tier": "BREEDING_SUGGESTIVE"
+      },
+      {
+        "code": "YF FU",
+        "tier": "BREEDING_SUGGESTIVE"
+      },
+      {
+        "code": "YF P",
+        "tier": "BREEDING_SUGGESTIVE"
+      },
+      {
+        "code": "YF B",
+        "tier": "NEST_EVIDENCE_POTENTIAL"
+      },
+      {
+        "code": "YF BR",
+        "tier": "NEST_EVIDENCE_POTENTIAL"
+      },
+      {
+        "code": "YF SY",
+        "tier": "BREEDING_SUGGESTIVE"
+      },
+      {
+        "code": "YF TH",
+        "tier": "BREEDING_SUGGESTIVE"
+      },
+      {
+        "code": "YF AA",
+        "tier": "BREEDING_SUGGESTIVE"
+      },
+      {
+        "code": "YF UF",
+        "tier": "BREEDING_SUGGESTIVE"
+      },
+      {
+        "code": "YF UR",
+        "tier": "NEST_EVIDENCE_POTENTIAL"
+      },
+      {
+        "code": "YF K",
+        "tier": "BREEDING_SUGGESTIVE"
+      },
+      {
+        "code": "DØD",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "RASTENDE",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "TRÆKKENDE",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "OVERFLYVENDE",
+        "tier": "NONBREEDING_BEHAVIOR"
+      },
+      {
+        "code": "YNGLENDE",
+        "tier": "BREEDING_LABELED_NOT_CERTIFIED_SITE"
+      },
+      {
+        "code": "DØD",
+        "tier": "NONBREEDING_BEHAVIOR"
+      }
+    ],
+    "additional_free_text_behavior_whitelist": [],
+    "nest_evidence_codes": [
+      "YF B",
+      "YF BR",
+      "YF UR"
+    ],
+    "label_breeding_not_certified": [
+      "YF",
+      "YNGLENDE"
+    ],
+    "strong_evidence_interpretation": "Nest building, incubation or chicks in nest can be relevant evidence of breeding only if original site/date and <=2km uncertainty independently pass; not automatically verified under this stage.",
+    "other_breeding_suggestive": "Mating and territorial behavior can occur away from nesting colonies, and returned codes may reflect field mappings; cannot assert source occupancy just from YF."
+  },
+  "output": {
+    "by_5_year_windows": true,
+    "exact_known_code_counts_only": true,
+    "all_unknown_values_grouped_AS_UNRECOGNIZED": true,
+    "missing_value_count": true,
+    "unknown_values_or_hashes_not_exported": true,
+    "coordinate_uncertainty_buckets_same_stage2": true,
+    "cross_tab_code_tiers_by_geospatial_precision": true,
+    "observed_site_years_matched": 0,
+    "source_colonies_certified": 0,
+    "asof_availability_verified": false,
+    "new_eogwf_endpoints": 0
+  },
+  "fail_closed": [
+    "If original stage2 counts/quality not identical or page request returns changed count, STOP.",
+    "If original dataset or species identity drift, STOP.",
+    "If codebook edited post-exposure, STOP.",
+    "If all behaviors unknown, STOP_CODEBOOK_DOES_NOT_MATCH_GBIF_FIELD without modifying vocabulary after scoring.",
+    "Do not overclaim independent colony occupancy from any YF code; site-year spatial join needs independent stage4.",
+    "No new EOG-WF endpoint: 3 scored/31 scientific STOP/3 admin exclusions frozen."
+  ],
+  "scientific_status": "POST_EXPOSURE_PUBLISHER_BEHAVIOR_CODE_SEMANTICS_ONLY_NOT_INDEPENDENT_BREEDING_COLONY_CONFIRMED"
+}
