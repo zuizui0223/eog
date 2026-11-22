@@ -41,6 +41,7 @@ These files document claims EOG must not present as algorithmic novelty.
 | `keitt_critical_distance_boundary.py` | Critical geographic thresholds, component merger and stepping-stone distances are prior art. |
 | `mce_environmental_exposure_boundary.py` | Minimum cumulative environmental exposure / least-exposure paths are prior art. |
 | `circuit_world_aggregation_boundary.py` | Multiple-path integration/redundancy are prior art; do not union mutually exclusive worlds before inference. |
+| `world_coherent_reachability_boundary.py` | Additional no-splicing guardrail: pooling mutually exclusive static or temporal world edges can invent an A-to-C path absent from every world; no new method claim. |
 | `functional_habitat_world_boundary.py` | Suitable + accessible habitat is prior art; explicit alternative-world identity is a separate uncertainty object. |
 | `history_matching_nroy_boundary.py` | Generic filtering to a compatible/NROY model set is prior art. |
 | `falsification_frontier_boundary.py` | Generic minimum-relaxation / Pareto falsification-frontier mathematics is prior art. |
