@@ -248,10 +248,10 @@ before being inserted into the final Oikos paper. The strongly observed
 pattern remains 16/16 individually sufficient sites, with 13/16 having
 multiple sufficient species and 32 distinct providers across sites.
 The independently source-preserved Oikos candidate is
-[the manuscript and figures](../manuscript/neon_small_mammal_continuity/MANUSCRIPT_V1.md),
-with [scientific boundary](../manuscript/neon_small_mammal_continuity/SUBMISSION_BOUNDARY_V1.json),
-[16-site results](../manuscript/neon_small_mammal_continuity/site_metrics_v1.csv)
-and [rebase reproducibility receipt](../manuscript/neon_small_mammal_continuity/MAINLINE_PORT_REPRODUCIBILITY_RECEIPT_V1.json).
+[the manuscript and figures](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_small_mammal_continuity/MANUSCRIPT_V1.md),
+with [scientific boundary](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_small_mammal_continuity/SUBMISSION_BOUNDARY_V1.json),
+[16-site results](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_small_mammal_continuity/site_metrics_v1.csv)
+and [rebase reproducibility receipt](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_small_mammal_continuity/MAINLINE_PORT_REPRODUCIBILITY_RECEIPT_V1.json).
 No biological response rerun, threshold changes, site replacement or
 new endpoint search is authorized. The blinded nine-page manuscript,
 four figures and 23-file anonymous reviewer pack were regenerated and
@@ -274,7 +274,7 @@ anonymous main prose when applicable, and begin Introduction on page two.
 The historical source/PDF instead includes Data availability in its main
 text, omits approved AI wording, and starts Introduction on page one
 (confirmed by reading the original rendered PDF). The non-destructive
-[Oikos policy v2 builder and author handoff](../manuscript/neon_small_mammal_continuity/OIKOS_POLICY_2026_10_27_AUTHOR_HANDOFF_V2.md)
+[Oikos policy v2 builder and author handoff](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_small_mammal_continuity/OIKOS_POLICY_2026_10_27_AUTHOR_HANDOFF_V2.md)
 separates the two form statements immediately and only creates a
 **new anonymous AI-approved PDF after explicit human author/coauthor
 confirmation**. The initial template is intentionally unapproved; no
