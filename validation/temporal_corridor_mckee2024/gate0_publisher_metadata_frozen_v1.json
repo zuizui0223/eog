@@ -1,0 +1,56 @@
+{
+  "schema": "eog.temporal_corridor_mckee2024.gate0_publisher_metadata_frozen.v1",
+  "status": "SOURCE_DECLARED_METADATA_FROZEN__NO_GPS_FILE_BYTES",
+  "source_doi": "10.5061/dryad.15dv41p51",
+  "publisher_dataset_id": 134688,
+  "publisher_version_id": 305836,
+  "publisher_version_number": 2,
+  "protocol_first_frozen_commit": "144bb8fdeaf6cbae1ef09c82b48ddbf821732f4b",
+  "source_audit_run_id": 45029127610,
+  "source_audit_head_sha": "39e18bd8ced4eb42280546fb42f88717da16e807",
+  "workflow_artifact_id": 14756843314,
+  "workflow_artifact_sha256": "17adc8def2b3354759aacf7715b9b08f8152888fcc21c94bc9cc6e1669dd209c",
+  "publisher_dataset_json_fingerprint": "bf93d3a2b53b09de9182bfcb5167fc4d085e1de5e270d86140ea0a6910883e85",
+  "publisher_file_roster_json_fingerprint": "707eac3d11ba6ce18301a826f31678c5edc27b4ea41ca0fe030558f0aaa8bf09",
+  "protocol_fingerprint": "078f51ee2720c6fdc31deb808cd6c2ba70f343e3197f5b1aed4fbdac2b3a950f",
+  "files": [
+    {
+      "name": "GPS12hrs_Locs.zip",
+      "file_id": 3334125,
+      "version_id": 305836,
+      "size_bytes": 1539661,
+      "digest_type": "sha-256",
+      "publisher_declared_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+      "metadata_fingerprint": "0fb189eaf8df707863fca33a3256df330e2ed8903e983b35644e37911219a96d",
+      "actual_file_byte_hash_verified": false
+    },
+    {
+      "name": "GPS2hrs_Locs.zip",
+      "file_id": 3334126,
+      "version_id": 305836,
+      "size_bytes": 8938302,
+      "digest_type": "sha-256",
+      "publisher_declared_sha256": "2ea7316f75030d5ecef6f4dd2baebaabf66ac4576052383838c5754791201351",
+      "metadata_fingerprint": "c2c2bcdff32cfc96d3e1576990a40857c2d222fe5369fc7a56936856f4e948e2",
+      "actual_file_byte_hash_verified": false
+    },
+    {
+      "name": "README.md",
+      "file_id": 3334129,
+      "version_id": 305836,
+      "size_bytes": 4915,
+      "digest_type": "sha-256",
+      "publisher_declared_sha256": "c2af382786022f26a68a288ccb6b4ad0e102b6ced9978ff6d3fbdc1e02fbe0df",
+      "metadata_fingerprint": "c07d94a8dd1a3f1b24fa59ca38396d3b14f07398064bb4d025fc7e805c98e4e2",
+      "actual_file_byte_hash_verified": false
+    }
+  ],
+  "source_metadata_only": true,
+  "all_binary_payloads_downloaded": false,
+  "sparse_12h_tracks_read": false,
+  "dense_2h_tracks_read": false,
+  "GPS_rows_read": false,
+  "scores_computed": false,
+  "new_eog_wf_endpoint": false,
+  "note": "Observed immutable publisher API identity, verified ZIP artifact checksum only. Original GPS/README source-file hashes are publisher declarations and have NOT been checked against downloaded file bytes."
+}
