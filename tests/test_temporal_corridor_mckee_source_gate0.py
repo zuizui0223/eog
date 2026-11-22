@@ -17,6 +17,7 @@ SOURCE = ROOT / "validation/temporal_corridor_mckee2024/source_gate0_protocol_v1
 qualify = NAMESPACE["qualify_documents"]
 audit = NAMESPACE["audit"]
 fetch_json = NAMESPACE["_fetch_official_json"]
+verify_frozen = NAMESPACE["verify_frozen_metadata"]
 
 
 @pytest.fixture
@@ -157,3 +158,45 @@ def test_source_contract_declares_no_dense_holdout_authorization(fixture_documen
     changed["status"] = "ALLOW_DATA"
     with pytest.raises(ValueError, match="frozen-before-access"):
         qualify(changed, dataset, files)
+
+
+def test_separate_gate0_frozen_receipt_matches_and_rejects_digest_drift(fixture_documents):
+    proto, dataset, files = fixture_documents
+    result = qualify(proto, dataset, files)
+    frozen = {
+        "schema": "eog.temporal_corridor_mckee2024.gate0_publisher_metadata_frozen.v1",
+        "status": "SOURCE_DECLARED_METADATA_FROZEN__NO_GPS_FILE_BYTES",
+        "source_doi": result["doi"],
+        "publisher_dataset_id": result["publisher_dataset_id"],
+        "publisher_version_id": result["version_id"],
+        "publisher_version_number": result["publisher_version_number"],
+        "publisher_dataset_json_fingerprint": result["dataset_json_fingerprint"],
+        "publisher_file_roster_json_fingerprint": result["file_roster_json_fingerprint"],
+        "protocol_fingerprint": result["protocol_fingerprint"],
+        "all_binary_payloads_downloaded": False,
+        "dense_2h_tracks_read": False,
+        "GPS_rows_read": False,
+        "files": [
+            {
+                "name": f["name"], "file_id": f["file_id"],
+                "version_id": f["version_id"], "size_bytes": f["size_bytes"],
+                "digest_type": f["source_declared_digest_type"],
+                "publisher_declared_sha256": f["source_declared_digest"],
+                "metadata_fingerprint": f["metadata_fingerprint"],
+            }
+            for f in result["files"]
+        ],
+    }
+    assert verify_frozen(result, frozen)["status"] == "MATCHES_FROZEN_GATE0_PUBLISHER_METADATA"
+    changed = copy.deepcopy(frozen)
+    changed["files"][0]["publisher_declared_sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="roster"):
+        verify_frozen(result, changed)
+    changed = copy.deepcopy(frozen)
+    changed["publisher_version_id"] += 1
+    with pytest.raises(ValueError, match="version_id"):
+        verify_frozen(result, changed)
+    changed = copy.deepcopy(frozen)
+    changed["dense_2h_tracks_read"] = True
+    with pytest.raises(ValueError, match="raw GPS"):
+        verify_frozen(result, changed)
