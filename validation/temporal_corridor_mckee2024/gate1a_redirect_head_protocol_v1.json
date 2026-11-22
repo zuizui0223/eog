@@ -1,0 +1,72 @@
+{
+  "schema": "eog.temporal_corridor_mckee2024.gate1_redirect_head_protocol.v1",
+  "status": "FROZEN_BEFORE_HEAD_REQUEST__NO_FILE_PAYLOAD",
+  "phase": "GATE1A_PUBLISHER_FIRST_REDIRECT_HEAD_ONLY",
+  "parent_gate0_receipt": "validation/temporal_corridor_mckee2024/gate0_publisher_metadata_frozen_v1.json",
+  "parent_gate0_version_id": 305836,
+  "fixed_eligible_files": [
+    {
+      "file_id": 3334125,
+      "name": "GPS12hrs_Locs.zip",
+      "size_bytes": 1539661,
+      "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+      "url": "https://datadryad.org/downloads/file_stream/3334125",
+      "role": "12h_sparse_only_future_authorization"
+    },
+    {
+      "file_id": 3334129,
+      "name": "README.md",
+      "size_bytes": 4915,
+      "sha256": "c2af382786022f26a68a288ccb6b4ad0e102b6ced9978ff6d3fbdc1e02fbe0df",
+      "url": "https://datadryad.org/downloads/file_stream/3334129",
+      "role": "schema_document_future_authorization"
+    }
+  ],
+  "explicitly_forbidden_files": [
+    {
+      "file_id": 3334126,
+      "name": "GPS2hrs_Locs.zip",
+      "sha256": "2ea7316f75030d5ecef6f4dd2baebaabf66ac4576052383838c5754791201351",
+      "reason": "dense_holdout_never_request_before_frozen_scoring_protocol"
+    }
+  ],
+  "network_contract": {
+    "method": "HEAD",
+    "request_budget_per_execution": 2,
+    "allowed_request_urls": [
+      "https://datadryad.org/downloads/file_stream/3334125",
+      "https://datadryad.org/downloads/file_stream/3334129"
+    ],
+    "follow_any_redirect": false,
+    "do_not_open_response_body": true,
+    "timeout_seconds": 25,
+    "permitted_initial_statuses": [
+      200,
+      301,
+      302,
+      303,
+      307,
+      308
+    ],
+    "if_redirect_to_non_https": "HOLD_SOURCE_TRANSPORT",
+    "if_direct_200": "record_content_length_type_metadata_only",
+    "record_only": "HTTP status, first target host (not signed URL or query), path-free response type/size and declared identity",
+    "prohibited": [
+      "GET",
+      "Range GET",
+      "any read of ZIP, README or GPS bytes",
+      "redirect follow-up",
+      "2h holdout request",
+      "source file download",
+      "ecological score"
+    ]
+  },
+  "future_gate1b": "separate freeze must pin exact first-hop host and any subsequent redirect host suffixes before authorizing 12h and README byte download and independent SHA verification",
+  "claim_boundary": {
+    "gate0_metadata_version_frozen": true,
+    "sparse_12h_byte_access_authorized": false,
+    "dense_2h_byte_access_authorized": false,
+    "model_scoring_authorized": false,
+    "new_EOG_WF_endpoint": false
+  }
+}
