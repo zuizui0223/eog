@@ -121,6 +121,11 @@ _TEMPORAL_SURVEY_EXPORTS: Final[tuple[str, ...]] = (
     "rank_positive_temporal_occurrence_candidates",
 )
 
+_TEMPORAL_PATH_CERTIFICATE_EXPORTS: Final[tuple[str, ...]] = (
+    "TemporalPathCertificate",
+    "audit_temporal_path_quantifiers",
+)
+
 _TEMPORAL_TRANSITION_EXPORTS: Final[tuple[str, ...]] = (
     "TemporalTransitionLandscape",
     "TemporalTransitionUniverseUpdate",
@@ -169,6 +174,7 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
         name: "eog.v2.temporal_transition_landscape"
         for name in _TEMPORAL_TRANSITION_EXPORTS
     },
+    **{name: "eog.v2.temporal_path_certificates" for name in _TEMPORAL_PATH_CERTIFICATE_EXPORTS},
     **{name: "eog.v2.temporal_relaxation" for name in _TEMPORAL_RELAXATION_EXPORTS},
     **{name: "eog.synthetic_archipelago" for name in _SYNTHETIC_EXPORTS},
     "build_dynamic_reachability_visualization_payload": "eog.reachability_visualization",
@@ -192,6 +198,7 @@ __all__ = [
     *_TEMPORAL_RECONSTRUCTION_EXPORTS,
     *_TEMPORAL_SURVEY_EXPORTS,
     *_TEMPORAL_TRANSITION_EXPORTS,
+    *_TEMPORAL_PATH_CERTIFICATE_EXPORTS,
     *_TEMPORAL_RELAXATION_EXPORTS,
 ]
 
