@@ -4,6 +4,17 @@
 
 The source was selected on 2026-11-22, before the repository source-metadata workflow was executed. The frozen gate is [source_gate0_protocol_v1.json](source_gate0_protocol_v1.json). This programme is separate from the closed EOG-WF three-endpoint manuscript.
 
+## Gate0 observed result (publisher metadata, not GPS data)
+
+Source-only GitHub Actions run [45029127610](https://github.com/zuizui0223/eog/actions/runs/45029127610) returned `SOURCE_METADATA_IDENTITY_QUALIFIED__NO_TRACK_ROWS`, with the source receipt and its verified artifact ZIP digest `17adc8def2b3354759aacf7715b9b08f8152888fcc21c94bc9cc6e1669dd209c`. The full publisher-declared file roster is now [frozen here](gate0_publisher_metadata_frozen_v1.json); protocol-first commit was `144bb8fdeaf6cbae1ef09c82b48ddbf821732f4b` before the source API request.
+
+- Public dataset ID 134688, numeric version ID 305836, version number 2.
+- Sparse 12-hour ZIP: file 3334125; 1,539,661 bytes; SHA-256 declared.
+- Dense 2-hour ZIP (sealed): file 3334126; 8,938,302 bytes; SHA-256 declared.
+- README: file 3334129; 4,915 bytes; SHA-256 declared.
+
+The source-files' SHA-256 values remain **declarations, not independently checked against downloaded file bytes**. No location record or binary source file was accessed. Subsequent Gate0 execution rejects any drift from this frozen receipt; it does not authorize Gate1.
+
 ## Publisher and stated source structure
 
 - DOI: https://doi.org/10.5061/dryad.15dv41p51
