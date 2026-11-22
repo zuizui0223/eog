@@ -1,0 +1,78 @@
+{
+  "schema": "eog.mckee2024.sparse12h.aggregate_qc.v1",
+  "status": "FROZEN_BEFORE_ANY_SPARSE_DBF_RECORD_VALUES_READ",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "schema_input": "validation/temporal_corridor_mckee2024/gate1_sparse_zip_schema_receipt_v1.json",
+  "source_file": "GPS12hrs_Locs.zip",
+  "declared_post_schema_aliases": {
+    "Timestamp": "Timstmp",
+    "SeasonYr": "SeasnYr",
+    "SpeciesCommon": "SpcsCmm",
+    "SpeciesScientific": "SpcsScn"
+  },
+  "fields_to_read": [
+    "State",
+    "Herd",
+    "SpcsCmm",
+    "SpcsScn",
+    "AID",
+    "SeasnYr",
+    "Season",
+    "Year",
+    "Timstmp",
+    "UTM_E",
+    "UTM_N"
+  ],
+  "unit": "Herd × AID × SeasnYr × Season (all 4 fields required to define cluster); repeated fixes are dependent",
+  "approved_actions": [
+    "read DBF record rows from the verified 12h ZIP ONLY to compute aggregate counts, field missingness, parseability, duplicates and within-cluster time intervals",
+    "check UTM_E/UTM_N numeric finite values and domain sanity without reporting any coordinates",
+    "retain per-animal group keys only in ephemeral memory; export aggregate counts, no raw fixes or individual IDs",
+    "calculate number of groups with at least 3 valid timestamped records and nominally 12h consecutive gaps",
+    "report up to 4 public herd names and aggregate season counts only; no GPS trace reconstruction"
+  ],
+  "forbidden_actions": [
+    "open GPS2hrs_Locs.zip or any withheld 2h observation",
+    "read SHP geometry records in this stage",
+    "export individual AID, exact timestamp, coordinates or path",
+    "fit/score EOG or comparator; tune temporal thresholds against the 2h file",
+    "reinterpret sparse-12h QC as independent biological validation"
+  ],
+  "time_parsing": {
+    "accepted_formats": [
+      "%Y-%m-%d %H:%M:%S",
+      "%Y-%m-%d %H:%M",
+      "%Y/%m/%d %H:%M:%S",
+      "%Y/%m/%d %H:%M",
+      "%m/%d/%Y %H:%M:%S",
+      "%m/%d/%Y %H:%M",
+      "%m/%d/%Y %I:%M:%S %p",
+      "%Y-%m-%dT%H:%M:%S"
+    ],
+    "additional_iso8601": "datetime.fromisoformat only if full string parsable; record aware vs naive and withhold UTC alignment",
+    "calendar_timezone": "Publisher README indicates Mountain Time (MT); DBF field is text; do not assert UTC offsets or DST correction until independently defined",
+    "nominal_gap_hours": 12,
+    "gap_window_hours": [
+      10,
+      14
+    ],
+    "sufficient_group_min_valid_timestamps": 3
+  },
+  "coordinate_QC": {
+    "easting_min_exclusive": 0,
+    "easting_max_exclusive": 1000000,
+    "northing_min_inclusive": 0,
+    "northing_max_inclusive": 10000000,
+    "numeric_not_geometry": true
+  },
+  "failure_policy": "STOP if source hash changes, required field missing, data records malformed, time parse coverage <95%, or nonfinite coordinate fraction >5%; no reinterpretation of data post inspection",
+  "output_privacy": "aggregate QC JSON only; no IDs, individual route, exact timestamps or coordinates",
+  "EOG_WF_frozen": {
+    "scored": 3,
+    "favorable": 2,
+    "adverse": 1,
+    "scientific_stops": 31,
+    "administrative_exclusions": 3
+  },
+  "dense_holdout_opened": false
+}
