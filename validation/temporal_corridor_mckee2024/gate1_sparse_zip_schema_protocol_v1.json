@@ -1,0 +1,78 @@
+{
+  "schema": "eog.mckee2024.sparse12h.zip_schema_gate1.v1",
+  "status": "FROZEN_BEFORE_ARCHIVE_MEMBER_INSPECTION",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "version_id": 305836,
+    "file_id": 3334125,
+    "filename": "GPS12hrs_Locs.zip",
+    "size": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4"
+  },
+  "scope": "ZIP archive directory, shape/index/DBF schema header and projection text ONLY",
+  "allow": [
+    "central ZIP directory: exact names/extensions/sizes/compression metadata",
+    "SHP and SHX first 100 header bytes (never serialize bounds)",
+    "DBF first 32 bytes and field descriptors up to terminator; no rows",
+    "PRJ WKT and optional CPG text",
+    "schema counts, field names/types, declared CRS and non-sensitive JSON receipt"
+  ],
+  "prohibit": [
+    "any point geometries, SHP records, DBF record rows, individual IDs, timestamps or coordinates",
+    "opening 2-hour GPS ZIP",
+    "scoring heldout predictions or modeling tracks",
+    "committing any source binary to GitHub"
+  ],
+  "limits": {
+    "entries": 40,
+    "total_uncompressed": 150000000,
+    "member_uncompressed": 120000000,
+    "compression_ratio": 200,
+    "dbf_header": 16384,
+    "prj": 65536,
+    "cpg": 8192
+  },
+  "required_extensions": [
+    ".shp",
+    ".shx",
+    ".dbf",
+    ".prj"
+  ],
+  "optional_extensions": [
+    ".cpg"
+  ],
+  "expected_shape_types": [
+    1,
+    11,
+    21
+  ],
+  "expected_crs": "EPSG:3742",
+  "expected_fields": [
+    "AID",
+    "Timestamp",
+    "SeasonYr",
+    "Herd",
+    "UTM_E",
+    "UTM_N"
+  ],
+  "conditions": [
+    "only one shapefile layer, all mandatory components share basename",
+    "unknown extensions trigger HOLD",
+    "DBF count and SHX index count must agree",
+    "CRS must be verified from PRJ, not inferred from journal text"
+  ],
+  "stop_on": [
+    "SHA or size mismatch",
+    "unsafe member paths/symlinks/encryption/compression",
+    "missing/duplicate components",
+    "DBF/SHP/SHX header or count mismatch",
+    "CRS or necessary fields absent"
+  ],
+  "result_class": "SCHEMA_PASS_ONLY or explicit STOP; never ecological validation",
+  "frozen_eog_wf": {
+    "scored": 3,
+    "scientific_stop": 31,
+    "administrative_exclusions": 3
+  },
+  "dense_2h_holdout_access": false
+}

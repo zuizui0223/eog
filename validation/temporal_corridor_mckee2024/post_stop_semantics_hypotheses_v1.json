@@ -1,0 +1,50 @@
+{
+  "schema": "eog.mckee2024.sparse12h.post_stop_semantics_exploration.v1",
+  "status": "FROZEN_BEFORE_ALTERNATIVE_TIME_OR_CRS_DIAGNOSTICS",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "observed_parent": "validation/temporal_corridor_mckee2024/post_stop_field_diagnostic_receipt_v1.json",
+  "question": "Can observable timestamp formats and aggregate coordinates discriminate possible format/CRS labeling errors without selecting an interpretation or touching withheld data?",
+  "time_hypotheses": [
+    {
+      "id": "T0",
+      "date_only_policy": "reject",
+      "purpose": "original frozen STOP baseline"
+    },
+    {
+      "id": "T1",
+      "date_only_policy": "assume_00_00_local",
+      "purpose": "test consistency with alternating 12h records, not authorized correction"
+    },
+    {
+      "id": "T2",
+      "date_only_policy": "assume_12_00_local",
+      "purpose": "negative control for ambiguity, not authorized correction"
+    }
+  ],
+  "time_diagnostics": [
+    "hour-of-day histogram for timestamped records; no dates or IDs",
+    "aggregate counts of within-(Herd,AID,SeasnYr,Season) consecutive gaps within 10-14h under T1/T2",
+    "aggregate counts of zero or negative gaps, gaps >24h and >=3-valid-fix groups",
+    "report only summary counts, not per-individual track or timestamp"
+  ],
+  "crs_hypotheses": [
+    "EPSG:3742",
+    "EPSG:5070",
+    "ESRI:102003",
+    "EPSG:3857"
+  ],
+  "crs_diagnostic": "transform ONLY the already-rounded spatial bounding-box center from the prior aggregate receipt into approximate longitude/latitude; compare broad geographic plausibility to published Wyoming herds but do not change PRJ, data or model CRS",
+  "crs_input_bbox_rounded_10000": [
+    -1180000,
+    2030000,
+    -910000,
+    2530000
+  ],
+  "do_not_read_shp_record_geometry": true,
+  "no_alternative_CRS_accepted_automatically": true,
+  "no_date_imputation_accepted_automatically": true,
+  "source_documentation_required_before_scoring": true,
+  "dense_2h_holdout_access": false,
+  "original_gate2_stop_remains": true,
+  "EOG_WF_3_31_3_unchanged": true
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "eog.mckee2024.sparse12h.post_stop_format_coordinate_receipt.v1",
+  "status": "DIAGNOSTIC_COMPLETE__SOURCE_TIME_AND_CRS_SEMANTICS_HOLD",
+  "protocol_commit": "41808f49d26d33038da5788943348957b606268e",
+  "original_gate2_stop_commit": "069d1a40127086c493daaf83e9434b2944817926",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "record_count": 28953,
+  "time_string_shape_counts": {
+    "YYYY-MM-DD HH:MM:SS": 18118,
+    "YYYY-MM-DD": 10835
+  },
+  "post_hoc_interpretation_limit": "Date-only values MUST NOT be unilaterally imputed as midnight or UTC time from this diagnostic; get independently documented format semantics first.",
+  "attribute_easting": {
+    "all_negative_records": 28953,
+    "aggregate_range_rounded_10000": [
+      -1180000,
+      -910000
+    ]
+  },
+  "attribute_northing": {
+    "aggregate_range_rounded_10000": [
+      2030000,
+      2530000
+    ]
+  },
+  "shapefile_header_bbox_rounded_10000": [
+    -1180000,
+    2030000,
+    -910000,
+    2530000
+  ],
+  "declared_projection": "EPSG:3742 (NAD83(HARN)/UTM zone 12N)",
+  "projection_conflict": "The SHP aggregate bounds match negative easting-like attribute coordinates, but those values conflict with normal expected coordinate magnitude for Wyoming under declared UTM zone 12N; CRS reinterpretation NOT authorized.",
+  "source_QC_outcome": "STOP_UNRESOLVED_TIMESTAMP_PRECISION_AND_CRS_SEMANTICS",
+  "geometries_read": false,
+  "individual_coordinates_exported": false,
+  "individual_timestamps_exported": false,
+  "dense_2hr_holdout_opened": false,
+  "ecological_scores_computed": false,
+  "no_automatic_rename_or_reprojection": true,
+  "EOG_WF_frozen_3_31_3": true
+}
