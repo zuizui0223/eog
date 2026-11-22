@@ -27,7 +27,8 @@ jobs:
       - name: Exactly two official publisher JSON metadata requests
         run: |
           python validation/temporal_corridor_mckee2024/qualify_gate0.py \
-            --output mckee2024_source_gate0_receipt.json
+            --output mckee2024_source_gate0_receipt.json \
+            --verify-frozen validation/temporal_corridor_mckee2024/gate0_publisher_metadata_frozen_v1.json
       - name: Archive metadata-only receipt, even on HOLD
         if: always()
         uses: actions/upload-artifact@v4
