@@ -78,5 +78,13 @@ def test_method_cores_and_evidence_denominator_are_retained():
     assert "3 scored" in result
     assert "31 scientific" in result
     assert "3 administrative" in result
-    assert "2 favorable" in result and "1 adverse" in result
+    for expected in (
+        "Azores yellow eel telemetry",
+        "SW Louisiana King Rail acoustics",
+        "Tampa Bay seagrass transects",
+        "−0.0099856",
+        "−0.0009718",
+        "+0.1010287",
+    ):
+        assert expected in result, f"frozen methodological endpoint missing: {expected}"
     assert (ROOT / "docs/REPOSITORY_BOUNDARY.md").is_file()
