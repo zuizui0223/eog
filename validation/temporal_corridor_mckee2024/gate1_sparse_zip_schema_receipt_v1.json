@@ -1,0 +1,146 @@
+{
+  "schema": "eog.mckee2024.sparse12h.archive_schema_receipt.v1",
+  "status": "STRUCTURE_CRS_COUNT_PASS__EXPECTED_COLUMN_ALIAS_REVIEW_REQUIRED",
+  "protocol_commit": "5030137ae5f6af0caf232d8ad4271594b8f29f0d",
+  "source_doi": "10.5061/dryad.15dv41p51",
+  "publisher_file_id": 3334125,
+  "publisher_version_id": 305836,
+  "source_file": "GPS12hrs_Locs.zip",
+  "source_file_size": 1539661,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "sha256_matches_prior_publisher_declaration": true,
+  "members": [
+    {
+      "name": "GPS12hrs_Locs.dbf",
+      "size": 22265243,
+      "compressed": 1005632
+    },
+    {
+      "name": "GPS12hrs_Locs.prj",
+      "size": 440,
+      "compressed": 273
+    },
+    {
+      "name": "GPS12hrs_Locs.shp",
+      "size": 810784,
+      "compressed": 468361
+    },
+    {
+      "name": "GPS12hrs_Locs.shx",
+      "size": 231724,
+      "compressed": 64933
+    }
+  ],
+  "zip_member_path_safety_pass": true,
+  "zip_supported_compression_pass": true,
+  "one_shape_layer": true,
+  "shp_header": {
+    "type_code": 1,
+    "version": 1000,
+    "declared_size": 810784
+  },
+  "shx_header": {
+    "type_code": 1,
+    "version": 1000,
+    "declared_size": 231724,
+    "index_entry_count": 28953
+  },
+  "dbf_header": {
+    "record_count_declared": 28953,
+    "header_length": 385,
+    "record_length": 769,
+    "fields": [
+      {
+        "name": "State",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "Herd",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "SpcsCmm",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "SpcsScn",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "AID",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "SeasnYr",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "Season",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "Year",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "Timstmp",
+        "type": "C",
+        "length": 80,
+        "decimal": 0
+      },
+      {
+        "name": "UTM_E",
+        "type": "N",
+        "length": 24,
+        "decimal": 15
+      },
+      {
+        "name": "UTM_N",
+        "type": "N",
+        "length": 24,
+        "decimal": 15
+      }
+    ]
+  },
+  "dbf_vs_shx_count_matches": true,
+  "projection": {
+    "epsg": 3742,
+    "name": "NAD83(HARN) / UTM zone 12N",
+    "prj_wkt_sha256": "e7d9463cff5d56198b19ed19ec150495841ddfa66168aaf29702b71fb8642fb4"
+  },
+  "required_field_name_discrepancies": [
+    {
+      "advertised": "Timestamp",
+      "physical": "Timstmp",
+      "status": "ALIAS_NOT_YET_AUTHORIZED"
+    },
+    {
+      "advertised": "SeasonYr",
+      "physical": "SeasnYr",
+      "status": "ALIAS_NOT_YET_AUTHORIZED"
+    }
+  ],
+  "source_record_values_read": false,
+  "shape_coordinate_values_read": false,
+  "individual_tracks_read": false,
+  "dense_2h_holdout_opened": false,
+  "biological_prediction_scored": false,
+  "EOG_WF_3_31_3_unchanged": true,
+  "next_stage": "Declare explicit field aliases and timezone parsing rules in a separate pre-row inspection protocol, then qualify sparse-only records."
+}
