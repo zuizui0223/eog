@@ -8,13 +8,13 @@ The existing [circuit world-aggregation boundary](../benchmarks/circuit_world_ag
 
 ## Static world counterexample
 
-Observed positive evidence is A alone, with declared source A, node universe {A,B,C} and two transition steps. Each edge has raw support 1 and the explicit loss channel is 1, so a single outgoing edge transmits half the support.
+Positive evidence is A and D, with source A, node universe {A,B,C,D} and two transition steps. Both worlds contain the same A → D edge (raw support 0.5), ensuring the existing two-positive-occurrence input contract is met. In this static fixture the A loss channel is 0.5 and other nodes use 1.0; together with A → B raw support 1 and B → C raw support 1, the invalid pooled path has first-passage support 0.25. D does not lead to C.
 
 | Declared world | Available directed edges | Can A reach C by step 2? |
 |---|---|---|
-| world_ab | A → B | No |
-| world_bc | B → C | No |
-| **Invalid pooled graph** | A → B and B → C | **Yes; first-passage support 0.25** |
+| world_ab | A → D and A → B | No |
+| world_bc | A → D and B → C | No |
+| **Invalid pooled graph** | A → D, A → B and B → C | **Yes; first-passage support 0.25** |
 
 The correct finite-world union of reachable **nodes** excludes C. Replacing the pair of graphs with their edge union before propagation silently switches from one fixed world to another in the middle of a path.
 
@@ -22,7 +22,7 @@ As a positive control, genuinely adding a third world containing A → B → C m
 
 ## Temporal world counterexample
 
-With snapshots t0,t1,t2:
+With snapshots t0,t1,t2, source A and a standard loss channel of 1.0 (D is present in the node universe but unused):
 
 | Declared world | t0 → t1 edges | t1 → t2 edges | Reaches C at t2? |
 |---|---|---|---|
