@@ -1,0 +1,38 @@
+name: EOG McKee-2024 Dryad metadata-only Gate0
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/eog-mckee2024-dryad-metadata-gate0.yml"
+      - "validation/temporal_corridor_mckee2024/**"
+      - "tests/test_temporal_corridor_mckee_source_gate0.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install existing EOG package for metadata parsing
+        run: python -m pip install -e . pytest
+      - name: Test no-payload gate against offline metadata fixtures
+        run: python -m pytest tests/test_temporal_corridor_mckee_source_gate0.py -q
+      - name: Exactly two official publisher JSON metadata requests
+        run: |
+          python validation/temporal_corridor_mckee2024/qualify_gate0.py \
+            --output mckee2024_source_gate0_receipt.json
+      - name: Archive metadata-only receipt, even on HOLD
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mckee2024-gate0-metadata-only
+          path: mckee2024_source_gate0_receipt.json
+          if-no-files-found: ignore
+          retention-days: 30
