@@ -122,3 +122,31 @@ def test_all_stages_keep_prediction_and_dense_holdout_sealed():
         for row in rows
     )
     assert rows[-1]["EOG_WF_3_31_3_unchanged"] is True
+
+
+
+def test_two_replay_producers_are_importable_without_source_data():
+    import subprocess
+    import sys
+    producers = (
+        ROOT / "replay_sparse_schema_and_geometry.py",
+        ROOT / "replay_sparse_time_qc.py",
+    )
+    for script in producers:
+        result = subprocess.run(
+            [sys.executable, str(script), "--help"],
+            capture_output=True, text=True, timeout=15, check=False,
+        )
+        assert result.returncode == 0, result.stderr
+        assert "--zip" in result.stdout
+        assert "--stage" in result.stdout
+
+
+def test_producer_rejects_nonpublisher_file_without_reading_rows(tmp_path):
+    import runpy
+    import pytest
+    script = runpy.run_path(str(ROOT / "replay_sparse_schema_and_geometry.py"))
+    bad = tmp_path / "GPS12hrs_Locs.zip"
+    bad.write_bytes(b"not the source")
+    with pytest.raises(ValueError, match="exact 12h source"):
+        script["verify_source"](bad)
