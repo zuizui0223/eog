@@ -1,0 +1,56 @@
+{
+  "schema": "eog.mckee2024.sparse12h.aggregate_qc_receipt.v1",
+  "status": "STOP_TIME_PARSE_COVERAGE_AND_UTM_E_SEMANTICS_UNRESOLVED",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_size_bytes": 1539661,
+  "stage2_frozen_protocol_commit": "c5a26e202f83a09ad8af8360603c9422236ffe6d",
+  "dbf_records": 28953,
+  "active_records": 28953,
+  "deleted_records": 0,
+  "field_missing_count_total": 0,
+  "herd_fix_counts": {
+    "AtlanticRim": 17248,
+    "ClarksFork": 3132,
+    "Dubois": 4624,
+    "Jackson": 3949
+  },
+  "species_common_fix_counts": {
+    "Elk": 3949,
+    "MuleDeer": 25004
+  },
+  "season_fix_counts": {
+    "fa": 17396,
+    "sp": 11557
+  },
+  "year_span": [
+    2007,
+    2019
+  ],
+  "unique_herd_animal_pairs": 144,
+  "groups_with_at_least_one_parseable_timestamp": 421,
+  "groups_with_at_least_three_parseable_timestamps": 418,
+  "timestamp_format_counts": {
+    "%Y-%m-%d %H:%M:%S": 18118,
+    "unparseable_or_missing": 10835
+  },
+  "parseable_fraction": 0.6257728041999102,
+  "timestamp_parse_requirement_at_least_0_95": false,
+  "coordinate_qc": {
+    "UTM_E_outside_0_to_1000000": 28953,
+    "UTM_N_within_0_to_10000000": 28953
+  },
+  "within_group_gaps_computed_on_parsed_subset_only": {
+    "[10,14]hours": 6331,
+    "(14,24]hours": 10989,
+    ">24hours": 377,
+    "duplicates": 0
+  },
+  "observational_warning": "Time, coordinate-column semantics and possible mismatch between PRJ projection and attribute X must be resolved in a source-diagnostic protocol before any temporal or spatial EOG calculation.",
+  "individual_animal_identifiers_exported": false,
+  "raw_timestamps_or_coordinates_exported": false,
+  "SHP_geometry_records_read": false,
+  "dense_2hr_holdout_read": false,
+  "ecological_prediction_scored": false,
+  "no_retuning_or_promotion": true,
+  "EOG_WF_frozen_3_31_3": true
+}
