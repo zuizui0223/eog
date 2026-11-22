@@ -61,3 +61,14 @@ Individual-season and herd are dependence clusters; GPS points within an animal 
 - [Offline tests](../../tests/test_temporal_corridor_mckee_source_gate0.py)
 - [Metadata-only GitHub Actions workflow](../../.github/workflows/eog-mckee2024-dryad-metadata-gate0.yml)
 - [Time-coherent EOG path API](../../src/eog/v2/temporal_path_certificates.py)
+
+
+## Uploaded original sparse GPS: exact source matching and source-QC STOP (2026-11-22)
+
+The user-supplied 12-hour ZIP was independently verified at **1,539,661 bytes / SHA-256 `556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4`**, matching frozen official Dryad file ID 3334125. The original ZIP is NOT committed. This resolves file acquisition after the earlier HEAD/GET 403 transport STOPs, **not** source schema correctness.
+
+All source inspection stages were precommitted as separate protocols before examining archive members, DBF record values, alternative time/CRS assumptions and SHP Point geometries. Detailed evidence and the decision boundary: [SPARSE_SOURCE_QA_20261122.md](SPARSE_SOURCE_QA_20261122.md).
+
+Key limitations: 28,953 sparse points / 144 herd–animal ID combinations; 10,835 date-only timestamp strings; and source `.prj`/README declares EPSG:3742 although all 28,953 physical coordinates are geographically plausible under candidate EPSG:5070 and zero under the declared projection. These are **input-data QC findings**, not an EOG performance result. Unverified time-zone semantics and the authoritative intended CRS block confirmatory path prediction. All 2-hour dense GPS records remain unopened.
+
+Optional reproducibility CLIs (require local user-supplied sparse ZIP, never raw-data uploads): [schema/geometry replay](replay_sparse_schema_and_geometry.py) and [time/QC replay](replay_sparse_time_qc.py). Existing EOG-WF denominator 3 scored /31 scientific STOP/3 admin exclusions is unchanged.
