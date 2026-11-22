@@ -16,3 +16,7 @@ Use the repository layers as follows:
 In particular, claims such as A-Islands incremental information or the adverse Tanzania strong-reference result are preserved as empirical boundaries. They do not define the current finite-world/temporal API and they must not be used to imply that the newer distributional-world framework has already achieved empirical superiority.
 
 Any future manuscript for the integrated EOG mainline should be created as a separate, explicitly named artifact only after its own estimand, falsification benchmark and empirical validation gate are frozen. Do not repurpose these historical files in place.
+
+## Biology/method boundary (2026-11-22)
+
+The dedicated fungal and grassland ecological manuscript, figures and submission materials have been **migrated to [KNK](https://github.com/zuizui0223/knk/tree/main/manuscript/history_storage)**. They are not an active EOG method-paper lane. This directory otherwise retains legacy *method* evidence and separate prior case-study provenance only; do not turn legacy biological patterns into EOG mathematics claims.
