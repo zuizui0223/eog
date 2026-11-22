@@ -61,3 +61,9 @@ Individual-season and herd are dependence clusters; GPS points within an animal 
 - [Offline tests](../../tests/test_temporal_corridor_mckee_source_gate0.py)
 - [Metadata-only GitHub Actions workflow](../../.github/workflows/eog-mckee2024-dryad-metadata-gate0.yml)
 - [Time-coherent EOG path API](../../src/eog/v2/temporal_path_certificates.py)
+
+## Gate1a v2: documented GET first-response probe after HEAD 403
+
+The v1 HEAD-only gate was frozen before access and ended in `HOLD_SOURCE_TRANSPORT_UNVERIFIED` (HTTP 403 on the first sparse 12h source URL); see [PR #741](https://github.com/zuizui0223/eog/pull/741), Actions run 45029791588, artifact ZIP SHA-256 `951bf0f864f21f962cc8f3edc3092ebd63529e16da661b438291615bc4ea3431`. It did not read a file body or unlock a next stage. The original STOP remains binding for that transport method.
+
+A separate [v2 protocol](gate1a_get_headers_v2_protocol.json) was frozen before any GET request. It changes **only** HEAD to an official GET first-response inspection, while retaining the same publisher version 305836, sparse/README file IDs and SHA-256 declarations, and the dense 2h holdout prohibition. The [v2 adapter](qualify_gate1a_get_headers_v2.py) disables redirect following, never calls `read()` on the first response and logs only HTTP status and the first redirect hostname. An immediate 200 (direct file response), 403, non-HTTPS redirect or other error is a HOLD rather than an invitation to inspect source bytes. This is a transport diagnostic; it is neither a scientific validation nor permission to download GPS.
