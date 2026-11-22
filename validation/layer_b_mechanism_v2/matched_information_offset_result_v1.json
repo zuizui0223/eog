@@ -1,0 +1,999 @@
+{
+  "provenance": {
+    "901": "02703a5c325e8f1d13a6a6e02cea3e9f57311d73a6d101fc1687b24fe9fea672",
+    "907": "81b95a071c1073a9dbc6e508fe2a91de99be79a4e31e3c4f823af678525450e0",
+    "911": "cc2eba87e7975f4e4c077dad20a9b9c8eaec43f3b3e89c4187e35fa58cc07036",
+    "919": "8cb7f702bacc15dd5650e1ad7801568fdef0370697fe632b59a91d8a094cbeb2",
+    "929": "ae9bf678e7708f48de8ddea6fa0da53a34aedc9581eb3c15ce35a7a324bdc016",
+    "937": "c2486b039679aabd78a008af52ef19f6ef32971e04757ca59565edcfb4e76bc2",
+    "941": "be0d27bdf2d406e5b43d5b87a355a69f41d206dbec9600fd331d420f1cd15833",
+    "947": "ab7e1177630fef78521792f0092e107dd2a05a766fa55c4d330187aa91177800"
+  },
+  "rows": [
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6481602154492241,
+        "eog_ten": 0.6411168262783591,
+        "eog_two": 0.6419544746523075,
+        "path_two": 0.6530468095496368,
+        "permuted_two": 0.6778455728434658
+      },
+      "baseline_loss": 0.6783681303895771,
+      "promoted": {
+        "concat_eog_two": false,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": false,
+        "permuted_two": true
+      },
+      "regime": "diffusion",
+      "seed": 901,
+      "selected_loss": {
+        "concat_eog_two": 0.6783681303895771,
+        "eog_ten": 0.6411168262783591,
+        "eog_two": 0.6419544746523075,
+        "path_two": 0.6783681303895771,
+        "permuted_two": 0.6778455728434658
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6881507365131294,
+        "eog_ten": 0.6926136863627511,
+        "eog_two": 0.6905175556094942,
+        "path_two": 0.6824390540002048,
+        "permuted_two": 0.6957356388012527
+      },
+      "baseline_loss": 0.6965760112085524,
+      "promoted": {
+        "concat_eog_two": false,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": true,
+        "permuted_two": true
+      },
+      "regime": "best_path",
+      "seed": 901,
+      "selected_loss": {
+        "concat_eog_two": 0.6965760112085524,
+        "eog_ten": 0.6965760112085524,
+        "eog_two": 0.6965760112085524,
+        "path_two": 0.6824390540002048,
+        "permuted_two": 0.6957356388012527
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7178831607603939,
+        "eog_ten": 0.7240645129614894,
+        "eog_two": 0.7186264304791431,
+        "path_two": 0.7139765636359537,
+        "permuted_two": 0.7061303470623859
+      },
+      "baseline_loss": 0.7063696128616143,
+      "promoted": {
+        "concat_eog_two": false,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": true
+      },
+      "regime": "environment_only",
+      "seed": 901,
+      "selected_loss": {
+        "concat_eog_two": 0.7063696128616143,
+        "eog_ten": 0.7063696128616143,
+        "eog_two": 0.7063696128616143,
+        "path_two": 0.7063696128616143,
+        "permuted_two": 0.7061303470623859
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.8404680268226408,
+        "eog_ten": 0.9755884521601325,
+        "eog_two": 0.8893365256450022,
+        "path_two": 0.8554962682263556,
+        "permuted_two": 0.7163502626672542
+      },
+      "baseline_loss": 0.7198878433867315,
+      "promoted": {
+        "concat_eog_two": false,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": false,
+        "permuted_two": true
+      },
+      "regime": "unseen_diffusion_reversal",
+      "seed": 901,
+      "selected_loss": {
+        "concat_eog_two": 0.7198878433867315,
+        "eog_ten": 0.9755884521601325,
+        "eog_two": 0.8893365256450022,
+        "path_two": 0.7198878433867315,
+        "permuted_two": 0.7163502626672542
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6699335468260899,
+        "eog_ten": 0.6692798125972848,
+        "eog_two": 0.6695543518292019,
+        "path_two": 0.6892720045879953,
+        "permuted_two": 0.690731733807057
+      },
+      "baseline_loss": 0.693050203495594,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": true
+      },
+      "regime": "diffusion",
+      "seed": 907,
+      "selected_loss": {
+        "concat_eog_two": 0.6699335468260899,
+        "eog_ten": 0.6692798125972848,
+        "eog_two": 0.6695543518292019,
+        "path_two": 0.6892720045879953,
+        "permuted_two": 0.690731733807057
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7041441662344703,
+        "eog_ten": 0.6933828251210984,
+        "eog_two": 0.69231366212117,
+        "path_two": 0.7020618854192345,
+        "permuted_two": 0.6938408081189023
+      },
+      "baseline_loss": 0.6933276599566259,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "best_path",
+      "seed": 907,
+      "selected_loss": {
+        "concat_eog_two": 0.7041441662344703,
+        "eog_ten": 0.6933276599566259,
+        "eog_two": 0.6933276599566259,
+        "path_two": 0.7020618854192345,
+        "permuted_two": 0.6933276599566259
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7085233227773338,
+        "eog_ten": 0.7191849820752358,
+        "eog_two": 0.715126413868786,
+        "path_two": 0.7244197705027596,
+        "permuted_two": 0.7170663903267264
+      },
+      "baseline_loss": 0.7098368328407655,
+      "promoted": {
+        "concat_eog_two": false,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "environment_only",
+      "seed": 907,
+      "selected_loss": {
+        "concat_eog_two": 0.7098368328407655,
+        "eog_ten": 0.7098368328407655,
+        "eog_two": 0.7098368328407655,
+        "path_two": 0.7244197705027596,
+        "permuted_two": 0.7098368328407655
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7867369978151922,
+        "eog_ten": 0.8649651284632294,
+        "eog_two": 0.8170365159291799,
+        "path_two": 0.8222659157437148,
+        "permuted_two": 0.7317318592260094
+      },
+      "baseline_loss": 0.7327018560053968,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": true
+      },
+      "regime": "unseen_diffusion_reversal",
+      "seed": 907,
+      "selected_loss": {
+        "concat_eog_two": 0.7867369978151922,
+        "eog_ten": 0.8649651284632294,
+        "eog_two": 0.8170365159291799,
+        "path_two": 0.8222659157437148,
+        "permuted_two": 0.7317318592260094
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6565362169866865,
+        "eog_ten": 0.6570707485215442,
+        "eog_two": 0.6599471669632757,
+        "path_two": 0.6630062638797446,
+        "permuted_two": 0.6775365440564332
+      },
+      "baseline_loss": 0.6808703720489074,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": true
+      },
+      "regime": "diffusion",
+      "seed": 911,
+      "selected_loss": {
+        "concat_eog_two": 0.6565362169866865,
+        "eog_ten": 0.6570707485215442,
+        "eog_two": 0.6599471669632757,
+        "path_two": 0.6630062638797446,
+        "permuted_two": 0.6775365440564332
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7143604507772513,
+        "eog_ten": 0.7295113582335578,
+        "eog_two": 0.7317135760203575,
+        "path_two": 0.7246198795944995,
+        "permuted_two": 0.7457430196928269
+      },
+      "baseline_loss": 0.7412423608357797,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": true
+      },
+      "regime": "best_path",
+      "seed": 911,
+      "selected_loss": {
+        "concat_eog_two": 0.7143604507772513,
+        "eog_ten": 0.7295113582335578,
+        "eog_two": 0.7412423608357797,
+        "path_two": 0.7412423608357797,
+        "permuted_two": 0.7457430196928269
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.724734011183968,
+        "eog_ten": 0.7359378112572942,
+        "eog_two": 0.7353401128643617,
+        "path_two": 0.7329228783653139,
+        "permuted_two": 0.7315210012075872
+      },
+      "baseline_loss": 0.7295465503004879,
+      "promoted": {
+        "concat_eog_two": false,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "environment_only",
+      "seed": 911,
+      "selected_loss": {
+        "concat_eog_two": 0.7295465503004879,
+        "eog_ten": 0.7359378112572942,
+        "eog_two": 0.7353401128643617,
+        "path_two": 0.7329228783653139,
+        "permuted_two": 0.7295465503004879
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.8119425084655171,
+        "eog_ten": 0.8600996323864403,
+        "eog_two": 0.8385088443906982,
+        "path_two": 0.8162991378211318,
+        "permuted_two": 0.7784630901660212
+      },
+      "baseline_loss": 0.7763476724535098,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": true
+      },
+      "regime": "unseen_diffusion_reversal",
+      "seed": 911,
+      "selected_loss": {
+        "concat_eog_two": 0.8119425084655171,
+        "eog_ten": 0.8600996323864403,
+        "eog_two": 0.8385088443906982,
+        "path_two": 0.8162991378211318,
+        "permuted_two": 0.7784630901660212
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6905647039264797,
+        "eog_ten": 0.7368876293954374,
+        "eog_two": 0.7123679604143375,
+        "path_two": 0.6907723528634179,
+        "permuted_two": 0.6931632397132295
+      },
+      "baseline_loss": 0.6931157378785155,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "diffusion",
+      "seed": 919,
+      "selected_loss": {
+        "concat_eog_two": 0.6905647039264797,
+        "eog_ten": 0.7368876293954374,
+        "eog_two": 0.7123679604143375,
+        "path_two": 0.6907723528634179,
+        "permuted_two": 0.6931157378785155
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7285413825445002,
+        "eog_ten": 0.7375521003984362,
+        "eog_two": 0.7282217760431355,
+        "path_two": 0.7121702483802919,
+        "permuted_two": 0.7097190603187478
+      },
+      "baseline_loss": 0.7090911059172053,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "best_path",
+      "seed": 919,
+      "selected_loss": {
+        "concat_eog_two": 0.7285413825445002,
+        "eog_ten": 0.7375521003984362,
+        "eog_two": 0.7282217760431355,
+        "path_two": 0.7121702483802919,
+        "permuted_two": 0.7090911059172053
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7290032114618309,
+        "eog_ten": 0.7308641121683105,
+        "eog_two": 0.7262929230652765,
+        "path_two": 0.7129178234450949,
+        "permuted_two": 0.7108282154698966
+      },
+      "baseline_loss": 0.711088008613301,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "environment_only",
+      "seed": 919,
+      "selected_loss": {
+        "concat_eog_two": 0.7290032114618309,
+        "eog_ten": 0.7308641121683105,
+        "eog_two": 0.7262929230652765,
+        "path_two": 0.7129178234450949,
+        "permuted_two": 0.711088008613301
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.8936284919504197,
+        "eog_ten": 1.0504658900764083,
+        "eog_two": 0.9541352875452223,
+        "path_two": 0.8724207197839708,
+        "permuted_two": 0.7624446360236403
+      },
+      "baseline_loss": 0.7608719064754704,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "unseen_diffusion_reversal",
+      "seed": 919,
+      "selected_loss": {
+        "concat_eog_two": 0.8936284919504197,
+        "eog_ten": 1.0504658900764083,
+        "eog_two": 0.9541352875452223,
+        "path_two": 0.8724207197839708,
+        "permuted_two": 0.7608719064754704
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6907179205463887,
+        "eog_ten": 0.733034270746881,
+        "eog_two": 0.7129489179903195,
+        "path_two": 0.716977306232144,
+        "permuted_two": 0.6886235087091627
+      },
+      "baseline_loss": 0.6897781593969283,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": false
+      },
+      "regime": "diffusion",
+      "seed": 929,
+      "selected_loss": {
+        "concat_eog_two": 0.6907179205463887,
+        "eog_ten": 0.6897781593969283,
+        "eog_two": 0.6897781593969283,
+        "path_two": 0.6897781593969283,
+        "permuted_two": 0.6897781593969283
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7005937930656979,
+        "eog_ten": 0.7167403724001535,
+        "eog_two": 0.7050384816484726,
+        "path_two": 0.6952761002971736,
+        "permuted_two": 0.6845370626984302
+      },
+      "baseline_loss": 0.6839744759924744,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": true
+      },
+      "regime": "best_path",
+      "seed": 929,
+      "selected_loss": {
+        "concat_eog_two": 0.7005937930656979,
+        "eog_ten": 0.6839744759924744,
+        "eog_two": 0.6839744759924744,
+        "path_two": 0.6839744759924744,
+        "permuted_two": 0.6845370626984302
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.688547389621247,
+        "eog_ten": 0.6985796952050816,
+        "eog_two": 0.6959387095804865,
+        "path_two": 0.6959575742603412,
+        "permuted_two": 0.6873834577738535
+      },
+      "baseline_loss": 0.6861225995732799,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": false
+      },
+      "regime": "environment_only",
+      "seed": 929,
+      "selected_loss": {
+        "concat_eog_two": 0.688547389621247,
+        "eog_ten": 0.6861225995732799,
+        "eog_two": 0.6861225995732799,
+        "path_two": 0.6861225995732799,
+        "permuted_two": 0.6861225995732799
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.8175280404024285,
+        "eog_ten": 0.9285811113909707,
+        "eog_two": 0.85996358549947,
+        "path_two": 0.8332547302132175,
+        "permuted_two": 0.7385642045567604
+      },
+      "baseline_loss": 0.7384113451069513,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": false
+      },
+      "regime": "unseen_diffusion_reversal",
+      "seed": 929,
+      "selected_loss": {
+        "concat_eog_two": 0.8175280404024285,
+        "eog_ten": 0.7384113451069513,
+        "eog_two": 0.7384113451069513,
+        "path_two": 0.7384113451069513,
+        "permuted_two": 0.7384113451069513
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6772141883391677,
+        "eog_ten": 0.6920718057700745,
+        "eog_two": 0.6968762232752396,
+        "path_two": 0.7028437100028159,
+        "permuted_two": 0.7211495253979687
+      },
+      "baseline_loss": 0.7175023175762685,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "diffusion",
+      "seed": 937,
+      "selected_loss": {
+        "concat_eog_two": 0.6772141883391677,
+        "eog_ten": 0.6920718057700745,
+        "eog_two": 0.6968762232752396,
+        "path_two": 0.7028437100028159,
+        "permuted_two": 0.7175023175762685
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7297333188358337,
+        "eog_ten": 0.7286828194179032,
+        "eog_two": 0.7296305962772933,
+        "path_two": 0.7262508419243239,
+        "permuted_two": 0.7339959152374752
+      },
+      "baseline_loss": 0.7315376525178736,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": false,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "best_path",
+      "seed": 937,
+      "selected_loss": {
+        "concat_eog_two": 0.7297333188358337,
+        "eog_ten": 0.7315376525178736,
+        "eog_two": 0.7296305962772933,
+        "path_two": 0.7262508419243239,
+        "permuted_two": 0.7315376525178736
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7189299675883832,
+        "eog_ten": 0.7159756183549596,
+        "eog_two": 0.7150272216683943,
+        "path_two": 0.7142644081792544,
+        "permuted_two": 0.7141349990989685
+      },
+      "baseline_loss": 0.7134020862004121,
+      "promoted": {
+        "concat_eog_two": false,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": false
+      },
+      "regime": "environment_only",
+      "seed": 937,
+      "selected_loss": {
+        "concat_eog_two": 0.7134020862004121,
+        "eog_ten": 0.7134020862004121,
+        "eog_two": 0.7134020862004121,
+        "path_two": 0.7134020862004121,
+        "permuted_two": 0.7134020862004121
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7976154765140386,
+        "eog_ten": 0.866314312864758,
+        "eog_two": 0.8422290785523444,
+        "path_two": 0.8235653513658725,
+        "permuted_two": 0.7868499329184584
+      },
+      "baseline_loss": 0.7855673512384758,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "unseen_diffusion_reversal",
+      "seed": 937,
+      "selected_loss": {
+        "concat_eog_two": 0.7976154765140386,
+        "eog_ten": 0.866314312864758,
+        "eog_two": 0.8422290785523444,
+        "path_two": 0.8235653513658725,
+        "permuted_two": 0.7855673512384758
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6686295915894805,
+        "eog_ten": 0.6862891543505937,
+        "eog_two": 0.6782150911358783,
+        "path_two": 0.6765193901316877,
+        "permuted_two": 0.6906649598943754
+      },
+      "baseline_loss": 0.6882193307093851,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "diffusion",
+      "seed": 941,
+      "selected_loss": {
+        "concat_eog_two": 0.6686295915894805,
+        "eog_ten": 0.6862891543505937,
+        "eog_two": 0.6782150911358783,
+        "path_two": 0.6765193901316877,
+        "permuted_two": 0.6882193307093851
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6995528113326488,
+        "eog_ten": 0.7060987695360444,
+        "eog_two": 0.6983653041524729,
+        "path_two": 0.6903774171942415,
+        "permuted_two": 0.7040240572525037
+      },
+      "baseline_loss": 0.6994813026831062,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": true
+      },
+      "regime": "best_path",
+      "seed": 941,
+      "selected_loss": {
+        "concat_eog_two": 0.6995528113326488,
+        "eog_ten": 0.7060987695360444,
+        "eog_two": 0.6983653041524729,
+        "path_two": 0.6903774171942415,
+        "permuted_two": 0.7040240572525037
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7023558783325415,
+        "eog_ten": 0.7090521122847904,
+        "eog_two": 0.7060155156723897,
+        "path_two": 0.7025294616110487,
+        "permuted_two": 0.7019621087789524
+      },
+      "baseline_loss": 0.7025758447202944,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": false
+      },
+      "regime": "environment_only",
+      "seed": 941,
+      "selected_loss": {
+        "concat_eog_two": 0.7023558783325415,
+        "eog_ten": 0.7025758447202944,
+        "eog_two": 0.7025758447202944,
+        "path_two": 0.7025758447202944,
+        "permuted_two": 0.7025758447202944
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.8433622030207059,
+        "eog_ten": 0.924371071929267,
+        "eog_two": 0.8743596590049603,
+        "path_two": 0.839899130947147,
+        "permuted_two": 0.7745253132941691
+      },
+      "baseline_loss": 0.773545104931546,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "unseen_diffusion_reversal",
+      "seed": 941,
+      "selected_loss": {
+        "concat_eog_two": 0.8433622030207059,
+        "eog_ten": 0.924371071929267,
+        "eog_two": 0.8743596590049603,
+        "path_two": 0.839899130947147,
+        "permuted_two": 0.773545104931546
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.660686874986464,
+        "eog_ten": 0.647839013984393,
+        "eog_two": 0.6582365475068453,
+        "path_two": 0.6700624168594242,
+        "permuted_two": 0.7026360743085972
+      },
+      "baseline_loss": 0.7022329484537985,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "diffusion",
+      "seed": 947,
+      "selected_loss": {
+        "concat_eog_two": 0.660686874986464,
+        "eog_ten": 0.647839013984393,
+        "eog_two": 0.6582365475068453,
+        "path_two": 0.6700624168594242,
+        "permuted_two": 0.7022329484537985
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.7039260347341408,
+        "eog_ten": 0.6840011179888841,
+        "eog_two": 0.6890219986515302,
+        "path_two": 0.6859743728875144,
+        "permuted_two": 0.7116614092670482
+      },
+      "baseline_loss": 0.7084271123417086,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "best_path",
+      "seed": 947,
+      "selected_loss": {
+        "concat_eog_two": 0.7039260347341408,
+        "eog_ten": 0.6840011179888841,
+        "eog_two": 0.6890219986515302,
+        "path_two": 0.6859743728875144,
+        "permuted_two": 0.7084271123417086
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.6927076261885019,
+        "eog_ten": 0.6984819129090497,
+        "eog_two": 0.6972330473613633,
+        "path_two": 0.695856874786302,
+        "permuted_two": 0.6985416463690916
+      },
+      "baseline_loss": 0.6965130990344061,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": false,
+        "eog_two": false,
+        "path_two": false,
+        "permuted_two": false
+      },
+      "regime": "environment_only",
+      "seed": 947,
+      "selected_loss": {
+        "concat_eog_two": 0.6927076261885019,
+        "eog_ten": 0.6965130990344061,
+        "eog_two": 0.6965130990344061,
+        "path_two": 0.6965130990344061,
+        "permuted_two": 0.6965130990344061
+      }
+    },
+    {
+      "always_on_loss": {
+        "concat_eog_two": 0.8219457209406901,
+        "eog_ten": 0.8920256778021199,
+        "eog_two": 0.8469046804614692,
+        "path_two": 0.8140742660978794,
+        "permuted_two": 0.7585150657796643
+      },
+      "baseline_loss": 0.7596340978263871,
+      "promoted": {
+        "concat_eog_two": true,
+        "eog_ten": true,
+        "eog_two": true,
+        "path_two": true,
+        "permuted_two": false
+      },
+      "regime": "unseen_diffusion_reversal",
+      "seed": 947,
+      "selected_loss": {
+        "concat_eog_two": 0.8219457209406901,
+        "eog_ten": 0.8920256778021199,
+        "eog_two": 0.8469046804614692,
+        "path_two": 0.8140742660978794,
+        "permuted_two": 0.7596340978263871
+      }
+    }
+  ],
+  "runtime": {
+    "numpy": "2.2.6",
+    "python": "3.10.11",
+    "sklearn": "1.5.2"
+  },
+  "schema": "eog.matched_information_offset.v1",
+  "summaries": {
+    "best_path": {
+      "eog_minus_path_selected": {
+        "eog_wins": 1,
+        "maximum": 0.01605152766284368,
+        "mean": 0.004483690810474922,
+        "minimum": -0.008734225462608602,
+        "ties": 2
+      },
+      "methods": {
+        "concat_eog_two": {
+          "always_on_delta": 0.0006681265730432984,
+          "promotions": 7,
+          "selected_delta": 0.0017212859099711708
+        },
+        "eog_ten": {
+          "always_on_delta": 0.003115671000687853,
+          "promotions": 4,
+          "selected_delta": -0.00013481695260963988
+        },
+        "eog_two": {
+          "always_on_delta": 0.00014565863382502708,
+          "promotions": 4,
+          "selected_delta": -0.00041218729193270853
+        },
+        "path_two": {
+          "always_on_delta": -0.005560985219480258,
+          "promotions": 6,
+          "selected_delta": -0.00489587810240763
+        },
+        "permuted_two": {
+          "always_on_delta": 0.0019499112417326048,
+          "promotions": 4,
+          "selected_delta": 0.0010957034656376013
+        }
+      }
+    },
+    "diffusion": {
+      "eog_minus_path_selected": {
+        "eog_wins": 5,
+        "maximum": 0.021595607550919604,
+        "mean": -0.00671155661719712,
+        "minimum": -0.03641365573726962,
+        "ties": 1
+      },
+      "methods": {
+        "concat_eog_two": {
+          "always_on_delta": -0.022586742662374176,
+          "promotions": 7,
+          "selected_delta": -0.01881075329483005
+        },
+        "eog_ten": {
+          "always_on_delta": -0.009943492288050845,
+          "promotions": 7,
+          "selected_delta": -0.015350506206794928
+        },
+        "eog_two": {
+          "always_on_delta": -0.014129558272696158,
+          "promotions": 7,
+          "selected_delta": -0.01702590309687005
+        },
+        "path_two": {
+          "always_on_delta": -0.010079618230263515,
+          "promotions": 6,
+          "selected_delta": -0.010314346479672928
+        },
+        "permuted_two": {
+          "always_on_delta": -0.00009825515233563564,
+          "promotions": 3,
+          "selected_delta": -0.0007718569033903222
+        }
+      }
+    },
+    "environment_only": {
+      "eog_minus_path_selected": {
+        "eog_wins": 1,
+        "maximum": 0.013375099620181574,
+        "mean": 0.00015117455715440986,
+        "minimum": -0.014582937661994144,
+        "ties": 5
+      },
+      "methods": {
+        "concat_eog_two": {
+          "always_on_delta": 0.0034037417212048754,
+          "promotions": 4,
+          "selected_delta": 0.002039319207854981
+        },
+        "eog_ten": {
+          "always_on_delta": 0.009585765383956252,
+          "promotions": 2,
+          "selected_delta": 0.003270920563976973
+        },
+        "eog_two": {
+          "always_on_delta": 0.006768217551954989,
+          "promotions": 2,
+          "selected_delta": 0.002624809626981167
+        },
+        "path_two": {
+          "always_on_delta": 0.00467384008018841,
+          "promotions": 3,
+          "selected_delta": 0.0024736350698267573
+        },
+        "permuted_two": {
+          "always_on_delta": 0.001514191492862596,
+          "promotions": 1,
+          "selected_delta": -0.000029908224903549274
+        }
+      }
+    },
+    "unseen_diffusion_reversal": {
+      "eog_minus_path_selected": {
+        "eog_wins": 1,
+        "maximum": 0.1694486822582707,
+        "mean": 0.044262278297803576,
+        "minimum": -0.005229399814534852,
+        "ties": 1
+      },
+      "methods": {
+        "concat_eog_two": {
+          "always_on_delta": 0.07078253606339552,
+          "promotions": 7,
+          "selected_delta": 0.05571001313390686
+        },
+        "eog_ten": {
+          "always_on_delta": 0.16443051245610718,
+          "promotions": 7,
+          "selected_delta": 0.14065929167060476
+        },
+        "eog_two": {
+          "always_on_delta": 0.10943837495048471,
+          "promotions": 7,
+          "selected_delta": 0.09424434490141986
+        },
+        "path_two": {
+          "always_on_delta": 0.07878854284685258,
+          "promotions": 6,
+          "selected_delta": 0.04998206660361629
+        },
+        "permuted_two": {
+          "always_on_delta": 0.00005964840093856949,
+          "promotions": 3,
+          "selected_delta": -0.0002990199732941651
+        }
+      }
+    }
+  },
+  "uses_biological_response": false
+}
