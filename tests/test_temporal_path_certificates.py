@@ -288,3 +288,63 @@ def test_empty_supplied_universe_fails_closed():
         audit_temporal_path_quantifiers(
             flow, (), source_id="A", target_id="C"
         )
+
+
+def test_no_implicit_waiting_between_disconnected_intervals():
+    # B becomes connected to C only after a gap. EOG's temporal operator
+    # does not hold mass at B during that gap.
+    gap = _world(
+        "gap",
+        (_edges(("A", "B")), _edges(), _edges(("B", "C"))),
+    )
+    flow, audit = _audit((gap,))
+    assert not audit.any_world_reachable
+    assert "C" in flow.robustly_unreachable_by_time[-1]
+
+
+def test_exhaustive_two_corridor_world_pairs_match_independent_path_truth():
+    # Each world has four independent binary decisions:
+    # t0: A->B and A->D; t1: B->C and D->C.
+    # Evaluate all 16 x 16 pairs without using the path engine to
+    # construct expected truths. This is a finite algebraic truth table.
+    def expected_paths(mask):
+        paths = set()
+        if mask & 1 and mask & 2:
+            paths.add(("A", "B", "C"))
+        if mask & 4 and mask & 8:
+            paths.add(("A", "D", "C"))
+        return paths
+
+    def world_for(mask, index):
+        early = []
+        late = []
+        if mask & 1:
+            early.append(("A", "B", 1.0))
+        if mask & 4:
+            early.append(("A", "D", 1.0))
+        if mask & 2:
+            late.append(("B", "C", 1.0))
+        if mask & 8:
+            late.append(("D", "C", 1.0))
+        return _world(f"w{index}", (tuple(early), tuple(late)))
+
+    universes = [world_for(mask, mask) for mask in range(16)]
+    for i in range(16):
+        for j in range(16):
+            _, result = _audit((universes[i], universes[j])) if i != j else _audit(
+                (universes[i],)
+            )
+            first = expected_paths(i)
+            second = expected_paths(j)
+            expected_all = bool(first) and bool(second)
+            expected_common = bool(first & second)
+            assert result.every_world_reachable == expected_all
+            assert result.any_world_reachable == bool(first or second)
+            assert result.common_time_path_exists == expected_common
+            mandatory = set()
+            if expected_all:
+                if all(p[1] == "B" for p in first | second):
+                    mandatory.add("B")
+                if all(p[1] == "D" for p in first | second):
+                    mandatory.add("D")
+            assert set(result.necessary_waypoints_in_every_world) == mandatory
