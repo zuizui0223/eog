@@ -1,0 +1,32 @@
+{
+  "schema": "eog.mckee2024.sparse12h.post_stop_field_diagnostic.v1",
+  "status": "FROZEN_AFTER_GATE2_QC_STOP_BEFORE_FORMAT_DIAGNOSTIC",
+  "parent_gate2_receipt": "validation/temporal_corridor_mckee2024/gate2_sparse_only_aggregate_qc_receipt_v1.json",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "exact_unsolved_questions": [
+    "Why 10835/28953 Timstmp strings are not recognized by pre-frozen list of formats?",
+    "Why 28953/28953 numeric UTM_E attribute values fall outside 0..1,000,000 although shapefile PRJ resolves to EPSG:3742?"
+  ],
+  "allowed_only": [
+    "read same verified 12h DBF rows to derive normalized syntax patterns that replace all digits with D and letters with L; count patterns without displaying any original timestamp",
+    "compute only aggregate numeric ranges of DBF UTM_E and UTM_N rounded to nearest 10,000 units; classify negatives and numeric magnitude bins; never export individual coordinates",
+    "read only the first 100 bytes of SHP/SHX header to derive aggregate bounding box, rounded to 10,000 units; no shape record access",
+    "compute finite/error rates, no movement model",
+    "write a SOURCE_DIAGNOSTIC_ONLY record; original Stage2 STOP remains unchanged"
+  ],
+  "prohibited": [
+    "dump exact timestamps, animals, coordinates, location samples or decoded trajectory records",
+    "read SHP/SHX geometry records",
+    "open withheld dense 2h file",
+    "change Gate2 historical status, re-fit any heldout outcome or score EOG",
+    "redefine coordinate columns or parse time zones without independent evidence"
+  ],
+  "success_condition": "Identify syntax-pattern classes and coarse coordinate domain mismatch sufficiently to design a separately frozen interpretation contract; do not promote to valid data automatically",
+  "stop_condition": "if data identity changes, patterns reveal unapproved identifiers, or source mismatch cannot be characterized, retain HOLD; do not generate route predictions",
+  "claim_boundary": {
+    "diagnostic_not_predictive": true,
+    "sparse_only": true,
+    "dense_2h_access": false,
+    "EOG_WF_3_31_3_unchanged": true
+  }
+}
