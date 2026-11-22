@@ -1,17 +1,5 @@
-# Figure 1 accessibility description
+# Structural paper asset migrated
 
+The original EOG paper-only file `manuscript/figure_1_accessibility.md` is preserved at [Structural canonical/archive](https://github.com/zuizui0223/Structural/blob/main/manuscript/figure_1_accessibility.md) and indexed in the [89-file SHA-verified handoff manifest](https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json).
 
-
-A five-panel conceptual figure separates environmental support, spatial evaluation, source proximity, matrix-aware connectivity, and occurrence-anchored EOG configuration.
-
-Panel A is titled 'Pointwise environmental support' and asks: How locally supported is each location? Its declared output is local support.
-
-Panel B is titled 'Spatial block cross-validation' and asks: How strictly is prediction evaluated? Its declared output is held-out evaluation.
-
-Panel C is titled 'Direct source distance' and asks: How far is a target from a training occurrence? Its declared output is source proximity.
-
-Panel D is titled 'Matrix-aware current flow' and asks: How does the landscape conduct between focal locations? Its declared output is matrix-aware connectivity.
-
-Panel E is titled 'Occurrence-anchored EOG' and asks: Does target-to-anchor configuration persist across declared graph assumptions? Its declared output is scenario-robust configuration.
-
-The panels are arranged as distinct roles rather than as a causal or movement sequence, and no arrows are used to imply movement.
+This is a link-only historical pointer, not an active EOG biological manuscript or revised scientific claim. The original was frozen in EOG commit [c9ba38785e42ecfdcae9256e5792fb8b32ea2b77](https://github.com/zuizui0223/eog/blob/c9ba38785e42ecfdcae9256e5792fb8b32ea2b77/manuscript/figure_1_accessibility.md). The A-Islands strong-reference method comparison was adverse and cannot be described as a general ecological predictive success.

@@ -25,7 +25,7 @@ The original 16-site NEON finite-world assay reported 0/16 sites with positive n
 ## Additional methodological diagnostics, not biological discoveries
 
 - **Glanville**: old exact-world-ID encoding gave heldout log loss 0.230197 vs symmetric-summary 0.187983; this is an adverse identity encoding result, not a fresh prospective method-superiority score. Structural rule contraction had independent audit status.
-- **A-Islands**: 842 islands, eligible 845 plant taxa, conditional structural concordance 0.6177466 (species-bootstrap 95% CI 0.6086806–0.6269445); validates a conditional graph diagnostic, not colonization probability or strong-baseline superiority.
+- **A-Islands**: 842 islands, eligible 845 plant taxa, conditional structural concordance 0.6177466 (species-bootstrap 95% CI 0.6086806–0.6269445); validates a conditional graph diagnostic. Independent strong-reference Structural comparison was **adverse**: `C-R3=+0.0034852` log loss (95% CI +0.0024664 to +0.0045082), not a general prediction improvement. [Canonical paper](https://github.com/zuizui0223/Structural).
 - **Tanzania birds**: adding EOG connected frequency to matrix-aware current-flow baseline was adverse (macro log loss +0.0321131, CI +0.0174580 to +0.0486750). This keeps the method's comparator ceiling explicit.
 - **MRR Glanville**: conditional geographic relaxation bounds change under exception budget, host gating, and hypothetical candidate-source catalogue. These are properties of an estimand, not observed movement distances or founders. [MRR audit](MINIMUM_REQUIRED_RELAXATION_AUDIT_20261120.md).
 - **Arctic tern**: known marked departure vs retrospective candidate-source geometry produced 198/224 20-km source-specific/any-source conflicts; 171 persist when exact rounded co-location is excluded. This is a method/source-policy sensitivity result, **not** identified alternative founders or migration rates.
@@ -39,3 +39,7 @@ Fungal v28/v31–v38, grassland v30, unscored v27/v29, Czech grassland source-on
 ## Historical provenance
 
 The source files migrated to KNK are preserved in EOG commit [bd8531144e5ff655334990a664313ebc5e734308](https://github.com/zuizui0223/eog/tree/bd8531144e5ff655334990a664313ebc5e734308); KNK has a 109-path Git blob SHA manifest and automated verification. EOG now keeps only pointers where old documentation filenames were once referenced. Earlier evidence classifications remain reproducible from the fixed commit.
+
+## Structural paper source-of-truth
+
+The stand-alone A-Islands/Tanzania manuscript, figures and paper-specific tests are preserved in [Structural](https://github.com/zuizui0223/Structural) with [89/89 original-source Git blob matches](https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json). EOG retains original scientific benchmark code/outputs and method-level comparisons; paper authoring and biological claims are no longer EOG's active scope. No frozen EOG-WF score or denominator was changed.

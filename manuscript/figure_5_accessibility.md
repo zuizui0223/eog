@@ -1,17 +1,5 @@
-# Figure 5 accessibility description
+# Structural paper asset migrated
 
+The original EOG paper-only file `manuscript/figure_5_accessibility.md` is preserved at [Structural canonical/archive](https://github.com/zuizui0223/Structural/blob/main/manuscript/figure_5_accessibility.md) and indexed in the [89-file SHA-verified handoff manifest](https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json).
 
-
-A five-row audit table shows how each main structural-manuscript output is linked to frozen evidence, a committed transform script, and a result fingerprint.
-
-F1 is Figure 1 semantic roles; its transform is build_figure_1_roles.py and its displayed result fingerprint begins sha256:1c8e4cd99144f139d95b.
-
-F2 is Figure 2 A-Islands; its transform is build_figure_2_aislands.py and its displayed result fingerprint begins sha256:e706f9b062170552da72.
-
-F3 is Figure 3 Tanzania; its transform is build_figure_3_tanzania.py and its displayed result fingerprint begins sha256:bdb55aa7f66d75aa3b2b.
-
-F4 is Figure 4 boundary matrix; its transform is build_figure_4_boundary.py and its displayed result fingerprint begins sha256:e8a7f87fdbadd1603009.
-
-T3 is Table 3 + Table S1; its transform is build_structural_results_tables.py and its displayed result fingerprint begins sha256:5377a39d7043a0257072.
-
-The figure has no movement or causal arrows and introduces no new effect size or hypothesis test.
+This is a link-only historical pointer, not an active EOG biological manuscript or revised scientific claim. The original was frozen in EOG commit [c9ba38785e42ecfdcae9256e5792fb8b32ea2b77](https://github.com/zuizui0223/eog/blob/c9ba38785e42ecfdcae9256e5792fb8b32ea2b77/manuscript/figure_5_accessibility.md). The A-Islands strong-reference method comparison was adverse and cannot be described as a general ecological predictive success.

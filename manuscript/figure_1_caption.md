@@ -1,22 +1,5 @@
-# Figure 1 caption
+# Structural paper asset migrated
 
+The original EOG paper-only file `manuscript/figure_1_caption.md` is preserved at [Structural canonical/archive](https://github.com/zuizui0223/Structural/blob/main/manuscript/figure_1_caption.md) and indexed in the [89-file SHA-verified handoff manifest](https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json).
 
-
-**Figure 1 | Distinct spatial roles in the structural EOG workflow.**
-
-The five panels are deliberately non-sequential: they separate quantities that can be used together but answer different questions.
-
-**A, Pointwise environmental support.** A frozen support field supplies a local value for each location; it does not by itself identify occurrence-anchored configuration.
-
-**B, Spatial block cross-validation.** Spatial blocks separate training and held-out records to reduce geographic leakage; they change evaluation, not the structural estimand.
-
-**C, Direct source distance.** Nearest-source distance is a direct proximity covariate. Equal distance does not imply equal intermediate configuration.
-
-**D, Matrix-aware current flow.** Current flow uses a declared resistance surface to summarize multi-path landscape connectivity and is a strong structural competitor when such data are available.
-
-**E, Occurrence-anchored EOG.** Connected frequency is the share of predeclared graph scenarios in which a target is connected to training-presence anchors. It is an assumption-robust structural diagnostic.
-
-The figure is conceptual and contains no empirical effect size or causal ordering.
-
-In particular, occurrence-anchored connected frequency is a structural robustness diagnostic across predeclared graph scenarios, not a movement, dispersal, or colonisation probability.
-
+This is a link-only historical pointer, not an active EOG biological manuscript or revised scientific claim. The original was frozen in EOG commit [c9ba38785e42ecfdcae9256e5792fb8b32ea2b77](https://github.com/zuizui0223/eog/blob/c9ba38785e42ecfdcae9256e5792fb8b32ea2b77/manuscript/figure_1_caption.md). The A-Islands strong-reference method comparison was adverse and cannot be described as a general ecological predictive success.

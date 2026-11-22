@@ -26,7 +26,7 @@ Original EOG source SHA: `91240104f9816459cd9555a63555664aff60760b`. The canonic
 4. Keep generic method implementation and reproducible method examples in EOG if required for checks.
 5. An original study's methodological diagnostic result is **not** a new EOG-WF prospective scored endpoint; its denominator remains **3 scored / 31 scientific STOPs / 3 administrative exclusions**.
 
-**Remaining legacy evidence in EOG:** biological source-specific stress data and old *structural method* manuscripts remain where required to regenerate benchmark provenance; they are not an active EOG ecological paper. [External NEON archive](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122) and [KNK](https://github.com/zuizui0223/knk) contain their respective biological-study sources of truth.
+**Remaining legacy evidence in EOG:** biological source-specific stress data and *structural method benchmark* scripts/receipts remain where required to regenerate benchmark provenance. Stand-alone Structural manuscript/figure/test assets are no longer EOG authoring assets and are archived or canonical in Structural. [External NEON archive](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122) and [KNK](https://github.com/zuizui0223/knk) contain their respective biological-study sources of truth.
 
 ## Automated scope regression (2026-11-22)
 
@@ -40,3 +40,9 @@ link-only archival stubs, never new biology findings or active Oikos assets.
 The check does not validate biological inference, run external scores,
 or change the original frozen result fingerprints. Any new methodological
 manuscript directory requires an explicit policy update and review.
+
+## Structural paper provenance and retirement (2026-11-22)
+
+Structural standalone paper assets were inventoried from EOG source tree `c9ba38785e42ecfdcae9256e5792fb8b32ea2b77` and matched against [Structural's 89-file handoff](https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json): **70 preexisting exact Git blob matches** plus **19 historically divergent/missing assets archived unchanged** in Structural. No active Structural files were overwritten. EOG's duplicate paper manuscript (40 files), paper-only figures (33), and paper-specific tests (16) are retired from its active tree, with Markdown path redirects for external links.
+
+**Scientific boundary:** A-Islands original constrained graph concordance was 0.6177466, but an adequately strong reference gave an **adverse** added log-loss difference `C-R3=+0.0034852` (95% CI +0.0024664 to +0.0045082); Tanzania's strong-reference heldout result was adverse as well. EOG retains these as *method sensitivity/benchmark controls*; scientific ecological interpretation and new work belong to Structural. Do not count A-Islands/Tanzania as fourth and fifth independent EOG-WF endpoints.

@@ -4,6 +4,8 @@
 
 > Repository boundary updated 2026-11-22. Fungal and grassland biological findings were migrated byte-for-byte to [KNK](https://github.com/zuizui0223/knk). EOG is responsible for inference, estimands, falsification rules and method validation; it is **not** the owner of ecological history-storage interpretations.
 
+**Structural handoff (2026-11-22):** the former stand-alone A-Islands/Tanzania structural paper is maintained in [Structural](https://github.com/zuizui0223/Structural); 89 original paper-asset Git blobs were verified, with 19 alternate histories archived. EOG retains original real-data **methodological** comparator evidence, including adverse strong-reference results.
+
 ## Evidence classes
 
 | Evidence | EOG home | Appropriate claim |

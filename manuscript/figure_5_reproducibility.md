@@ -1,7 +1,5 @@
-# Figure 5 reproducibility note
+# Structural paper asset migrated
 
-Figure 5 is an audit layer, not a new ecological analysis. Its builder reads the committed figure manifest plus the frozen structural-results table manifest/metadata, verifies result files and cross-system fingerprints, and emits a source-to-result provenance table.
+The original EOG paper-only file `manuscript/figure_5_reproducibility.md` is preserved at [Structural canonical/archive](https://github.com/zuizui0223/Structural/blob/main/manuscript/figure_5_reproducibility.md) and indexed in the [89-file SHA-verified handoff manifest](https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json).
 
-The figure deliberately contains no empirical effect size, new hypothesis test, movement arrow, or causal arrow. Fingerprints establish provenance and rebuildability only; they do not establish ecological causality, realised movement, or model superiority.
-
-The dedicated Figure 5 contract tests check the five declared audit rows, result SHA-256 fingerprints, Figure 1 manifest pin, parseable SVG output, and absence of movement/causal arrow markers.
+This is a link-only historical pointer, not an active EOG biological manuscript or revised scientific claim. The original was frozen in EOG commit [c9ba38785e42ecfdcae9256e5792fb8b32ea2b77](https://github.com/zuizui0223/eog/blob/c9ba38785e42ecfdcae9256e5792fb8b32ea2b77/manuscript/figure_5_reproducibility.md). The A-Islands strong-reference method comparison was adverse and cannot be described as a general ecological predictive success.
