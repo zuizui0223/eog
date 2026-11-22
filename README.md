@@ -1,4 +1,6 @@
-# Environmental Occupancy Geometry (EOG)
+# Environmental Occupancy Geometry (EOG) — mathematical and methodological inference
+
+> **Repository scope (2026-11-22):** EOG owns the mathematical estimands, finite-world inference, methodological validation, and benchmark performance — **not the interpretation or authorship of biological discoveries**. All fungal/grassland assembly-history experiments, protocols, frozen results, and biological manuscript materials have moved to [KNK](https://github.com/zuizui0223/knk). The unchanged generic `eog.history_retention` method remains available here and is pinned by KNK.
 
 > **Evidence inventory (2026-11-20):** [Mathematical / known-truth results vs empirical results](docs/result_inventory/README.md). This is an index of confirmed findings and adverse/STOP boundaries, **not** a new scored endpoint or a change to the frozen EOG-WF claim.
 
@@ -36,22 +38,11 @@ Canonical state:
 - Glanville independent evidence: [`validation/glanville_eogwf/README.md`](validation/glanville_eogwf/README.md)
 - STOC independent evidence: [`validation/stoc_eogwf/README.md`](validation/stoc_eogwf/README.md)
 
-## Separate ecological paper lane
+## Repository boundary: methods here, biological studies elsewhere
 
-The independent NSF NEON 16-site small-mammal metacommunity programme
-has **completed** its prospectively fixed response analysis. Its
-turnover-generated spatial-continuity hypothesis was **not supported**
-(0/16 positive null-adjusted sites), while the frozen data show
-**multiple independently continuous species at 13/16 sites**.
-This is occupancy continuity under a declared graph-world assay, not
-measured animal movement or functional redundancy.
-
-The [scientifically fixed Oikos manuscript candidate](manuscript/neon_small_mammal_continuity/MANUSCRIPT_V1.md),
-[claim matrix](manuscript/neon_small_mammal_continuity/CLAIM_MATRIX_V1.json),
-and [source/author approval boundary](manuscript/neon_small_mammal_continuity/MAINLINE_PORT_REPRODUCIBILITY_RECEIPT_V1.json)
-are separate from the closed EOG-WF method-paper denominator.
-The paper has **not** been submitted and still needs explicit author/admin
-confirmation. No fourth EOG-WF empirical endpoint was added.
+- **KNK** [ecological assembly-history research](https://github.com/zuizui0223/knk): fungal community/host-state, grassland shoot/root, rank/dominance, v27–v38 protocols, source-only STOPs, and the Ecology Letters manuscript/figure/submission package. Original EOG source files at bd8531144e5ff655334990a664313ebc5e734308 were copied byte-identically before this cleanup.
+- **EOG**: mathematical contracts, exact finite-world and identifiability tests, MRR estimands, generic history-retention statistics, source/protocol audits, and method predictive benchmarks. The 3 EOG-WF independent scores (2 favorable, 1 adverse) remain frozen and unchanged.
+- Other historical ecological case-study and NEON manuscript assets in EOG are *legacy evaluation/provenance only*, not EOG's active biological research or novel ecological claims. Their separate downstream homes are not specified by this migration; do not promote them within EOG.
 
 ## Scientific center
 

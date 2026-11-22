@@ -1,8 +1,8 @@
-"""Target-specific history-retention statistics for EOG empirical benchmarks.
+"""Generic target-specific history-retention statistics for mathematical method validation.
 
 The core estimand is the fraction of target variation explained by a declared history
 factor after a nuisance/time factor.  This module deliberately contains no dataset
-adapter and no ecological interpretation.  Inference is randomized only at the declared
+adapter and no ecological interpretation; biological study scripts now live in KNK.  Inference is randomized only at the declared
 experimental-unit level.
 """
 from __future__ import annotations
