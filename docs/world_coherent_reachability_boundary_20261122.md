@@ -47,3 +47,7 @@ Outputs distinguish original compatible worlds, their per-world first-passage su
 - Every exclusion is conditional on exhaustive enumeration of the **declared finite** world set, the source and the finite horizon; unlisted ecological or analytical worlds can rescue it.
 - Source support is not a calibrated colonisation probability. A spliced path is not evidence of a historical route.
 - The experiment creates no independent ecological replicate, changes no real-data score, and gives no reason to reopen the closed EOG-WF candidate search.
+
+## Follow-on: universal accessibility versus invariant route
+
+The [finite-world path quantifier certificate](world_path_quantifier_certificate_20261122.md) extends this no-splicing guardrail: a target may be reachable within *every* world even though no individual complete route is available in *all* worlds. The new production audit separately checks shared route existence and universally indispensable intermediate nodes; it does not change any earlier known-truth result.
