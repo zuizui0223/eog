@@ -98,7 +98,8 @@ class TemporalPathCertificate:
     necessary_waypoints_in_some_worlds: tuple[str, ...]
     shared_edges_by_interval: tuple[tuple[Edge, ...], ...]
     mass_based_target_status: str
-    structural_mass_status_agreement: bool
+    mass_status_comparable: bool
+    structural_mass_status_agreement: bool | None
     coverage_certificate: str
     flow_fingerprint: str
     world_fingerprints: tuple[tuple[str, str], ...]
@@ -255,6 +256,11 @@ def audit_temporal_path_quantifiers(
         else "contingent" if some_reached
         else "robustly_unreachable"
     )
+    # TemporalFlowSet retains the full *declared source mixture*. A
+    # selected-source structural path can be compared with that mass
+    # envelope only when the selected source is the sole declared source.
+    mass_comparable = all(w.source_ids == (source_id,) for w in declared)
+    mass_agreement = structural_status == mass_status if mass_comparable else None
     certificate = "exhaustive_declared_temporal_world_paths"
     payload = {
         "source_id": source_id,
@@ -278,7 +284,8 @@ def audit_temporal_path_quantifiers(
             [list(edge) for edge in edges] for edges in shared_edges
         ],
         "mass_based_target_status": mass_status,
-        "structural_mass_status_agreement": structural_status == mass_status,
+        "mass_status_comparable": mass_comparable,
+        "structural_mass_status_agreement": mass_agreement,
         "flow_fingerprint": flow.fingerprint,
         "coverage_certificate": certificate,
     }
@@ -301,7 +308,8 @@ def audit_temporal_path_quantifiers(
         necessary_waypoints_in_some_worlds=some_waypoints,
         shared_edges_by_interval=shared_edges,
         mass_based_target_status=mass_status,
-        structural_mass_status_agreement=structural_status == mass_status,
+        mass_status_comparable=mass_comparable,
+        structural_mass_status_agreement=mass_agreement,
         coverage_certificate=certificate,
         flow_fingerprint=flow.fingerprint,
         world_fingerprints=definitions,
