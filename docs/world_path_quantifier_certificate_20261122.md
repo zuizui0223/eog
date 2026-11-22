@@ -69,3 +69,7 @@ From an installed development environment at repository root:
 The tests cover alternative corridors, shared paths with optional intermediates, common necessary node without a shared route, world expansion, missing target access, edge floors, world-order invariance, and fail-closed source/fingerprint validation.
 
 Implementation: [world path certificates](../src/eog/v2/world_path_certificates.py). Previous guardrail: [world-coherent reachability boundary](world_coherent_reachability_boundary_20261122.md).
+
+## Time-indexed extension
+
+The previously deferred temporal-world case now has its own [time-coherent path quantifier certificate](temporal_path_quantifier_certificate_20261122.md). The new API retains ordered interval identity and distinguishes common routes, universally necessary spatial waypoints and universally necessary timed states, without pooling alternative temporal worlds. No static API, mass forecast, or frozen empirical result is changed.
