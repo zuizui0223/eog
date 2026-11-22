@@ -1,0 +1,37 @@
+name: EOG McKee-2024 HEAD-only transport preflight Gate1A
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/eog-mckee2024-gate1a-head-only.yml"
+      - "validation/temporal_corridor_mckee2024/gate1a_*"
+      - "validation/temporal_corridor_mckee2024/qualify_gate1a_head_only.py"
+      - "tests/test_temporal_corridor_mckee_gate1a_head.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  two-pinned-head-requests-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run offline contract/denial tests
+        run: python -m pip install pytest && python -m pytest tests/test_temporal_corridor_mckee_gate1a_head.py -q
+      - name: HEAD only; stop before any redirect, GET or source bytes
+        run: |
+          python validation/temporal_corridor_mckee2024/qualify_gate1a_head_only.py \
+            --output mckee2024_gate1a_redirect_receipt.json
+      - name: Archive host-only receipt even on HOLD
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mckee2024-gate1a-first-redirect-host-only
+          path: mckee2024_gate1a_redirect_receipt.json
+          if-no-files-found: ignore
+          retention-days: 30
