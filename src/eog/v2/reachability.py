@@ -58,6 +58,11 @@ _WORLD_EXPORTS: Final[tuple[str, ...]] = (
     "rank_positive_occurrence_candidates",
 )
 
+_PATH_CERTIFICATE_EXPORTS: Final[tuple[str, ...]] = (
+    "WorldPathCertificate",
+    "audit_world_path_quantifiers",
+)
+
 _FORECAST_EXPORTS: Final[tuple[str, ...]] = (
     "ForecastGateDeclaration",
     "WorldForecastMember",
@@ -146,6 +151,7 @@ _EXPORT_MODULE: Final[dict[str, str]] = {
     **{name: "eog.reachability_network_diagnostics" for name in _NETWORK_EXPORTS},
     **{name: "eog.v2.distributional_history" for name in _HISTORY_EXPORTS},
     **{name: "eog.v2.world_reconstruction" for name in _WORLD_EXPORTS},
+    **{name: "eog.v2.world_path_certificates" for name in _PATH_CERTIFICATE_EXPORTS},
     **{name: "eog.v2.world_forecast" for name in _FORECAST_EXPORTS},
     **{name: "eog.v2.world_predictive_summary" for name in _PREDICTIVE_SUMMARY_EXPORTS},
     **{
@@ -177,6 +183,7 @@ __all__ = [
     *_SYNTHETIC_EXPORTS,
     *_HISTORY_EXPORTS,
     *_WORLD_EXPORTS,
+    *_PATH_CERTIFICATE_EXPORTS,
     *_FORECAST_EXPORTS,
     *_PREDICTIVE_SUMMARY_EXPORTS,
     *_SEQUENTIAL_FORECAST_EXPORTS,
