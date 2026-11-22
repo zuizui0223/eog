@@ -1,7 +1,5 @@
-# Figure 2 reproducibility note
+# Structural paper asset migrated
 
-The committed Figure 2 builder is a presentation layer over frozen A-Islands benchmark outputs; it does not refit or alter the benchmark.
+The original EOG paper-only file `manuscript/figure_2_reproducibility.md` is preserved at [Structural canonical/archive](https://github.com/zuizui0223/Structural/blob/main/manuscript/figure_2_reproducibility.md) and indexed in the [89-file SHA-verified handoff manifest](https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json).
 
-After the Figure 2 source projection was finalized, the builder was explicitly compiled with CPython 3.10.20 and `tests/test_structural_figure_2.py` passed all five contract tests under that interpreter. The compatibility correction only normalizes SVG-building f-string delimiters so that the same source is valid on the repository's Python 3.10–3.12 support range; it does not change the frozen numerical inputs, estimability accounting, or scientific interpretation.
-
-The ordinary repository CI remains the authoritative cross-version check for the pull request.
+This is a link-only historical pointer, not an active EOG biological manuscript or revised scientific claim. The original was frozen in EOG commit [c9ba38785e42ecfdcae9256e5792fb8b32ea2b77](https://github.com/zuizui0223/eog/blob/c9ba38785e42ecfdcae9256e5792fb8b32ea2b77/manuscript/figure_2_reproducibility.md). The A-Islands strong-reference method comparison was adverse and cannot be described as a general ecological predictive success.

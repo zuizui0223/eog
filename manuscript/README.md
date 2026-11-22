@@ -1,26 +1,16 @@
-# Manuscript assets: frozen structural evidence line
+# EOG manuscripts — mathematical and methodological papers only
 
-The files in this directory preserve the earlier **structural-reachability / incremental-information manuscript line** and its figures, tables and submission tooling.
+EOG's active manuscript scope is **mathematical estimands, finite-world identifiability, inference contracts, MRR, and the unchanged EOG-WF methodology/heldout benchmark**.
 
-They are **not the active EOG method architecture** after the 2026-08 distributional-watershed cleanup.
+The former stand-alone A-Islands/Tanzania Structural manuscript, its figures and paper-specific tests have been source-matched and retired from EOG's authoring tree. Its scientific home is [Structural](https://github.com/zuizui0223/Structural), with [89-file handoff manifest](https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json). Matching Structural canonical files cover 70 assets; 19 alternate historical EOG versions are preserved in an archive rather than overwriting modern Structural code. EOG's original source files remain available at [pinned git commit](https://github.com/zuizui0223/eog/tree/c9ba38785e42ecfdcae9256e5792fb8b32ea2b77).
 
-The structural manuscript remains scientifically useful because it records positive and adverse empirical evidence about occurrence-anchored connectivity features relative to weaker and stronger competitors. Those results must not be deleted, retuned or silently rewritten to fit the newer world-reconstruction narrative.
+The frozen A-Islands/Tanzania **method evaluation** remains in EOG's benchmarks/source-contracts with an adverse strong-reference comparator as well as the positive conditional graph diagnostic. This is not an additional EOG-WF fresh endpoint and cannot establish universal predictive superiority.
 
-Use the repository layers as follows:
+The old `manuscript/submission` folder still contains historical mixed-scope strategy/gate receipts; it is **provenance only**, not an additional active Structural paper. Avoid using it to restart a biological submission.
 
-- active method direction: [`../docs/development_mainline.md`](../docs/development_mainline.md);
-- prospective package boundary: [`../docs/eog_v2_package_layout.md`](../docs/eog_v2_package_layout.md);
-- frozen evidence/claim boundaries: [`../docs/evidence_ledger.md`](../docs/evidence_ledger.md) and [`../docs/claim_matrix.md`](../docs/claim_matrix.md);
-- this directory: publication provenance for the earlier structural paper line.
+Other biological-study handoffs:
+- [KNK](https://github.com/zuizui0223/knk/tree/main/manuscript/history_storage): fungal/grassland assembly history and Ecology Letters manuscript.
+- [neon](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122): former NEON mammal biological manuscripts; canonical NEON project has **SUBMISSION HOLD** after mammal-scale validity re-audit.
+- [Structural](https://github.com/zuizui0223/Structural): structural/reference-adequacy study.
 
-In particular, claims such as A-Islands incremental information or the adverse Tanzania strong-reference result are preserved as empirical boundaries. They do not define the current finite-world/temporal API and they must not be used to imply that the newer distributional-world framework has already achieved empirical superiority.
-
-Any future manuscript for the integrated EOG mainline should be created as a separate, explicitly named artifact only after its own estimand, falsification benchmark and empirical validation gate are frozen. Do not repurpose these historical files in place.
-
-## Biology/method boundary (2026-11-22)
-
-The dedicated fungal and grassland ecological manuscript, figures and submission materials have been **migrated to [KNK](https://github.com/zuizui0223/knk/tree/main/manuscript/history_storage)**. They are not an active EOG method-paper lane. This directory otherwise retains legacy *method* evidence and separate prior case-study provenance only; do not turn legacy biological patterns into EOG mathematics claims.
-
-## Historical NEON biological papers (2026-11-22)
-
-The two NEON ecology manuscript lanes and their supporting paper-generation assets are **archived in [zuizui0223/neon](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122/manuscript)**. Their original EOG documents are now link stubs only. NEON's post-audit current status is **SUBMISSION HOLD**. The EOG generic `metacommunity_connectivity` methods, synthetic tests and response-validation records remain here as methodological provenance, not active ecological manuscripts.
+Retained active EOG method lines and frozen source/claim restrictions: [mainline](../docs/development_mainline.md), [evidence ledger](../docs/evidence_ledger.md), [mathematical inventory](../docs/result_inventory/README.md).
