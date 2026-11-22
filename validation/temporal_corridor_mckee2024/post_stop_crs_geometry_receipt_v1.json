@@ -1,0 +1,57 @@
+{
+  "schema": "eog.mckee2024.sparse12h.crs_geometry_diagnostic_receipt.v1",
+  "status": "SHAPE_DBF_COORDINATES_CONSISTENT__PUBLISHER_CRS_DECLARATION_CONFLICT",
+  "protocol_commit": "f5ed446e1a5f39843bec4f7a4a396c3eb4136f6d",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "records_evaluated": 28953,
+  "shape_type": "Point",
+  "SHAPE_DBF_xy_consistency": {
+    "tolerance": 0.000001,
+    "matching_points": 28953,
+    "fraction": 1,
+    "maximum_absolute_difference_rounded_6dp": 0
+  },
+  "geographic_reference": {
+    "bounded_region": "Wyoming/Idaho broad buffered fixed lon/lat rectangle",
+    "lon_min": -114.5,
+    "lon_max": -102,
+    "lat_min": 39,
+    "lat_max": 47
+  },
+  "candidate_crs_evaluations": [
+    {
+      "crs": "EPSG:3742",
+      "within_region": 0,
+      "of": 28953,
+      "fraction": 0
+    },
+    {
+      "crs": "EPSG:5070",
+      "within_region": 28953,
+      "of": 28953,
+      "fraction": 1
+    },
+    {
+      "crs": "ESRI:102003",
+      "within_region": 0,
+      "of": 28953,
+      "fraction": 0
+    },
+    {
+      "crs": "EPSG:3857",
+      "within_region": 0,
+      "of": 28953,
+      "fraction": 0
+    }
+  ],
+  "publisher_claim": "NAD83(HARN)/UTM zone 12N, EPSG:3742",
+  "finding": "All sparse points geographically align under EPSG:5070 and none under claimed EPSG:3742. This strongly indicates a source coordinate metadata conflict, but is not proof of intended source CRS.",
+  "EPSG5070_automatically_accepted": false,
+  "publisher_PRJ_overwritten": false,
+  "original_gate2_STOP_retained": true,
+  "SHP_point_records_read_12h_only": true,
+  "individual_coordinates_exported": false,
+  "dense_2hour_holdout_opened": false,
+  "ecological_scores_computed": false,
+  "EOG_WF_3_31_3_unchanged": true
+}
