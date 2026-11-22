@@ -1,0 +1,39 @@
+{
+  "schema": "eog.mckee2024.sparse12h.pre_scoring_crs_geometric_diagnostic.v1",
+  "status": "FROZEN_BEFORE_READING_SHP_POINT_RECORDS",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_sealed": "GPS2hrs_Locs.zip always forbidden",
+  "prior_crs_receipt": "validation/temporal_corridor_mckee2024/post_stop_semantics_hypothesis_receipt_v1.json",
+  "objective": "Independently diagnose disagreement between declared EPSG3742 PRJ and coordinate values using ONLY verified 12h sparse GPS input.",
+  "predeclared_candidates": [
+    "EPSG:3742",
+    "EPSG:5070",
+    "ESRI:102003",
+    "EPSG:3857"
+  ],
+  "geographic_reference": "Wyoming and nearby Idaho broad buffered region, based on published location and fixed before reading geometry",
+  "predeclared_validation_lonlat_bbox": {
+    "min_lon": -114.5,
+    "max_lon": -102,
+    "min_lat": 39,
+    "max_lat": 47
+  },
+  "coordinate_match_abs_tolerance": 0.000001,
+  "allowed_only": [
+    "read Point shapefile records (x,y) from verified 12h ZIP and corresponding DBF numeric UTM_E/UTM_N",
+    "count geometry/attribute agreement without exporting any individual point",
+    "transform each point under four predeclared candidate CRSs and report only aggregate fractions within fixed broad Wyoming/Idaho bounds",
+    "retain all contradictions and original metadata/source STOP, export counts/fractions only"
+  ],
+  "prohibited": [
+    "read dense 2h holdout observations",
+    "publish raw coordinates, animal identities, dates or migration paths",
+    "silently overwrite source PRJ or infer definitive true CRS based solely on geographic plausibility",
+    "compute EOG/BBMM model scores or change original Gate2 STOP",
+    "try more candidate CRS values post-result without another frozen protocol"
+  ],
+  "success_test": "geometry-attribute agreement >=99% within 1e-6 with source CRS contradiction explicitly retained",
+  "inference_limit": "Geographically consistent CRS is candidate only; confirm independently before confirmatory spatial scoring.",
+  "original_gate2_STOP_preserved": true,
+  "EOG_WF_3_31_3_unchanged": true
+}
