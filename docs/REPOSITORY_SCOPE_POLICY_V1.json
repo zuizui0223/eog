@@ -16,6 +16,7 @@
     "neon_metacommunity_redundancy",
     "neon_small_mammal_continuity",
     "paper_ready",
+    "result_tables",
     "submission"
   ],
   "legacy_redirect_only": {
@@ -37,8 +38,7 @@
     "validation/eog_alternaria_genotype_generality_v37",
     "validation/eog_mechanistic_ceiling_v38",
     "figures",
-    "manuscript/figure_data",
-    "manuscript/result_tables"
+    "manuscript/figure_data"
   ],
   "disallowed_code_patterns": [
     "benchmarks/run_eog_*(?:leopold|grassland_above_below|identity_storage|arrival_role|role_mapping|history_level_leverage|dominance_tail|alternaria|wood_decomposer)*.py"
@@ -81,7 +81,8 @@
   "structural_doc_stub_globs": [
     "manuscript/structural*.md",
     "manuscript/figure_[1-5]*.md",
-    "manuscript/submission/STRUCTURAL_VISUAL_QA_RECEIPT_*.md"
+    "manuscript/submission/STRUCTURAL_VISUAL_QA_RECEIPT_*.md",
+    "manuscript/result_tables/*.md"
   ],
   "structural_disallowed_paper_script_globs": [
     "manuscript/build_structural_*.py",

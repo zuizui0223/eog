@@ -95,7 +95,7 @@ def test_structural_paper_handoff_is_redirect_only():
     p = _policy()
     for pattern in p["structural_disallowed_paper_script_globs"]:
         assert not list(ROOT.glob(pattern)), f"retired Structural script returned: {pattern}"
-    for path in ("figures", "manuscript/figure_data", "manuscript/result_tables"):
+    for path in ("figures", "manuscript/figure_data"):
         assert not (ROOT / path).exists(), f"Structural paper-only folder reintroduced: {path}"
     count = 0
     for pattern in p["structural_doc_stub_globs"]:
@@ -104,7 +104,11 @@ def test_structural_paper_handoff_is_redirect_only():
             text = path.read_text(encoding="utf-8")
             assert "https://github.com/zuizui0223/Structural" in text, path
             assert len(text.encode("utf-8")) < 2048, path
-    assert count >= 20, "historical Structural paper links removed or reactivated"
+    assert count >= 23, "historical Structural paper links removed or reactivated"
+    paper_table_dir = ROOT / "manuscript/result_tables"
+    assert all(x.is_file() and x.suffix == ".md" for x in paper_table_dir.iterdir()), (
+        "old structural results-tables folder may contain only short archival redirect Markdown"
+    )
     for core in (
         "src/eog/v2/world_reconstruction.py",
         "src/eog/v2/metacommunity_connectivity.py",
