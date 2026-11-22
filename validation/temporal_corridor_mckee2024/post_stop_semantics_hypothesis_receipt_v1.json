@@ -1,0 +1,59 @@
+{
+  "schema": "eog.mckee2024.sparse12h.post_stop_semantics_hypothesis_receipt.v1",
+  "status": "T0_MIDNIGHT_HYPOTHESIS_SUPPORTED_DESCRIPTIVELY__EPSG5070_CANDIDATE_ONLY",
+  "protocol_commit": "3e9ed35101b4cafe5ac31d87f949ae4796df02c3",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "full_timestamp_hour_histogram": {
+    "12": 11489,
+    "13": 3057,
+    "00": 379,
+    "01": 3193
+  },
+  "full_datetime_records": 18118,
+  "date_only_records": 10835,
+  "date_only_midnight_hypothetical": {
+    "groups": 421,
+    "gaps": 28532,
+    "gaps_10_to_14h": 27678,
+    "fraction_10_to_14h": 0.9700686947988224,
+    "gaps_over24h": 128,
+    "duplicate_timestamp_pairs": 0
+  },
+  "date_only_noon_negative_control": {
+    "groups": 421,
+    "gaps": 28532,
+    "gaps_10_to_14h": 6334,
+    "fraction_10_to_14h": 0.2219963549698584,
+    "duplicate_timestamp_pairs": 10421
+  },
+  "coarse_bbox_center_candidate_projections": [
+    {
+      "crs": "EPSG:3742",
+      "lon_rounded_degrees": -126,
+      "lat_rounded_degrees": 20
+    },
+    {
+      "crs": "EPSG:5070",
+      "lon_rounded_degrees": -109,
+      "lat_rounded_degrees": 43
+    },
+    {
+      "crs": "ESRI:102003",
+      "lon_rounded_degrees": -112,
+      "lat_rounded_degrees": 57
+    },
+    {
+      "crs": "EPSG:3857",
+      "lon_rounded_degrees": -9,
+      "lat_rounded_degrees": 20
+    }
+  ],
+  "published_method_context": "McKee et al. 2024 explicitly describe subsampled ~00:00/01:00 and 12:00/13:00 Mountain Time 12-hour fixes; see https://doi.org/10.1002/ecs2.4983",
+  "publisher_readme_claim": "Projection NAD83(HARN)/UTM zone 12N EPSG:3742 (inconsistent with observed coordinates if Wyoming).",
+  "inference_limit": "Neither midnight imputation nor EPSG:5070 is automatically accepted as a corrected source definition; dataset-specific geospatial QC and independent documentation must precede any EOG scoring.",
+  "raw_coords_or_timestamps_exported": false,
+  "shape_records_read": false,
+  "dense_2h_opened": false,
+  "ecological_scores_computed": false,
+  "EOG_WF_frozen_3_31_3": true
+}
