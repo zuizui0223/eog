@@ -1,0 +1,13 @@
+{
+  "schema": "eog.eogwf_v2_manifest_fresh_real.protocol_lock.v1",
+  "programme": "eogwf_v2_manifest_fresh_real_v1",
+  "protocol_path": "validation/eogwf_v2_manifest_fresh_real_v1/protocol_v1.json",
+  "protocol_git_blob_sha1": "4133680c86380e10f35bd31580f375e1bc9c7bec",
+  "lock_state": "frozen_before_candidate_roster_capture",
+  "candidate_roster_captured": false,
+  "candidate_data_entity_payload_requests": 0,
+  "biological_response_payload_requests": 0,
+  "model_fits": 0,
+  "outer_scores": 0,
+  "changes_to_protocol_after_roster_capture_allowed": false
+}

@@ -1,0 +1,218 @@
+{
+  "schema": "eog.eogwf_v2_manifest_fresh_real.protocol.v1",
+  "programme": "eogwf_v2_manifest_fresh_real_v1",
+  "frozen_date": "2026-09-22",
+  "purpose": "Prospectively test whether the response-independent EOG-WF v2 manifest eligibility boundary plus calibration-only arm selection can translate to one genuinely fresh real ecological system without reopening the closed EOG-WF programme.",
+  "scientific_separation": {
+    "separate_from_closed_eog_wf": true,
+    "changes_closed_eog_wf_synthesis": false,
+    "counts_as_fourth_eog_wf_endpoint": false,
+    "separate_from_closed_layer_b_mechanism_v2_programme": true,
+    "prior_consumed_or_stopped_candidates_may_be_reused": false,
+    "closed_programme_results_used_only_for_method_design": true
+  },
+  "target_and_discovery": {
+    "catalog": "Environmental Data Initiative (EDI) Data Portal",
+    "exact_search_string": "Peromyscus maniculatus",
+    "target_common_name": "deer mouse",
+    "target_scientific_name": "Peromyscus maniculatus",
+    "target_change_after_roster_capture_allowed": false,
+    "fallback_search_strings_allowed": false,
+    "result_capture_limit": 50,
+    "roster_capture_must_precede_any_candidate_data_entity_payload_access": true,
+    "roster_contents_allowed": [
+      "package identifier",
+      "title",
+      "abstract",
+      "publication date",
+      "entity names/types/sizes/checksums from package metadata",
+      "documentation links"
+    ],
+    "roster_sort_key": "canonical EDI package identifier ascending, then revision ascending",
+    "exclusion_rule": "exclude any source identity already present in closed EOG-WF candidate-flow or Layer-B real-translation ledgers before qualification",
+    "metadata_only_screen": {
+      "real_field_monitoring_required": true,
+      "synthetic_or_simulation_reject": true,
+      "target_documented_in_package_metadata_or_linked_publication_required": true,
+      "repeated_sampling_design_required": true,
+      "response_independent_geometry_required": true,
+      "response_independent_effort_or_exact_effort_documentation_required": true,
+      "response_entity_must_remain_unopened": true
+    }
+  },
+  "execution_budget": {
+    "maximum_pre_response_candidate_attempts": 3,
+    "maximum_active_candidate_at_once": 1,
+    "maximum_response_payload_openings": 1,
+    "maximum_scored_outer_endpoints": 1,
+    "parallel_candidate_attempts_allowed": false,
+    "replacement_after_terminal_pre_response_stop": "advance to next frozen-roster candidate if fewer than 3 attempts have been used",
+    "replacement_after_any_response_payload_open": false,
+    "candidate_hunting_after_budget_exhaustion": false,
+    "gate_weakening_to_obtain_score": false
+  },
+  "pre_response_qualification": {
+    "candidate_preflight": {
+      "minimum_unique_spatial_nodes": 50,
+      "minimum_temporal_contexts": 17,
+      "minimum_candidate_units": 500,
+      "minimum_repeated_nodes": 50,
+      "analysis_registry_closed_required": true,
+      "geometry_response_separable_required": true,
+      "coordinate_geometry_required": true
+    },
+    "source_integrity": {
+      "manifest_strict_content_identity_required": true,
+      "registry_expected_sha256_and_bytes_required": true,
+      "effort_expected_sha256_and_bytes_required": true,
+      "response_entity_immutable_identity_or_checksum_required_before_open": true,
+      "acquisition_transport_may_change_if_content_identity_is_unchanged": true,
+      "post_response_source_substitution_allowed": false
+    },
+    "response_semantics": {
+      "exact_response_header_or_schema_independently_freezable_required": true,
+      "join_or_unit_mapping_fully_defined_before_response": true,
+      "missing_value_semantics_frozen_before_response": true,
+      "observation_mode_must_be_one_of": [
+        "explicit_binary_tokens",
+        "complete_source_zero"
+      ],
+      "no_post_response_alias_discovery": true,
+      "zero_never_means_biological_absence": true
+    },
+    "independent_target_support": {
+      "target_presence_documented_without_response_payload_required": true,
+      "documented_sampling_design_capable_of_recorded_nondetection_required": true,
+      "independent_evidence_of_both_positive_and_negative_support_required": true,
+      "evidence_must_make_frozen_class_minima_plausible": true
+    }
+  },
+  "manifest_world_design": {
+    "generator_type": "coordinate_threshold_worlds_v1",
+    "metric": "haversine_km",
+    "construction_mode": "structural_lcc_ladder",
+    "axis_id": "fresh_real_haversine_km",
+    "target_lcc_fractions": [
+      0.25,
+      0.5,
+      0.75,
+      0.9
+    ],
+    "deduplicate_identical_thresholds": true,
+    "threshold_semantics_key": "geometry_threshold_km",
+    "include_external_open": true,
+    "external_open_world_id": "external_open",
+    "biological_dispersal_distance_inferred_from_ladder": false,
+    "local_support_rule": "one-step support from the frozen prior-positive source set under each local threshold world",
+    "positive_falsification": "unsupported eligible positive eliminates that local world after the prediction for the current context has been formed",
+    "negative_falsification": "none",
+    "external_open_falsification": "none"
+  },
+  "predictive_state_design": {
+    "repeated_measure_endpoint": true,
+    "refresh_policy": "sequential_context",
+    "train_generator_id": "fresh_real_v1_sequential_preoutcome",
+    "serve_generator_id": "fresh_real_v1_sequential_preoutcome",
+    "source_policy": "all previously observed positive nodes aggregated symmetrically",
+    "source_label_invariant": true,
+    "source_symmetric_representation": "source_symmetric_world_support_summary_v2_candidate",
+    "baseline_contains_spatial_coordinates": true,
+    "static_predictive_opt_in": false,
+    "predictive_state_gate_must_return": "predictive_complement_candidate",
+    "ineligible_action": "terminal pre-response predictive stop for that candidate; do not open biological response"
+  },
+  "temporal_partition": {
+    "ordering": "response-independent chronological context order",
+    "minimum_contexts": 17,
+    "initialization_contexts": "first 1 context, initialization_only",
+    "remaining_context_allocation": {
+      "outer": "last max(4, floor(0.25 * remaining_context_count)) contexts",
+      "inner_validation": "preceding max(4, floor(0.25 * remaining_context_count)) contexts",
+      "inner_train": "all earlier remaining contexts"
+    },
+    "minimum_inner_train_contexts": 8,
+    "response_stratification_allowed": false,
+    "repartition_after_response_allowed": false,
+    "outer_feedback_before_selection": false
+  },
+  "baseline_and_learner": {
+    "baseline_feature_rule": "include all predeclared response-independent site/context/effort covariates supplied by the selected package, plus coordinates and deterministic context encodings; exclude identifiers and response-derived fields; no response-based feature selection",
+    "preprocessing_fit_scope": "inner_train only before inner selection; frozen transformation rules reused in validation and outer",
+    "learner": "sklearn.ensemble.RandomForestClassifier",
+    "hyperparameters": {
+      "n_estimators": 200,
+      "max_features": "sqrt",
+      "min_samples_leaf": 8,
+      "class_weight": null,
+      "random_state": 20260909,
+      "n_jobs": 1
+    },
+    "primary_metric": "macro binary log loss across temporal contexts",
+    "same_learner_and_preprocessing_both_arms": true,
+    "augmented_only_difference": "frozen source-symmetric Layer-B feature block"
+  },
+  "post_response_estimability_gate": {
+    "must_be_first_outcome_dependent_operation": true,
+    "initialization_positive_minimum": 1,
+    "inner_train_positive_minimum": 30,
+    "inner_train_negative_minimum": 30,
+    "inner_validation_positive_minimum": 10,
+    "inner_validation_negative_minimum": 10,
+    "outer_positive_minimum": 10,
+    "outer_negative_minimum": 10,
+    "outer_contexts_with_both_classes_minimum": 4,
+    "failure_action": "terminal outer_non_estimable_under_frozen_rules; zero model fits and zero outer scores"
+  },
+  "calibration_only_selection": {
+    "candidate_arms": [
+      "baseline_only",
+      "baseline_plus_frozen_layer_b"
+    ],
+    "fit_before_selection": "fit both arms on inner_train only",
+    "selection_data": "inner_validation only",
+    "selection_metric": "macro binary log loss",
+    "promotion_rule": "select augmented if and only if augmented inner-validation loss is strictly lower than baseline inner-validation loss; otherwise baseline",
+    "outer_feedback_for_selection": false,
+    "final_fit": "refit required arm models on inner_train plus inner_validation with unchanged hyperparameters and preprocessing contract",
+    "selection_revisited_after_outer": false
+  },
+  "outer_endpoint": {
+    "untouched_before_selection": true,
+    "maximum_outer_scoring_runs": 1,
+    "report": [
+      "baseline outer macro log loss",
+      "always-augmented outer macro log loss",
+      "selected-arm outer macro log loss",
+      "selected minus baseline",
+      "selected minus always-augmented",
+      "selected regret to oracle"
+    ],
+    "acceptable_terminal_outcomes": [
+      "selective_favorable",
+      "selective_null_or_negligible",
+      "selective_adverse",
+      "outer_non_estimable_under_frozen_rules"
+    ],
+    "post_outer_rescue_tuning_allowed": false
+  },
+  "claim_boundary": {
+    "primary_question": "In one genuinely fresh real ecological system selected under a frozen catalog/query and response-blind manifest qualification, does the v2 eligibility boundary plus calibration-only arm selection retain useful Layer-B information without forced augmentation?",
+    "one_system_establishes_universal_benefit": false,
+    "ineligible_or_pre_response_stop_is_predictive_evidence": false,
+    "qualification_failure_is_biological_negative": false,
+    "result_changes_closed_eog_wf": false,
+    "all_terminal_directions_must_be_reported": true
+  },
+  "forbidden": [
+    "change EDI search string after seeing search results",
+    "change focal taxon after roster capture",
+    "use a prior EOG candidate or source identity",
+    "open response payload while screening candidate metadata",
+    "weaken node/context/class minima to obtain a scored result",
+    "repair schema or registry after biological response access",
+    "try a replacement candidate after any response payload has been opened",
+    "add another outer endpoint after the first scored outer result",
+    "represent this programme as a fourth EOG-WF endpoint"
+  ],
+  "current_status": "protocol_frozen_before_roster_capture"
+}
