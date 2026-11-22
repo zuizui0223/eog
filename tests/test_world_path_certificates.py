@@ -182,9 +182,12 @@ def test_missing_source_or_nondeclared_target_or_bad_floor_is_rejected():
 
 def test_zero_weight_selected_source_cannot_certify_a_path():
     w = _world(
-        "w", _edges(("A", "D")), sources=("A", "D"), weights=(0.0, 1.0)
+        "w", _edges(("A", "D"), ("D", "C")),
+        sources=("A", "D"), weights=(0.0, 1.0),
     )
-    frozen = reconstruct_compatible_worlds((w,), ("A", "D"), max_steps=2)
+    # Fixed-source reconstruction requires a separate non-source positive.
+    # C can be reached from D, while selected source A has zero mass.
+    frozen = reconstruct_compatible_worlds((w,), ("A", "C", "D"), max_steps=2)
     with pytest.raises(ValueError, match="positive weight"):
         audit_world_path_quantifiers(
             frozen, (w,), source_id="A", target_id="C"
