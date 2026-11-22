@@ -61,3 +61,7 @@ Individual-season and herd are dependence clusters; GPS points within an animal 
 - [Offline tests](../../tests/test_temporal_corridor_mckee_source_gate0.py)
 - [Metadata-only GitHub Actions workflow](../../.github/workflows/eog-mckee2024-dryad-metadata-gate0.yml)
 - [Time-coherent EOG path API](../../src/eog/v2/temporal_path_certificates.py)
+
+## Gate1a HEAD-only transport audit (separate frozen source-access stage)
+
+To prepare **12-hour/README-only** source-byte verification without exposing records, the [Gate1a frozen pre-HEAD contract](gate1a_redirect_head_protocol_v1.json) authorizes exactly two publisher HEAD requests: official file-stream IDs 3334125 and 3334129. It blocks the dense 2-hour ID 3334126, all GET/range requests, redirects, body reads and signed-location logging. The [source transport auditor](qualify_gate1a_head_only.py) records only first-hop HTTP status and redirect hostname; the [CI workflow](../../.github/workflows/eog-mckee2024-gate1a-head-only.yml) archives a host-only receipt. A successful HEAD probe **does not authorize any download**. A distinct subsequently frozen Gate1b contract must pin permitted redirect hosts and the original SHA-256 source identities before sparse bytes are requested.
