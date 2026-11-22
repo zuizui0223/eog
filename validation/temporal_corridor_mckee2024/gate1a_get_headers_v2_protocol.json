@@ -1,0 +1,58 @@
+{
+  "schema": "eog.temporal_corridor_mckee2024.gate1a_get_header_protocol.v2",
+  "status": "FROZEN_BEFORE_FIRST_GET__NO_RESPONSE_BODY_ACCESS",
+  "doi": "10.5061/dryad.15dv41p51",
+  "version_id": 305836,
+  "parent_gate0_receipt": "validation/temporal_corridor_mckee2024/gate0_publisher_metadata_frozen_v1.json",
+  "previous_attempt": {
+    "pr": 741,
+    "run_id": 45029791588,
+    "result": "HOLD_SOURCE_TRANSPORT_UNVERIFIED",
+    "observed_failure": "Official sparse-file HEAD returned HTTP 403",
+    "inference_limit": "HTTP 403 under HEAD does not establish that official GET download is unavailable"
+  },
+  "change_from_previous_protocol": "Use one official GET per allowed source endpoint; stop on its first response, follow no redirect, read no response body; a direct 200 is HOLD without body consumption",
+  "requests": [
+    {
+      "file_id": 3334125,
+      "name": "GPS12hrs_Locs.zip",
+      "url": "https://datadryad.org/downloads/file_stream/3334125",
+      "size_bytes": 1539661,
+      "publisher_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4"
+    },
+    {
+      "file_id": 3334129,
+      "name": "README.md",
+      "url": "https://datadryad.org/downloads/file_stream/3334129",
+      "size_bytes": 4915,
+      "publisher_sha256": "c2af382786022f26a68a288ccb6b4ad0e102b6ced9978ff6d3fbdc1e02fbe0df"
+    }
+  ],
+  "forbidden_file_id": 3334126,
+  "network_contract": {
+    "method": "GET",
+    "exact_first_host": "datadryad.org",
+    "no_redirect_following": true,
+    "no_response_body_read": true,
+    "no_retry": true,
+    "timeout_seconds": 25,
+    "allowed_3xx": [
+      301,
+      302,
+      303,
+      307,
+      308
+    ],
+    "on_3xx": "record status and first redirect hostname only, never signed Location",
+    "on_200": "HOLD_DIRECT_PAYLOAD_RESPONSE_UNINSPECTED without reading body",
+    "on_other_status": "HOLD_TRANSPORT_UNVERIFIED",
+    "no_raw_GPS_data_access": true
+  },
+  "claim_boundary": {
+    "sparse_12h_GPS_rows_read": false,
+    "dense_2h_GPS_rows_read": false,
+    "source_payload_bytes_intentionally_consumed": false,
+    "gate1b_file_download_authorized": false,
+    "new_EOG_WF_endpoint": false
+  }
+}
