@@ -1,0 +1,37 @@
+name: EOG McKee-2024 GET-no-body redirect check v2
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/eog-mckee2024-get-no-body-v2.yml"
+      - "validation/temporal_corridor_mckee2024/gate1a_get_headers_v2_protocol.json"
+      - "validation/temporal_corridor_mckee2024/qualify_gate1a_get_headers_v2.py"
+      - "tests/test_temporal_corridor_mckee_get_headers_v2.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  official-first-response-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Test pre-frozen no-body and holdout isolation
+        run: python -m pip install pytest && python -m pytest tests/test_temporal_corridor_mckee_get_headers_v2.py -q
+      - name: Query only original official first response and never read body
+        run: |
+          python validation/temporal_corridor_mckee2024/qualify_gate1a_get_headers_v2.py \
+            --output mckee2024_get_no_body_v2_receipt.json
+      - name: Keep source-only STOP/redirect receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mckee2024-get-first-response-no-body-v2
+          path: mckee2024_get_no_body_v2_receipt.json
+          if-no-files-found: ignore
+          retention-days: 30
