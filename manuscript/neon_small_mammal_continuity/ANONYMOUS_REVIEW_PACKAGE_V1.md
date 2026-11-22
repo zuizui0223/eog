@@ -1,9 +1,7 @@
-# Anonymous reviewer data/code package — preparation note
+# Archived in NEON — ANONYMOUS_REVIEW_PACKAGE_V1.md
 
-Oikos uses double-blind review and requires data and custom code to be available to editors and reviewers at initial submission.
+This historical NEON biological manuscript/support document is archived byte-for-byte in [NEON](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_small_mammal_continuity/ANONYMOUS_REVIEW_PACKAGE_V1.md). It is not part of EOG's active mathematical/methodological publication programme.
 
-For this paper, the reviewer bundle is generated automatically from frozen scientific files and excludes author names, email addresses, ORCID identifiers, Git metadata and identity-bearing repository links. It contains the NEON source DOI and the exact response/query contracts needed to identify the public source data.
+**Scientific caution:** the current [NEON repository](https://github.com/zuizui0223/neon) is in **SUBMISSION HOLD** following a later mammal-scale validity audit. The old 13/16 descriptive result must not be promoted as validated functional redundancy or a robust species-turnover mechanism.
 
-The bundle is intended for anonymous peer review only. At initial submission it can be uploaded to ScholarOne as an additional file for review, or placed in a service offering private-for-peer-review access.
-
-After acceptance, the final data/code package must be deposited in a permanent public repository with a persistent identifier such as a DOI. GitHub alone does not satisfy the NSO permanent-archive requirement.
+[Original frozen EOG version](https://github.com/zuizui0223/eog/blob/91240104f9816459cd9555a63555664aff60760b/manuscript/neon_small_mammal_continuity/ANONYMOUS_REVIEW_PACKAGE_V1.md).

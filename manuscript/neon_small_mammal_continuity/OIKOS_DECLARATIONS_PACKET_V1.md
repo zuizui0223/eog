@@ -1,41 +1,7 @@
-# Oikos submission declarations — completion packet
+# Archived in NEON — OIKOS_DECLARATIONS_PACKET_V1.md
 
-## Conflict of interest
+This historical NEON biological manuscript/support document is archived byte-for-byte in [NEON](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_small_mammal_continuity/OIKOS_DECLARATIONS_PACKET_V1.md). It is not part of EOG's active mathematical/methodological publication programme.
 
-[Choose one and delete the other.]
+**Scientific caution:** the current [NEON repository](https://github.com/zuizui0223/neon) is in **SUBMISSION HOLD** following a later mammal-scale validity audit. The old 13/16 descriptive result must not be promoted as validated functional redundancy or a robust species-turnover mechanism.
 
-- The authors declare no conflicts of interest.
-- The authors declare the following conflicts of interest: [details].
-
-## Ethics statement
-
-This study analysed previously collected data from the NSF National Ecological Observatory Network (NEON) Small mammal box trapping programme and did not involve new animal capture, handling or field experimentation by the authors of this analysis. The manuscript should cite the NEON data source and, if required by the editor, refer readers to the original NEON collection protocols and approvals associated with that programme.
-
-## Funding
-
-[Insert funding source(s), grant numbers and recipient author(s), or state that no specific funding was received for this study.]
-
-## Acknowledgements
-
-[Insert acknowledgements only for contributors who do not meet authorship criteria and who have agreed to be named.]
-
-## Equity, diversity and inclusion statement for submission system
-
-The study used an existing continental-scale ecological monitoring dataset and did not recruit human participants. Site selection for the confirmatory analysis was response-blind and followed a fixed metadata-based rule rather than investigator preference. [Authors should review and adapt this statement to their institutional and NSO EDI requirements before submission.]
-
-## CRediT
-
-Oikos/NSO requires CRediT roles for revised submissions. Complete after final author order is fixed.
-
-- Conceptualization: [author initials]
-- Methodology: [author initials]
-- Software: [author initials]
-- Formal analysis: [author initials]
-- Investigation: [author initials]
-- Data curation: [author initials]
-- Writing – original draft: [author initials]
-- Writing – review & editing: [author initials]
-- Visualization: [author initials]
-- Supervision: [author initials]
-- Project administration: [author initials]
-- Funding acquisition: [author initials, if applicable]
+[Original frozen EOG version](https://github.com/zuizui0223/eog/blob/91240104f9816459cd9555a63555664aff60760b/manuscript/neon_small_mammal_continuity/OIKOS_DECLARATIONS_PACKET_V1.md).

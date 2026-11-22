@@ -18,6 +18,10 @@ Same strong learner and features in each baseline arm; only the pre-frozen 10 sy
 
 **Frozen denominator: exactly 3 scored predictive endpoints, 31 scientific/protocol STOPs, 3 administrative exclusions. No fourth scored endpoint.** The product conclusion is structural diagnostics plus **context-dependent** predictive complement, not generic predictive superiority. [Paper-ready original method text](../../manuscript/paper_ready/methods_results_core.md).
 
+## NEON saturation is a methodological audit, not accepted mammal ecology
+
+The original 16-site NEON finite-world assay reported 0/16 sites with positive null-adjusted turnover gain and a post hoc 13/16 occurrence-continuity count. A later algebraic audit found best-species world-survival saturation at 16/16, forcing much of the signed null interpretation. The independent **[NEON validity audit](https://github.com/zuizui0223/neon/blob/main/README.md)** subsequently found that 93/94 canonical adjacency worlds already linked all same-grid trap pairs, and species-pool-conditioned carrier turnover was not exceptional (p=0.7568). Therefore the former ecological interpretation is **not a current supported finding**. The entire old biological manuscript/evidence package is archived in [NEON](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122); EOG retains only reproducible method stress-test evidence. No fourth EOG-WF endpoint is added.
+
 ## Additional methodological diagnostics, not biological discoveries
 
 - **Glanville**: old exact-world-ID encoding gave heldout log loss 0.230197 vs symmetric-summary 0.187983; this is an adverse identity encoding result, not a fresh prospective method-superiority score. Structural rule contraction had independent audit status.

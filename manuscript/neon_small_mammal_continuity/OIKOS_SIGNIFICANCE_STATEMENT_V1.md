@@ -1,5 +1,7 @@
-# Oikos significance statement
+# Archived in NEON — OIKOS_SIGNIFICANCE_STATEMENT_V1.md
 
-Species turnover is often invoked as a mechanism by which biodiversity creates aggregate properties that no single species can provide alone. We tested whether that logic extends to spatial continuity itself. Across 16 prospectively selected NEON small-mammal sites, pooling species never increased multiscale spatial continuity beyond the best constituent species. Instead, every site contained at least one individually fully continuous species, 13 of 16 contained multiple such species, and 32 species filled this role across the full site set. Heterospecific-only spatial rescue was rare, and at one site taxonomic pooling reduced continuity by adding spatially unsupported occurrences.
+This historical NEON biological manuscript/support document is archived byte-for-byte in [NEON](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_small_mammal_continuity/OIKOS_SIGNIFICANCE_STATEMENT_V1.md). It is not part of EOG's active mathematical/methodological publication programme.
 
-The study therefore identifies a distinct ecological organization—occupancy-continuity redundancy—rather than turnover-generated complementarity. This matters broadly for metacommunity ecology because it shows that biodiversity aggregation can preserve a regional spatial property through redundant constituent species rather than by stitching together incomplete distributions. The result also defines when community-level connectivity summaries may obscure the species-level structure that actually carries the spatial pattern.
+**Scientific caution:** the current [NEON repository](https://github.com/zuizui0223/neon) is in **SUBMISSION HOLD** following a later mammal-scale validity audit. The old 13/16 descriptive result must not be promoted as validated functional redundancy or a robust species-turnover mechanism.
+
+[Original frozen EOG version](https://github.com/zuizui0223/eog/blob/91240104f9816459cd9555a63555664aff60760b/manuscript/neon_small_mammal_continuity/OIKOS_SIGNIFICANCE_STATEMENT_V1.md).

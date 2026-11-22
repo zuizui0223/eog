@@ -20,3 +20,7 @@ Any future manuscript for the integrated EOG mainline should be created as a sep
 ## Biology/method boundary (2026-11-22)
 
 The dedicated fungal and grassland ecological manuscript, figures and submission materials have been **migrated to [KNK](https://github.com/zuizui0223/knk/tree/main/manuscript/history_storage)**. They are not an active EOG method-paper lane. This directory otherwise retains legacy *method* evidence and separate prior case-study provenance only; do not turn legacy biological patterns into EOG mathematics claims.
+
+## Historical NEON biological papers (2026-11-22)
+
+The two NEON ecology manuscript lanes and their supporting paper-generation assets are **archived in [zuizui0223/neon](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122/manuscript)**. Their original EOG documents are now link stubs only. NEON's post-audit current status is **SUBMISSION HOLD**. The EOG generic `metacommunity_connectivity` methods, synthetic tests and response-validation records remain here as methodological provenance, not active ecological manuscripts.
