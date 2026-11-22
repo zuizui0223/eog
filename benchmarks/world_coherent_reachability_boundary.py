@@ -29,32 +29,33 @@ from eog.v2.reachability import (
 )
 
 
-NODES = ("A", "B", "C")
+NODES = ("A", "B", "C", "D")
 INDEX = {node_id: index for index, node_id in enumerate(NODES)}
-AB = (("A", "B"),)
-BC = (("B", "C"),)
+AB = (("A", "B", 1.0),)
+BC = (("B", "C", 1.0),)
+COMMON = (("A", "D", 0.5),)
 ABC = AB + BC
 TIMES = ("t0", "t1", "t2")
 
 
-def _operator(edges):
+def _operator(edges, *, static=False):
     return build_dynamic_transition_operator(
         NODES,
         [
             DynamicReachabilityEdge(
                 source=INDEX[source],
                 target=INDEX[target],
-                geographic_support=1.0,
+                geographic_support=float(support),
             )
-            for source, target in edges
+            for source, target, support in edges
         ],
-        loss_support=1.0,
+        loss_support=(0.5, 1.0, 1.0, 1.0) if static else 1.0,
     )
 
 
 def _static_flow(worlds):
     reconstruction = reconstruct_compatible_worlds(
-        worlds, ("A",), max_steps=2
+        worlds, ("A", "D"), max_steps=2
     )
     flow = build_world_flow_set(reconstruction, worlds)
     return reconstruction, flow
@@ -66,35 +67,35 @@ def _target_support(flow, node_id="C"):
 
 
 def _static_splicing():
-    ab = FiniteWorld("world_ab", _operator(AB), ("A",))
-    bc = FiniteWorld("world_bc", _operator(BC), ("A",))
+    ab = FiniteWorld("world_ab", _operator(COMMON + AB, static=True), ("A",))
+    bc = FiniteWorld("world_bc", _operator(COMMON + BC, static=True), ("A",))
     declared = (ab, bc)
     reconstruction, flow = _static_flow(declared)
 
     # This pooled world is intentionally *not* a member of the original
     # admissible universe. It is a deliberately invalid comparator.
-    pooled = FiniteWorld("illicit_pooled_graph", _operator(ABC), ("A",))
+    pooled = FiniteWorld("illicit_pooled_graph", _operator(COMMON + ABC, static=True), ("A",))
     _, pooled_flow = _static_flow((pooled,))
 
     # A genuine full-path world is added only in this separate expansion.
     # Before that expansion C must remain excluded.
-    complete = FiniteWorld("world_abc", _operator(ABC), ("A",))
+    complete = FiniteWorld("world_abc", _operator(COMMON + ABC, static=True), ("A",))
     expanded_reconstruction, expanded_flow = _static_flow((*declared, complete))
     update = compare_world_flow_universes(flow, expanded_flow)
 
     return {
         "declared_world_edges": {
-            "world_ab": [list(edge) for edge in AB],
-            "world_bc": [list(edge) for edge in BC],
+            "world_ab": [list(edge) for edge in COMMON + AB],
+            "world_bc": [list(edge) for edge in COMMON + BC],
         },
-        "observed_positive_ids": ["A"],
+        "observed_positive_ids": ["A", "D"],
         "compatible_world_ids": list(reconstruction.compatible_world_ids),
         "target_support_by_world": _target_support(flow),
         "target_status": next(
             row.status for row in flow.node_envelopes if row.node_id == "C"
         ),
         "robustly_unreachable_ids": list(flow.robustly_unreachable_ids),
-        "pooled_union_edges": [list(edge) for edge in ABC],
+        "pooled_union_edges": [list(edge) for edge in COMMON + ABC],
         "illicit_pooled_target_support": _target_support(pooled_flow),
         "illicit_pooled_target_possible": "C" in pooled_flow.possible_ids,
         "genuine_expansion": {
