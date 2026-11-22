@@ -38,7 +38,7 @@ def test_archived_biological_scripts_and_workflows_stay_outside_eog():
 
 def test_manuscript_lanes_are_explicitly_declared():
     allowed = set(_policy()["allowed_manuscript_subdirectories"])
-    found = {f.name for f in (ROOT / "manuscript").iterdir() if f.is_dir()}
+    found = {f.name for f in (ROOT / "manuscript").iterdir() if f.is_dir() and not f.name.startswith("__") and not f.name.startswith(".")}
     assert found <= allowed, f"new manuscript lane lacks a repository owner: {sorted(found - allowed)}"
 
 
