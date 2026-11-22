@@ -1,0 +1,79 @@
+{
+  "schema": "eog.repository_ownership_gate.v1",
+  "canonical_repo": "zuizui0223/eog",
+  "scope": "mathematics, methodology, finite-world inference, comparative prediction validation",
+  "owner_documents": {
+    "fungal_grassland": "https://github.com/zuizui0223/knk/blob/main/migration/source_inventory_20261122.json",
+    "neon": "https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/SOURCE_MANIFEST.json",
+    "ledger": "docs/REPOSITORY_BOUNDARY.md"
+  },
+  "allowed_manuscript_subdirectories": [
+    "bam_counterfactual_identifiability",
+    "bam_identifiability",
+    "conditional_structural_value",
+    "figure_data",
+    "inferential_openness",
+    "neon_metacommunity_redundancy",
+    "neon_small_mammal_continuity",
+    "paper_ready",
+    "result_tables",
+    "submission"
+  ],
+  "legacy_redirect_only": {
+    "manuscript/neon_metacommunity_redundancy": "https://github.com/zuizui0223/neon",
+    "manuscript/neon_small_mammal_continuity": "https://github.com/zuizui0223/neon"
+  },
+  "disallowed_prefixes": [
+    "manuscript/history_storage",
+    "validation/eog_original_idea_empirical_history_retention_v27",
+    "validation/eog_original_idea_leopold_history_retention_v28",
+    "validation/eog_wood_decomposer_history_retention_v29",
+    "validation/eog_grassland_above_below_history_retention_v30",
+    "validation/eog_identity_storage_rank_abundance_v31",
+    "validation/eog_arrival_role_symmetry_v32",
+    "validation/eog_role_mapping_specificity_v33",
+    "validation/eog_history_level_leverage_v34",
+    "validation/eog_dominance_tail_history_storage_v35",
+    "validation/eog_alternaria_binary_components_v36",
+    "validation/eog_alternaria_genotype_generality_v37",
+    "validation/eog_mechanistic_ceiling_v38"
+  ],
+  "disallowed_code_patterns": [
+    "benchmarks/run_eog_*(?:leopold|grassland_above_below|identity_storage|arrival_role|role_mapping|history_level_leverage|dominance_tail|alternaria|wood_decomposer)*.py"
+  ],
+  "disallowed_biological_script_regexes": [
+    "^benchmarks/(run|probe)_eog_(?:original_idea_)?(?:leopold_history_retention_v28|grassland_above_below_history_retention_v30|wood_decomposer_history_retention_v29|identity_storage_rank_abundance_v31|arrival_role_symmetry_v32|role_mapping_specificity_v33|history_level_leverage_v34|dominance_tail_history_storage_v35|alternaria_binary_components_v36|alternaria_genotype_generality_v37)\\.py$",
+    "^tests/test_eog_(?:original_idea_)?(?:leopold_history_retention_v28|grassland_above_below_history_retention_v30|wood_decomposer_history_retention_v29|identity_storage_rank_abundance_v31|arrival_role_symmetry_v32|role_mapping_specificity_v33|history_level_leverage_v34|dominance_tail_history_storage_v35|alternaria_binary_components_v36|alternaria_genotype_generality_v37)\\.py$",
+    "^tests/test_history_storage_.*\\.py$",
+    "^scripts/audit_neon_continuity_ceiling_v1\\.py$",
+    "^\\.github/workflows/(?:history-storage.*|neon-(?:metacommunity|small-mammal-continuity|small-mammal-oikos|oikos-ceiling).*)\\.yml$"
+  ],
+  "knk_doc_stub_globs": [
+    "docs/eog_original_idea_empirical_history_retention_v27*.md",
+    "docs/eog_original_idea_leopold_history_retention_v28*.md",
+    "docs/eog_wood_decomposer_history_retention_v29*.md",
+    "docs/eog_grassland_above_below_history_retention_v30*.md",
+    "docs/eog_identity_storage_rank_abundance_v31*.md",
+    "docs/eog_arrival_role_symmetry_v32*.md",
+    "docs/eog_role_mapping_specificity_v33*.md",
+    "docs/eog_history_level_leverage_v34*.md",
+    "docs/eog_dominance_tail_history_storage_v35*.md",
+    "docs/eog_alternaria_binary_components_v36*.md",
+    "docs/eog_alternaria_genotype_generality_v37*.md",
+    "docs/eog_mechanistic_ceiling_v38*.md"
+  ],
+  "method_cores": [
+    "src/eog/history_retention.py",
+    "src/eog/v2/metacommunity_connectivity.py",
+    "tests/test_history_retention.py",
+    "tests/test_metacommunity_connectivity.py"
+  ],
+  "frozen_eogwf_method_endpoints": {
+    "scored": 3,
+    "favorable": 2,
+    "adverse": 1,
+    "scientific_stops": 31,
+    "administrative_exclusions": 3
+  },
+  "note": "The gate enforces ownership, not scientific validity. Historical empirical method benchmarks and source/protocol audit receipts remain in EOG. Add a new manuscript lane only by explicit boundary-policy revision."
+}

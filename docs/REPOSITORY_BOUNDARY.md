@@ -27,3 +27,16 @@ Original EOG source SHA: `91240104f9816459cd9555a63555664aff60760b`. The canonic
 5. An original study's methodological diagnostic result is **not** a new EOG-WF prospective scored endpoint; its denominator remains **3 scored / 31 scientific STOPs / 3 administrative exclusions**.
 
 **Remaining legacy evidence in EOG:** biological source-specific stress data and old *structural method* manuscripts remain where required to regenerate benchmark provenance; they are not an active EOG ecological paper. [External NEON archive](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122) and [KNK](https://github.com/zuizui0223/knk) contain their respective biological-study sources of truth.
+
+## Automated scope regression (2026-11-22)
+
+The package test suite now runs `tests/test_repository_scope.py` using
+`docs/REPOSITORY_SCOPE_POLICY_V1.json`. This checks that EOG keeps the
+generic mathematical core, retains the frozen 3-endpoint method evidence,
+and does **not** silently restore KNK's or neon's migrated biological
+manuscript/protocol lanes. The legacy neon manuscript paths may contain
+link-only archival stubs, never new biology findings or active Oikos assets.
+
+The check does not validate biological inference, run external scores,
+or change the original frozen result fingerprints. Any new methodological
+manuscript directory requires an explicit policy update and review.
