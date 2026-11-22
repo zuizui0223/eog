@@ -1,0 +1,50 @@
+{
+  "schema": "eog.wetland_seed123_native_r_replay.protocol.v1",
+  "status": "POST_EXPOSURE_REPLAY_PROTOCOL_FIXED_BEFORE_THIS_RUN",
+  "scientific_scope": "R-source-level deterministic reconstruction of the 20-row per site sampling stage only. No original occupancy refit or field-effect inference.",
+  "study": "Mizsei and Wenner (2025), Zenodo 10.5281/zenodo.15044115, CC BY 4.0",
+  "source": {
+    "repository": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys": "research/external/zenodo_15044115/wetland_amp_surv_data.csv",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites": "research/external/zenodo_15044115/wetland_amp_site_data.csv",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "q1_r_md5": "fcab406cd8a192a07cc97582c19011ad",
+    "q2_r_md5": "a2b2f6a30b7243c4b9ece3b5eb75dba6",
+    "survreps_repo": "edvardmizsei/hunviphab",
+    "survreps_commit": "25d4c64da289ffcc14679619bb3b18bd494de872",
+    "survreps_blob": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+  },
+  "R_execution": {
+    "interpreter": "R 4.4.3 via r-lib/actions/setup-r@v2",
+    "seed": 123,
+    "RNGkind_sample_kind": "Rejection",
+    "source_code": "Source pinned survreps.R only, not install or invoke hunviphab/unmarked",
+    "original_R_steps": [
+      "read.csv native source with check.names=TRUE",
+      "site Q1 exclude kis-banyato and vadasz-turjan; Q2 filter ci intervention",
+      "df$season <- 1 and df$X0 <- 1",
+      "survreps(df,'X0','season','site',20)",
+      "preserve original native raw CSV row ID in extra audit-only column"
+    ],
+    "original_runtime_verified": false
+  },
+  "endpoints_fixed_before_R_execution": [
+    "number of source-positive site×species records in Q1/Q2",
+    "number and identities of source-positive site×species pairs lost in seed-123 sampled table",
+    "number of distinct native source rows sampled among each site's 20 pseudo-occasions",
+    "number of resulting repeated source-row positions",
+    "exact native row-ID mapping as replay evidence",
+    "comparison with conditional analytical expectation without treating seed realization as a confidence interval"
+  ],
+  "fail_closed": [
+    "Require exact native CSV SHA256 and upstream git blob hash",
+    "require exactly 27 Q1 and 13 Q2 sites with 20 sampled rows each and exact known source-positive totals",
+    "require every sampled source-row ID came from same cohort/site in verified raw file",
+    "Never auto-resolve two native same-ID conflicting rows",
+    "No retrospective seed search or replacement of seed 123",
+    "No original occupancy, AIC, treatment effect, or causal A/B/M claim",
+    "No modifications to frozen EOG-WF 3/31/3 denominator"
+  ]
+}

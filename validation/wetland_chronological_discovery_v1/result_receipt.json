@@ -1,0 +1,218 @@
+{
+  "schema": "eog.wetland_chronological_discovery_v1.result_receipt",
+  "status": "SOURCE_AUTHENTICATED_NATIVE_FIRST_DATE_LATER_POSITIVE_RECORDS_VERIFIED_NOT_FALSE_NEGATIVES",
+  "role": "POST_EXPOSURE_SOURCE_OBSERVATION_TIMING_AUDIT_NOT_OCCUPANCY",
+  "source": {
+    "study": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837, data DOI 10.5281/zenodo.15044115, CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "full_native_rows": 381,
+    "full_native_sites": 29,
+    "cohort_names": [
+      "published_q1",
+      "published_q2"
+    ],
+    "prior_native_visit_ledger_fingerprint": "4c487bb1b00579cbff22be30ae056615708abb275f82eb5091f5df61c4c1b533"
+  },
+  "protocol": {
+    "frozen_source_specific_protocol_commit": "d641ea8cc49b0f468ea0e9fa3d07330bc66fd2ea",
+    "date_semantics": "site-specific earliest source-recorded calendar date, all actual method rows on that day OR of native source count>0",
+    "later_semantics": "strictly later source-recorded calendar dates at same site; no 20-pseudo-visit resampling",
+    "method_sets": {
+      "full": [
+        "acoustic",
+        "visual",
+        "dipnet",
+        "bottletrap"
+      ],
+      "paired_source": [
+        "acoustic",
+        "visual"
+      ]
+    },
+    "temporal_horizons_days": [
+      7,
+      14,
+      21,
+      30,
+      45,
+      60,
+      91
+    ],
+    "first_date_zero_is_true_absence": false,
+    "later_positive_proves_first_date_true_occupancy": false,
+    "static_occupancy_or_detection_model_fitted": false
+  },
+  "results": {
+    "Q1": {
+      "sites": 27,
+      "raw_source_rows": 351,
+      "site_dates": 117,
+      "taxa": 9,
+      "site_species_cells": 243,
+      "full_source_positive_site_species": 144,
+      "AV_source_positive_site_species": 104,
+      "first_full_positive_site_species": 62,
+      "first_AV_positive_site_species": 50,
+      "first_date_full_nonpositive_later_full_positive_site_species": 82,
+      "first_date_AV_nonpositive_later_AV_positive_site_species": 54,
+      "first_full_nonpositive_later_positive_fraction_of_full_positives": 0.5694444444444444,
+      "full_source_never_positive_site_species_undetermined": 99,
+      "category_partition": {
+        "av_detected_first": 50,
+        "same_day_extra_method_only": 12,
+        "later_AV_first_discovery": 54,
+        "later_additional_only_discovery": 28,
+        "never_source_positive": 99
+      },
+      "first_full_nonpositive_later_full_positive_within_days": {
+        "7": 22,
+        "14": 34,
+        "21": 39,
+        "30": 53,
+        "45": 76,
+        "60": 78,
+        "91": 82
+      },
+      "late_full_positive_lag_days": {
+        "min": 1,
+        "median": 27,
+        "max": 67
+      },
+      "species_examples": {
+        "Bombina bombina": {
+          "source_positive_sites": 18,
+          "first_full_positive_sites": 1,
+          "later_full_positive_sites": 17
+        },
+        "Pelophylax ridibundus": {
+          "source_positive_sites": 18,
+          "first_full_positive_sites": 3,
+          "later_full_positive_sites": 15
+        },
+        "Lissotriton vulgaris": {
+          "source_positive_sites": 21,
+          "first_full_positive_sites": 13,
+          "later_full_positive_sites": 8
+        },
+        "Hyla arborea": {
+          "source_positive_sites": 24,
+          "first_full_positive_sites": 17,
+          "later_full_positive_sites": 7
+        }
+      }
+    },
+    "Q2": {
+      "sites": 13,
+      "raw_source_rows": 188,
+      "site_dates": 64,
+      "taxa": 9,
+      "site_species_cells": 117,
+      "full_source_positive_site_species": 77,
+      "AV_source_positive_site_species": 61,
+      "first_full_positive_site_species": 28,
+      "first_AV_positive_site_species": 26,
+      "first_date_full_nonpositive_later_full_positive_site_species": 49,
+      "first_date_AV_nonpositive_later_AV_positive_site_species": 35,
+      "first_full_nonpositive_later_positive_fraction_of_full_positives": 0.6363636363636364,
+      "full_source_never_positive_site_species_undetermined": 40,
+      "category_partition": {
+        "av_detected_first": 26,
+        "same_day_extra_method_only": 2,
+        "later_AV_first_discovery": 35,
+        "later_additional_only_discovery": 14,
+        "never_source_positive": 40
+      },
+      "first_full_nonpositive_later_full_positive_within_days": {
+        "7": 10,
+        "14": 13,
+        "21": 14,
+        "30": 26,
+        "45": 46,
+        "60": 48,
+        "91": 49
+      },
+      "late_full_positive_lag_days": {
+        "min": 1,
+        "median": 30,
+        "max": 62
+      }
+    },
+    "Q2_native_site_species_source_history_exact_nested_subset_of_Q1": true,
+    "both_earlier_counterfactual_source_sites_without_any_recorded_positives_for_both_target_species": true,
+    "counterfactual_source_sites": {
+      "rachaz_2": {
+        "category": "intervention",
+        "source_recorded_site_dates": 5,
+        "unconfirmed_taxa": [
+          "Hyla arborea",
+          "Lissotriton vulgaris"
+        ]
+      },
+      "nyarfas-turjan-laperdo": {
+        "category": "control",
+        "source_recorded_site_dates": 2,
+        "unconfirmed_taxa": [
+          "Hyla arborea",
+          "Lissotriton vulgaris"
+        ]
+      }
+    },
+    "no_actual_true_absences_identified": true
+  },
+  "validation": {
+    "original_source_authenticated_run_id": 43889603841,
+    "run_url": "https://github.com/zuizui0223/eog/actions/runs/43889603841",
+    "run_conclusion": "success",
+    "source_result_fingerprint": "6e9c3a23f8410e5b6ec2ad10fc77e4edc6f30422e6f1ef86707792ed883eba75",
+    "artifact_id": 14236012097,
+    "artifact_zip_sha256": "577a45906061cea20182dd9304c10afc8f6ba2850157bb2e33c7e3cd1a4be800",
+    "CSV_outputs": [
+      {
+        "filename": "published_q1_site_species_chronology.csv",
+        "rows": 243,
+        "sha256": "b10b953dec7235bf012efb01b026ebb9cd956f81fcb548010f625c2bc912443e"
+      },
+      {
+        "filename": "published_q1_site_species_horizon.csv",
+        "rows": 1701,
+        "sha256": "e93f2aad141fdc0fae10e38f4c8c038cd343c35f133d3fc021cbb0e7ed5a7d2b"
+      },
+      {
+        "filename": "published_q1_candidate_site_species_chronology.csv",
+        "rows": 4,
+        "sha256": "80d2d95c38f0f93027ea7467e6e2bf8916c77806b6d402f3a4939d2d4af3f11a"
+      },
+      {
+        "filename": "published_q2_site_species_chronology.csv",
+        "rows": 117,
+        "sha256": "1d439b2280e320187b020fa96251d314b708654967e7a6d87a72719853c76f6d"
+      },
+      {
+        "filename": "published_q2_site_species_horizon.csv",
+        "rows": 819,
+        "sha256": "1c82d99b55d53a583bd905fd4bf7f29fa5614cd004256268f40e261aa5d079b6"
+      },
+      {
+        "filename": "published_q2_candidate_site_species_chronology.csv",
+        "rows": 2,
+        "sha256": "28395e0a9e9b71b5a201b269f39915c8c0764d6a0444359350c295b16cfc306d"
+      }
+    ],
+    "code": "benchmarks/wetland_chronological_discovery_v1.py",
+    "tests": "tests/test_wetland_chronological_discovery_v1.py",
+    "no_original_source_rows_dropped_or_duplicated": true,
+    "source_row_identity_recorded_in_earliest_positive_csv": true,
+    "original_source_SHA_verified_by_workflow": true,
+    "five_part_category_sums_and_Q2_nested_Q1_verified": true
+  },
+  "scope_limits": [
+    "Source first-date nondetection plus later-date recorded positivity is NOT independently confirmed first-date false-negative biological detection.",
+    "The detection may reflect phenology, movement, changes in local status or recorded-method presence/effort over up to 91 days.",
+    "Source positives are original recorded counts not externally adjudicated true site statuses; never-positive is UNKNOWN, not verified absence.",
+    "Source method grouping key is site×method×DOY, repeated bottletrap grouping keys are not unique physical trap IDs.",
+    "No occupancy likelihood, detection probability, empirical A/B/M, causal restoration effect, fresh EOG-WF prediction endpoint or PR merge; closed 3/31/3 EOG-WF remains unchanged."
+  ]
+}

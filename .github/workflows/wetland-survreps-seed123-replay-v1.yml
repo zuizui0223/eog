@@ -1,0 +1,200 @@
+name: Wetland original R seed-123 sampling-stage replay v1
+on:
+  pull_request:
+    paths:
+      - "benchmarks/wetland_survreps_seed123_replay_v1.R"
+      - "benchmarks/wetland_survreps_seed123_evaluate_v1.py"
+      - "tests/test_wetland_survreps_seed123_evaluate_v1.py"
+      - "benchmarks/wetland_nmixmatrix_stage_v1.R"
+      - "benchmarks/wetland_nmixmatrix_stage_v1.py"
+      - "tests/test_wetland_nmixmatrix_stage_v1.py"
+      - "docs/wetland_nmixmatrix_stage_v1.md"
+      - "validation/wetland_nmixmatrix_stage_v1/**"
+      - "validation/wetland_survreps_seed123_replay_v1/**"
+      - "benchmarks/wetland_seed_ensemble_v1.R"
+      - "benchmarks/wetland_seed_ensemble_v1.py"
+      - "tests/test_wetland_seed_ensemble_v1.py"
+      - "docs/wetland_seed_ensemble_v1.md"
+      - "validation/wetland_seed_ensemble_v1/**"
+      - "benchmarks/wetland_positive_evidence_channel_v1.py"
+      - "tests/test_wetland_positive_evidence_channel_v1.py"
+      - "docs/wetland_positive_evidence_channel_v1.md"
+      - "validation/wetland_positive_evidence_channel_v1/**"
+      - ".github/workflows/wetland-survreps-seed123-replay-v1.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.4.3'
+          use-public-rspm: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Python test runner
+        run: python -m pip install pytest
+      - name: Verify Python replay evaluator fail-closed tests
+        run: python -m pytest -q tests/test_wetland_survreps_seed123_evaluate_v1.py tests/test_wetland_nmixmatrix_stage_v1.py tests/test_wetland_seed_ensemble_v1.py tests/test_wetland_positive_evidence_channel_v1.py
+      - name: Authenticate pinned native CSVs and published source sampler
+        run: |
+          mkdir -p /tmp/eog_wetland_rreplay
+          curl --fail --location --retry 2 --max-time 35 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_site_data.csv \
+            -o /tmp/eog_wetland_rreplay/sites.csv
+          curl --fail --location --retry 2 --max-time 35 --silent --show-error \
+            https://raw.githubusercontent.com/zuizui0223/frogcs/5e2f0a87c639df373fa2700b29403d2ab417a1cc/research/external/zenodo_15044115/wetland_amp_surv_data.csv \
+            -o /tmp/eog_wetland_rreplay/surveys.csv
+          curl --fail --location --retry 2 --max-time 35 --silent --show-error \
+            https://raw.githubusercontent.com/edvardmizsei/hunviphab/25d4c64da289ffcc14679619bb3b18bd494de872/R/survreps.R \
+            -o /tmp/eog_wetland_rreplay/survreps.R
+          echo "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319  /tmp/eog_wetland_rreplay/sites.csv" | sha256sum -c -
+          echo "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd  /tmp/eog_wetland_rreplay/surveys.csv" | sha256sum -c -
+          test "$(git hash-object /tmp/eog_wetland_rreplay/survreps.R)" = "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+          echo "PINNED_SOURCE_R_FUNCTION_VERIFIED"
+      - name: Replay seed 123 in authentic R function without fitting occupancy
+        run: |
+          Rscript --version
+          Rscript --vanilla benchmarks/wetland_survreps_seed123_replay_v1.R \
+            /tmp/eog_wetland_rreplay/surveys.csv \
+            /tmp/eog_wetland_rreplay/sites.csv \
+            /tmp/eog_wetland_rreplay/survreps.R \
+            /tmp/eog_wetland_rreplay
+      - name: Compare R source-row selections with native recorded positives
+        run: |
+          python benchmarks/wetland_survreps_seed123_evaluate_v1.py \
+            --surveys /tmp/eog_wetland_rreplay/surveys.csv \
+            --sites /tmp/eog_wetland_rreplay/sites.csv \
+            --replay-dir /tmp/eog_wetland_rreplay \
+            --output /tmp/eog_wetland_rreplay/seed123_replay_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/eog_wetland_rreplay/seed123_replay_result.json').read_text())
+          assert r['status']=='PINNED_PUBLIC_R_STAGE_REPLAY_NOT_HISTORICAL_PAPER_FIT'
+          assert not r['historical_publication_runtime_verified']
+          assert not r['ecological_occupancy_fitting_permitted']
+          for cohort,(sites,raw,positive) in {
+            'published_q1': (27,351,144),'published_q2': (13,188,77)
+          }.items():
+              s=r['cohorts'][cohort]['sampling']
+              assert (s['sites'],s['native_rows'],s['native_positive_species_site_pairs'])==(sites,raw,positive)
+              assert s['sampled_positions']==sites*20
+              assert s['seed123_positive_species_site_pairs']+s['seed123_lost_positive_species_site_pairs']==positive
+          overlap=r['overlapping_cohort_diagnostic']
+          assert overlap['shared_native_source_sites']==13
+          assert overlap['same_unique_source_row_set_sites']==0
+          assert overlap['disagreeing_pseudodetection_site_species_pairs']==7
+          assert r['cohorts']['published_q1']['sampling']['seed123_lost_positive_species_site_pairs']==3
+          assert r['cohorts']['published_q2']['sampling']['seed123_lost_positive_species_site_pairs']==6
+          print('PINNED_R_REPLAY_POSITIVE_EVIDENCE_CHECKS_PASSED')
+          PY
+      - name: Authenticate and reconstruct original nmixmatrix stage, no occupancy fit
+        run: |
+          curl --fail --location --retry 1 --max-time 35 --silent --show-error \
+            https://raw.githubusercontent.com/edvardmizsei/hunviphab/25d4c64da289ffcc14679619bb3b18bd494de872/R/nmixmatrix.R \
+            -o /tmp/eog_wetland_rreplay/nmixmatrix.R
+          test "$(git hash-object /tmp/eog_wetland_rreplay/nmixmatrix.R)" = "40e0f5547cd67729e1c6d46d29a0ce2b75712a3a"
+          Rscript --vanilla benchmarks/wetland_nmixmatrix_stage_v1.R \
+            /tmp/eog_wetland_rreplay/surveys.csv \
+            /tmp/eog_wetland_rreplay \
+            /tmp/eog_wetland_rreplay/nmixmatrix.R \
+            /tmp/eog_wetland_rreplay
+          python benchmarks/wetland_nmixmatrix_stage_v1.py \
+            --surveys /tmp/eog_wetland_rreplay/surveys.csv \
+            --run-dir /tmp/eog_wetland_rreplay \
+            --output /tmp/eog_wetland_rreplay/nmixmatrix_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('/tmp/eog_wetland_rreplay/nmixmatrix_result.json').read_text())
+          assert not a['historical_installed_R_package_verified']
+          assert not a['original_unmarked_fitted_model_reproduced']
+          for cohort,(sites,lost) in {
+              'published_q1': (27,3),'published_q2': (13,6)
+          }.items():
+              d=a['cohorts'][cohort]['diagnostic']
+              assert d['R_nmixmatrix_cells']==sites*20*9
+              assert d['all_R_counts_match_native_selected_rows']
+              assert len(d['lost_native_positive_site_species'])==lost
+              assert 0<d['Kish_duplicate_weight_concentration_not_inferential_ESS']['fraction_of_nominal_pseudo_rows']<=1
+          print('WETLAND_NMIXMATRIX_SOURCE_COUNTS_EXACT_PARITY')
+          PY
+      - name: Enumerate all 256 fixed R seeds (post-exposure processing sensitivity only)
+        run: |
+          Rscript --vanilla benchmarks/wetland_seed_ensemble_v1.R \
+            /tmp/eog_wetland_rreplay/surveys.csv \
+            /tmp/eog_wetland_rreplay/sites.csv \
+            /tmp/eog_wetland_rreplay/survreps.R \
+            /tmp/eog_wetland_rreplay \
+            /tmp/eog_wetland_rreplay
+          python benchmarks/wetland_seed_ensemble_v1.py \
+            --surveys /tmp/eog_wetland_rreplay/surveys.csv \
+            --sites /tmp/eog_wetland_rreplay/sites.csv \
+            --summary /tmp/eog_wetland_rreplay/seed_ensemble_summary.csv \
+            --pairs /tmp/eog_wetland_rreplay/seed_ensemble_native_positive_pairs.csv \
+            --output /tmp/eog_wetland_rreplay/seed_ensemble_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/eog_wetland_rreplay/seed_ensemble_result.json').read_text())
+          assert d['seed_count']==256 and d['includes_seed123']
+          assert not d['verified_historical_installation']
+          assert not d['original_occupancy_model_fitted']
+          assert d['paired_same_13_native_sites']['seed123_disagreements']==7
+          assert abs(d['cohorts']['published_q1']['exact_expected_lost_native_positive_site_species']-9.475863116344188)<1e-9
+          assert abs(d['cohorts']['published_q2']['exact_expected_lost_native_positive_site_species']-4.871441193156649)<1e-9
+          print('PINNED_256_R_SEEDS_PROCESSING_SENSITIVITY_CHECKED_NO_OCCUPANCY')
+          PY
+      - name: Certify source-anchored positive-only world-compatibility direction
+        run: |
+          python benchmarks/wetland_positive_evidence_channel_v1.py \
+            --surveys /tmp/eog_wetland_rreplay/surveys.csv \
+            --sites /tmp/eog_wetland_rreplay/sites.csv \
+            --pairs /tmp/eog_wetland_rreplay/seed_ensemble_native_positive_pairs.csv \
+            --summary /tmp/eog_wetland_rreplay/seed_ensemble_summary.csv \
+            --output /tmp/eog_wetland_rreplay/positive_evidence_channel_result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('/tmp/eog_wetland_rreplay/positive_evidence_channel_result.json').read_text())
+          assert d['status']=='SOURCE_ANCHORED_POSITIVE_ONLY_MONOTONICITY_VERIFIED'
+          expected={
+              'published_q1':(144,59,85,0,256),
+              'published_q2':(77,35,42,0,254)
+          }
+          for cohort,(raw,core,variable,never,affected_seeds) in expected.items():
+              x=d['cohorts'][cohort]
+              assert (
+                  x['source_positive_site_species_pairs'],
+                  x['retained_at_every_one_of_256_seeds'],
+                  x['variable_between_256_seed_inputs'],
+                  x['omitted_at_all_256_seeds'],
+                  x['seeds_with_any_native_positive_omission']
+              )==(raw,core,variable,never,affected_seeds)
+              assert all(r['source_recovered_positive_count']==raw for r in x['per_seed'])
+          assert d['finite_world_statement']['positive_only_order']=='W(O) subseteq W(S) for all 256 source-validated seeds'
+          print('WETLAND_SOURCE_ANCHORED_POSITIVE_ONLY_EVIDENCE_RECONCILIATION_VERIFIED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wetland-r-seed123-native-row-replay-v1
+          path: |
+            /tmp/eog_wetland_rreplay/seed123_replay_result.json
+            /tmp/eog_wetland_rreplay/published_q1_source_row_mapping.csv
+            /tmp/eog_wetland_rreplay/published_q2_source_row_mapping.csv
+            /tmp/eog_wetland_rreplay/published_q1_runtime.txt
+            /tmp/eog_wetland_rreplay/published_q2_runtime.txt
+            /tmp/eog_wetland_rreplay/published_q1_nmixmatrix_cells.csv
+            /tmp/eog_wetland_rreplay/published_q2_nmixmatrix_cells.csv
+            /tmp/eog_wetland_rreplay/nmixmatrix_result.json
+            /tmp/eog_wetland_rreplay/seed_ensemble_summary.csv
+            /tmp/eog_wetland_rreplay/seed_ensemble_native_positive_pairs.csv
+            /tmp/eog_wetland_rreplay/seed_ensemble_runtime.txt
+            /tmp/eog_wetland_rreplay/seed_ensemble_result.json
+            /tmp/eog_wetland_rreplay/positive_evidence_channel_result.json

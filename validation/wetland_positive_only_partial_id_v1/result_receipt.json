@@ -1,0 +1,124 @@
+{
+  "schema": "eog.wetland_positive_only_partial_id_v1.result_receipt",
+  "status": "SOURCE_AUTHENTICATED_CONDITIONAL_POSITIVE_ONLY_IDENTIFICATION_BOUNDS_VERIFIED",
+  "analysis_role": "POST_EXPOSURE_LOGICAL_STATIC_BINARY_SOURCE_SENSITIVITY_NOT_EMPIRICAL_OCCUPANCY",
+  "source": {
+    "study": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837; native data and R at Zenodo 10.5281/zenodo.15044115, CC BY 4.0",
+    "repository": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "Q1_sites": 27,
+    "Q1_rows": 351,
+    "Q1_site_dates": 117,
+    "Q1_categories": {
+      "intervention": 13,
+      "control": 6,
+      "artificial": 8
+    },
+    "Q1_taxa": 9,
+    "reference_method_lattice_fingerprint": "d9ce91154c34abc1e0619feb803b0a39b7721ef18dcd01c85279d3b6c581f254"
+  },
+  "contract": {
+    "fixed_protocol_commit": "bbf61ecade0c31af8108309334f3d56490f50829",
+    "conditional_perfect_source_positive_specificity_assumed_not_independently_verified": true,
+    "hypothetical_static_binary_site_species_status_not_biological_closure": true,
+    "unrecorded_site_species_status_is_unknown_not_zero": true,
+    "no_detection_probability_or_actual_ecological_world_universe": true,
+    "conditional_prevalence_pi_g": "[k_g/n_g, 1]",
+    "conditional_contrast_delta_ab": "[k_A/n_A - 1, 1 - k_B/n_B]",
+    "all_present_binary_completion_makes_zero_possible": true
+  },
+  "verified_measures": {
+    "site_species_status_slots": 243,
+    "source_positive_all_four": 144,
+    "source_positive_acoustic_visual": 104,
+    "unfixed_all_four": 99,
+    "unfixed_acoustic_visual": 139,
+    "extra_unfixed_statuses_acoustic_visual": 40,
+    "hypothetical_unconstrained_binary_completion_multiplier_only": "2^40",
+    "ecological_EOG_transition_worlds_counted": false,
+    "method_panels": 15,
+    "comparisons_per_panel": 27,
+    "total_conditional_comparison_intervals": 405,
+    "full_source_sign_identification": {
+      "two_sided": 23,
+      "nonnegative_only": 2,
+      "nonpositive_only": 2,
+      "exact_zero": 0,
+      "strict_positive_or_negative_identified": 0
+    },
+    "AV_source_sign_identification": {
+      "two_sided": 25,
+      "nonnegative_only": 1,
+      "nonpositive_only": 1,
+      "exact_zero": 0,
+      "strict_positive_or_negative_identified": 0
+    },
+    "all_405_intervals_contain_zero": true,
+    "nested_positive_masks_and_opposite_nesting_intervals_verified": true,
+    "five_original_recorded_sign_reversals": 5,
+    "five_reversals_AV_observed_strict_sign_disallowed_by_full_source_conditional_bound": 2,
+    "key_example": {
+      "species": "Lissotriton vulgaris",
+      "comparing": "artificial_minus_control",
+      "full_source_positive_sites": {
+        "artificial": 8,
+        "control": 4,
+        "artificial_total": 8,
+        "control_total": 6
+      },
+      "full_observed_positive_site_rate_difference_pp": 33.333333333333336,
+      "full_conditional_latent_difference_bound_pp": [
+        0,
+        33.333333333333336
+      ],
+      "AV_observed_positive_site_rate_difference_pp": -50,
+      "AV_conditional_latent_difference_bound_pp": [
+        -100,
+        50
+      ],
+      "conditional_interpretation": "All 8 artificial sites have full-source positives; with perfect positive specificity, their static site-species status is 1 and true artificial-control difference is nonnegative, not strictly positive."
+    }
+  },
+  "verification": {
+    "source_pinned_GitHub_CI_run_id": 43713311272,
+    "source_pinned_GitHub_CI_url": "https://github.com/zuizui0223/eog/actions/runs/43713311272",
+    "conclusion": "success",
+    "result_fingerprint": "864b741974f0b8f12347825516eceab2232b3cd16291e998f18368416b2d9247",
+    "artifact_id": 14160889845,
+    "artifact_zip_sha256": "0d0cf4f2941410ada6a9d34df9c869446615faf06a1431390fe0a43ee05a1ee7",
+    "source_CI_exact_output_files": [
+      {
+        "filename": "method_panel_identification_intervals.csv",
+        "rows": 405,
+        "sha256": "0dc9c30def452c8aef17c1fd2fc8aede7944266663169424b321b22ba639ed4b"
+      },
+      {
+        "filename": "method_panel_positive_only_summary.csv",
+        "rows": 15,
+        "sha256": "b6184276311db85a1023ae25a74916705ca70ef499289d5bd99a48c78e99de8a"
+      },
+      {
+        "filename": "native_site_species_recording_mask.csv",
+        "rows": 243,
+        "sha256": "ff0bdc8f7a966bdecfe941f7e035733cdfc8c2ee99bf7332463848823dc1b091"
+      },
+      {
+        "filename": "five_method_reversals_identification_bounds.csv",
+        "rows": 5,
+        "sha256": "c62915924aca0773c917d5cc6d0d0dc7f14fa02840da6b185f85721960cc5ea0"
+      }
+    ],
+    "CI_full_q1_native_roster_verified": true,
+    "CI_405_intervals_and_all_15_panels_checked": true,
+    "CI_full_to_AV_interval_nesting_and_two_strict_AV_contradictions_checked": true
+  },
+  "hard_limits": [
+    "All inferred bounds are conditional on zero false positives; this was not externally validated.",
+    "Data span up to 91 days; hypothetical static binary site state is not verified seasonal closure.",
+    "No confirmed negative observations: zeros are unknown, and strict biological sign cannot be inferred from positives alone.",
+    "2^99 vs 2^139 are toy unconstrained static Boolean completion counts, not actual ecological movement/viability process worlds or information entropy.",
+    "No occupancy model, Bayesian probability, treatment effect, causal A/B/M, new fourth EOG-WF scored endpoint, or merge of Draft PR."
+  ]
+}

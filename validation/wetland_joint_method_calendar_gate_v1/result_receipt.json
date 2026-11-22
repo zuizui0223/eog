@@ -1,0 +1,244 @@
+{
+  "schema": "eog.wetland_joint_method_calendar_gate_v1.result_receipt",
+  "status": "SOURCE_AUTHENTICATED_JOINT_METHOD_CALENDAR_SPLIT_WITNESS_AND_756_CONTRASTS_VERIFIED",
+  "role": "POST_EXPOSURE_ORIGINAL_SOURCE_OBSERVATION_GATE_FACTORIAL_NOT_LATENT_OCCUPANCY",
+  "source": {
+    "study": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837, data at Zenodo DOI 10.5281/zenodo.15044115, CC BY 4.0",
+    "mirror_repo": "zuizui0223/frogcs",
+    "pinned_commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "prior_native_chronology_fingerprint": "6e9c3a23f8410e5b6ec2ad10fc77e4edc6f30422e6f1ef86707792ed883eba75"
+  },
+  "protocol": {
+    "precomputed_immutable_contract_commit": "231c770c14e67368c37eb250431adacc18db191d",
+    "original_cohorts": {
+      "Q1": {
+        "sites": 27,
+        "rows": 351,
+        "site_dates": 117,
+        "full_positives": 144,
+        "all_date_AV": 104
+      },
+      "Q2": {
+        "sites": 13,
+        "rows": 188,
+        "site_dates": 64,
+        "full_positives": 77,
+        "all_date_AV": 61
+      }
+    },
+    "date_anchors": [
+      "first",
+      "last"
+    ],
+    "horizon_calendar_days": [
+      7,
+      14,
+      21,
+      30,
+      45,
+      60,
+      91
+    ],
+    "methods_full": [
+      "acoustic",
+      "visual",
+      "dipnet",
+      "bottletrap"
+    ],
+    "methods_AV": [
+      "acoustic",
+      "visual"
+    ],
+    "site_taxon_original_positive": "Boolean OR of count>0 across original method/date rows",
+    "original_source_rows_unmodified": true,
+    "original_bottletrap_repeated_group_keys_not_deduplicated": true,
+    "all_first_last_91_day_anchors_recover_original_full_AND_AV_positive_sets": true
+  },
+  "key_result": {
+    "five_disjoint_positive_witness_categories": [
+      "joint_survives",
+      "method_only_marginal",
+      "time_only_marginal",
+      "split_witness_interaction",
+      "excluded_by_either_gate_alone"
+    ],
+    "class_definitions": {
+      "joint_survives": "AV_window",
+      "method_only_marginal": "F_window \\ AV_all",
+      "time_only_marginal": "AV_all \\ F_window",
+      "split_witness_interaction": "(F_window ∩ AV_all) \\ AV_window",
+      "excluded_by_either_gate_alone": "F_all \\ (F_window ∪ AV_all)"
+    },
+    "Q1_first14": {
+      "full_original_positives": 144,
+      "full_window_positives": 96,
+      "AV_window_positives": 73,
+      "partition": {
+        "joint_survives": 73,
+        "method_only_marginal": 22,
+        "time_only_marginal": 30,
+        "split_witness_interaction": 1,
+        "excluded_by_either_gate_alone": 18
+      },
+      "strict_source_category_sign_reversals_fullwindow_vs_original": 11,
+      "AVwindow_vs_original": 10,
+      "AV_vs_full_matched_calendar_window": 5
+    },
+    "Q1_last14": {
+      "full_original_positives": 144,
+      "full_window_positives": 94,
+      "AV_all_date_positive_pairs": 104,
+      "AV_window_positives": 48,
+      "partition": {
+        "joint_survives": 48,
+        "method_only_marginal": 30,
+        "time_only_marginal": 40,
+        "split_witness_interaction": 16,
+        "excluded_by_either_gate_alone": 10
+      },
+      "time_gate_alone_lost_positives": 50,
+      "method_gate_alone_lost_positives": 40,
+      "marginal_loss_sets_intersect_count": 10,
+      "naively_intersected_aggregate_marginal_positive_sets_count": 64,
+      "actual_original_row_level_joint_positive_count": 48,
+      "extra_split_witnesses_unseen_in_joint_mask": 16,
+      "strict_source_category_sign_reversals_fullwindow_vs_original": 7,
+      "AVwindow_vs_original": 9,
+      "AV_vs_full_matched_calendar_window": 5,
+      "split_witnesses_by_original_wetland_category": {
+        "intervention": 9,
+        "control": 1,
+        "artificial": 6
+      }
+    },
+    "Q1_first30": {
+      "full_window_positives": 115,
+      "AV_window_positives": 85,
+      "split_witness_interaction": 0,
+      "strict_source_category_sign_reversals_fullwindow_vs_original": 8,
+      "AVwindow_vs_original": 6,
+      "AV_vs_full_matched_calendar_window": 8
+    },
+    "Q1_last30": {
+      "full_window_positives": 127,
+      "AV_window_positives": 85,
+      "split_witness_interaction": 5,
+      "strict_source_category_sign_reversals_fullwindow_vs_original": 5,
+      "AVwindow_vs_original": 7,
+      "AV_vs_full_matched_calendar_window": 5
+    },
+    "Q2_first14": {
+      "full_original_positives": 77,
+      "full_window_positives": 41,
+      "AV_window_positives": 34,
+      "split_witness_interaction": 1
+    },
+    "Q2_last14": {
+      "full_original_positives": 77,
+      "full_window_positives": 44,
+      "AV_all_date_positive_pairs": 61,
+      "AV_window_positives": 25,
+      "partition": {
+        "joint_survives": 25,
+        "method_only_marginal": 10,
+        "time_only_marginal": 27,
+        "split_witness_interaction": 9,
+        "excluded_by_either_gate_alone": 6
+      },
+      "naively_intersected_aggregate_marginal_positive_sets_count": 34
+    },
+    "special_original_source_row_witness_examples": [
+      {
+        "site": "orditoi-zsilip",
+        "species": "Hyla arborea",
+        "source_wetland_category": "artificial",
+        "AV_recorded_outside_final14": {
+          "date": "2024-03-24",
+          "method": "visual",
+          "original_csv_line": 6
+        },
+        "extra_recorded_inside_final14": {
+          "date": "2024-05-30",
+          "method": "dipnet",
+          "original_csv_line": 368
+        }
+      },
+      {
+        "site": "szena-dulo",
+        "species": "Lissotriton vulgaris",
+        "source_wetland_category": "control",
+        "AV_recorded_outside_final14": {
+          "date": "2024-03-24",
+          "method": "visual",
+          "original_csv_line": 11
+        },
+        "extra_recorded_inside_final14": [
+          {
+            "date": "2024-04-13",
+            "method": "bottletrap",
+            "original_csv_line": 112
+          },
+          {
+            "date": "2024-04-14",
+            "method": "bottletrap",
+            "original_csv_line": 146
+          }
+        ]
+      }
+    ],
+    "all_14_per_cohort_method_and_time_masks_verified_source_nested": true,
+    "source_row_level_selection_operations_commute_but_positive_support_set_marginal_aggregation_does_not_distribute_over_joint_filter": true,
+    "Q1_14_windows_times_2_method_panels_times_27_contrasts": 756,
+    "Q2_intervention_source_records_verified_identical_Q1_subset": true,
+    "no_actual_biological_true_absence_certified": true
+  },
+  "verification": {
+    "source_pinned_CI_run_id": 43892391431,
+    "source_pinned_CI_url": "https://github.com/zuizui0223/eog/actions/runs/43892391431",
+    "conclusion": "success",
+    "result_fingerprint": "e9214692926cd1d865d7bccdd5438c5af977d4332a3faad4321de2a3b8e783ba",
+    "artifact_id": 14238126291,
+    "artifact_zip_sha256": "e5d50f85902e51de75f410b2b51e0db2dfd62e9cb4076645c2757353cdef7078",
+    "CSV_outputs": [
+      {
+        "filename": "published_q1_window_summary.csv",
+        "rows": 14,
+        "sha256": "b1601a7c7ed7d69d6b15a7598099c43861d9bea1b18006341913049d9b8e84d0"
+      },
+      {
+        "filename": "published_q2_window_summary.csv",
+        "rows": 14,
+        "sha256": "9ee4f893d8c005d84dad69db6ceab88d4e28c519df2d17d622ddf6c0a6a37ecd"
+      },
+      {
+        "filename": "published_q1_positive_pair_window_detail.csv",
+        "rows": 2016,
+        "sha256": "c96dba575951955a41e07244dc81a6d14e7ceff4d4fb66603f97a01fe53d5cce"
+      },
+      {
+        "filename": "published_q2_positive_pair_window_detail.csv",
+        "rows": 1078,
+        "sha256": "b2a817c21be45bdffdeae9dd16d38220b441f1d76b3fd8e8487797bf1ad9d29e"
+      },
+      {
+        "filename": "published_q1_category_method_calendar_contrasts.csv",
+        "rows": 756,
+        "sha256": "a676ba15872b83458d2076d68e95f6fcb163cc9e750ac7226e3907762061e44c"
+      }
+    ],
+    "code": "benchmarks/wetland_joint_method_calendar_gate_v1.py",
+    "unit_tests": "tests/test_wetland_joint_method_calendar_gate_v1.py",
+    "raw_source_SHA_and_15_source_gate_ci_suite_verified": true,
+    "original_site_taxon_positive_and_method_record_source_links_preserved": true
+  },
+  "hard_stops": [
+    "Site×species Boolean record positivity is not an ecological state; missing source positives are unknown, not true absences.",
+    "Two marginal support-positive witnesses may occur on different original rows. The raw row filters themselves DO commute; only aggregation of marginal source-positive masks loses co-occurrence information.",
+    "Date windows shorten calendar separation but do not establish temporal closure, method deployment, equal effort or biological independence of physical traps.",
+    "Original paper reports dipnet use in ordinary visits while source dipnet rows are sparse, so no-row does not prove method nondeployment.",
+    "756 wetland-category signed differences are repeated descriptive source analyses on same sites, not causal treatment evidence, p-values or independent confirmation.",
+    "No occupancy likelihood refit, ecological A/B/M movement-world identification, new fourth EOG-WF score or merge of draft PR #697."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema": "eog.wetland_positive_evidence_channel_v1.protocol",
+  "status": "POST_EXPOSURE_FIXED_SOURCE_RECONCILIATION_NOT_PREREGISTERED",
+  "scientific_question": "For every one of the 256 already executed R preprocessing seeds, distinguish source-confirmed positive evidence that survived the resample from positive evidence lost by the processing channel, and certify the direction of finite-world compatibility under positive-only evidence.",
+  "source": {
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "original_study": "Mizsei and Wenner (2025), Zenodo 10.5281/zenodo.15044115; CC BY 4.0",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_seed_ensemble_run": 43674891349,
+    "positive_pair_table_sha256": "3ba582b5fbbdaa0e6c6f89cb70bb640cba9e56e50bc0ca187a223f81c0a45ae6",
+    "summary_sha256": "0ed9b0f74ea4da5580a35ddfeada709cc6dfac5804bb1a9c916a71dd7b16b7cd"
+  },
+  "fixed_grain": {
+    "q1": "27 original analysis sites; 144 native-positive species×site pairs",
+    "q2": "13 intervention sites; 77 native-positive species×site pairs, nested in Q1",
+    "observation_key": "site, species; source-positive if any original native survey count >0",
+    "processing": "R 4.4.3; upstream pinned survreps; 20 pseudo-row site normalization; original 256 seeds 1..256",
+    "original_R_version_actual": "UNVERIFIED",
+    "physical_trap_identity": "UNVERIFIED"
+  },
+  "outcomes": [
+    "source-positive pair count and source-anchored coverage on each seed",
+    "256-seed intersection (retained in all 256), variable (lost in at least one but retained in at least one), and never-retained (lost in all 256)",
+    "per-species descriptive retained/loss frequencies with source positive denominators",
+    "exact for each seed S subset O and recovered=S union (O minus S) equals O",
+    "if pseudo-zero falsely interpreted as biological absence, exactly |O minus S| contradictions with source-confirmed positives; not actual ecological world exclusion",
+    "generic finite-world positive-only monotonicity W(O) subset W(S), demonstrated in unit tests and in explanation, without inventing ecological world counts"
+  ],
+  "stops": [
+    "No real EOG movement/viability/biotic world set is estimated from these processing records.",
+    "Never interpret absent-from-pseudo observation as biological absence.",
+    "These 256 seeds are a retrospective processing sensitivity, not independent ecological replicates or new EOG-WF endpoint.",
+    "Never infer true ecological world counts from unconstrained binary masks or from the seed ensemble.",
+    "Maintain the Draft review boundary and do not merge."
+  ]
+}

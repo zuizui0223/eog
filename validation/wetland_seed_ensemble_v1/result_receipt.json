@@ -1,0 +1,107 @@
+{
+  "schema": "eog.wetland_seed_ensemble_v1.result_receipt",
+  "status": "SOURCE_VERIFIED_256_FIXED_R_SEEDS_PROCESSING_SENSITIVITY_COMPLETED",
+  "analysis_status": "POST_EXPOSURE_ALGORITHM_DIAGNOSTIC_NOT_FIELD_REPLICATION",
+  "source": {
+    "dataset": "Mizsei and Wenner (2025), Zenodo DOI 10.5281/zenodo.15044115; CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_q1_md5": "fcab406cd8a192a07cc97582c19011ad",
+    "original_q2_md5": "a2b2f6a30b7243c4b9ece3b5eb75dba6",
+    "upstream": "edvardmizsei/hunviphab",
+    "upstream_commit": "25d4c64da289ffcc14679619bb3b18bd494de872",
+    "upstream_survreps_git_blob_sha1": "ae7de0753faa1660b9e1ce1bc81b8cdb39a9c670"
+  },
+  "roster": {
+    "R": "4.4.3",
+    "RNG": "Mersenne-Twister;Inversion;Rejection",
+    "seeds_first": 1,
+    "seeds_last": 256,
+    "seeds_total": 256,
+    "includes_original_seed123": true,
+    "post_exposure_fixed_before_this_run": true
+  },
+  "results": {
+    "q1": {
+      "sites": 27,
+      "native_rows": 351,
+      "native_positive_site_species": 144,
+      "seed123_lost": 3,
+      "seed123_minimum_tied_seeds": 3,
+      "seed123_empirical_lower_tail_count": 3,
+      "exact_expected": 9.475863116344188,
+      "ensemble_mean": 9.95703125,
+      "median": 10,
+      "q05": 5,
+      "q95": 15,
+      "min": 3,
+      "max": 19,
+      "descriptive_seed_mc_se": 0.1935909112730835,
+      "zero_loss_seeds": 0,
+      "mean_distinct_native_rows": 280.25390625,
+      "mean_duplicate_positions": 259.74609375
+    },
+    "q2": {
+      "sites": 13,
+      "native_rows": 188,
+      "native_positive_site_species": 77,
+      "seed123_lost": 6,
+      "exact_expected": 4.871441193156649,
+      "ensemble_mean": 4.921875,
+      "median": 5,
+      "q05": 2,
+      "q95": 9,
+      "min": 0,
+      "max": 11,
+      "descriptive_seed_mc_se": 0.1384015397791343,
+      "zero_loss_seeds": 2,
+      "mean_distinct_native_rows": 148.35546875,
+      "mean_duplicate_positions": 111.64453125
+    },
+    "paired_overlapping_13_native_sites": {
+      "native_positive_pairs": 77,
+      "ensemble_mean_pseudodetection_disagreements": 7.96875,
+      "ensemble_median": 8,
+      "q05": 4.75,
+      "q95": 12,
+      "min": 3,
+      "max": 14,
+      "seeds_with_at_least_one_disagreement": 256,
+      "seed123_disagreements": 7
+    },
+    "highest_exact_risk_example": {
+      "site": "tengelyut-1",
+      "species": "Triturus dobrogicus",
+      "n_native_rows": 18,
+      "k_native_positive_rows": 1,
+      "exact_conditional_drop_probability": 0.31880735010388184,
+      "q1_dropped_in_256_seeds": 87,
+      "q2_dropped_in_256_seeds": 76
+    }
+  },
+  "validation": {
+    "protocol_commit": "5cf7eeabe0511d880c661d24e808e5b5423a4b3c",
+    "result_fingerprint": "6094d8e326e7027a0ff0548679b5d88edc89dae3fa469dc7625d523661f58cdf",
+    "run_id": 43674891349,
+    "url": "https://github.com/zuizui0223/eog/actions/runs/43674891349",
+    "conclusion": "success",
+    "artifact_id": 14145523682,
+    "artifact_zip_sha256": "5efd36b7dab619ea5c32becbfedc24b17766d908be873b2032bd24b190dd7895",
+    "summary_csv_sha256": "0ed9b0f74ea4da5580a35ddfeada709cc6dfac5804bb1a9c916a71dd7b16b7cd",
+    "positive_pair_csv_sha256": "3ba582b5fbbdaa0e6c6f89cb70bb640cba9e56e50bc0ca187a223f81c0a45ae6",
+    "n_positive_seed_pair_rows": 56576,
+    "r_script": "benchmarks/wetland_seed_ensemble_v1.R",
+    "independent_python_validation": "benchmarks/wetland_seed_ensemble_v1.py",
+    "tests": "tests/test_wetland_seed_ensemble_v1.py"
+  },
+  "limits": [
+    "256 deterministic R seeds are not independent ecological populations, statistical field replicates, or evidence of intent to select a seed.",
+    "Analytic loss expectations are conditional on source-fixed public survreps 20-row sampling algorithm, not historical original occupancy estimates.",
+    "Pseudo-observation differences do not prove the original authors' ecological conclusions or coefficients wrong.",
+    "Original historical installed R/hunviphab runtime, independent physical trap IDs, effort and seasonal closure remain unverified.",
+    "Source 'surv' is a site×method×DOY grouping key, not a unique physical-trap identifier; no automatic deduplication is permitted.",
+    "No new fourth EOG-WF prediction endpoint and no causal A/B/M reconstruction."
+  ]
+}

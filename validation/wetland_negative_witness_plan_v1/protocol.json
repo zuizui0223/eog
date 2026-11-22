@@ -1,0 +1,36 @@
+{
+  "schema": "eog.wetland_certified_negative_witness_plan_v1.protocol",
+  "status": "POST_EXPOSURE_HYPOTHETICAL_OBSERVATION_DESIGN_FIXED_BEFORE_SOURCE_RUN",
+  "question": "Given exact full-method native recorded positive site×species masks, which currently source-unconfirmed site×species statuses would, if independently CERTIFIED truly absent, convert the four existing weakly one-sided (zero-allowed) category contrasts into a strict sign? Can candidate site visits be shared among two species?",
+  "source": {
+    "study": "Wenner et al. 2025, Global Ecology and Conservation 62 e03837, DOI 10.1016/j.gecco.2025.e03837; data Zenodo 10.5281/zenodo.15044115 CC BY 4.0",
+    "source_repo": "zuizui0223/frogcs",
+    "source_commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "prior_partial_id_fingerprint": "864b741974f0b8f12347825516eceab2232b3cd16291e998f18368416b2d9247"
+  },
+  "fixed_assumptions": [
+    "Every archived source-positive count is truly a positive binary site×species status (zero false positives), not validated independently.",
+    "A single static site×species status exists over the archived survey period, solely for illustrative logical bounds; ecological closure across 91 days is NOT shown.",
+    "Non-positive survey records mean UNKNOWN, never independently certified true absence; new negative witnesses are a COUNTERFACTUAL information scenario, NOT new field observations.",
+    "Each source-unconfirmed site×species may independently be truly present or truly absent; no other ecological constraints are assumed."
+  ],
+  "fixed_targets": [
+    "derive ALL source-positive-only nonnegative_only and nonpositive_only category contrasts among 9 species × intervention-control, intervention-artificial, artificial-control; do not cherry-pick",
+    "for each weak one-sided contrast, list every original site in the incomplete category with no recorded positive of that species; no candidates from source-positive sites",
+    "simulate one independently certified true negative at each listed source-unconfirmed candidate; use [positive_count/n, (n-verified_absences)/n] for latent group-rate interval and compare exact integer difference signs",
+    "verify a SINGLE certified absence in incomplete group makes strict comparison sign for each weak one-sided case",
+    "enumerate exact minimum number of distinct source-site visits, assuming a revisit COULD independently certify more than one species negative at that same site, needed to cover all four comparisons; separate site count from number of independent species×site negative certificates",
+    "report all-site min-cover solutions and source-recorded prior visit dates and method-row presence for candidate sites, without assuming effort",
+    "for any candidate newly confirmed positive rather than negative, show the effect is to tighten the original bound but cannot independently certify strict sign with no true negative evidence",
+    "return source SHA gates, explicit code tests and result receipts, no models"
+  ],
+  "hard_stops": [
+    "Source non-detection is not a certified true negative, including repeated non-detection or absence of dipnet CSV rows.",
+    "Do not claim 2 field visits WILL identify a strict biological effect; 2 is a conditional best-case combinatorial site cover if true absence certificates can be obtained for two species at each target site, something the data DO NOT currently support.",
+    "An actual field survey may only support detection-probability modeling, not logically perfect absence; site choice requires location/permissions/field protocol and biological temporal definition.",
+    "Study sites and wetland categories were observational, not randomized: strict site-level status difference is not a causal restoration effect.",
+    "No new occupancy, movement, A/B/M causal attribution, statistical power, p-values, actual ecological world enumeration or fourth EOG-WF scored endpoint; keep PR #697 Draft/unmerged."
+  ]
+}

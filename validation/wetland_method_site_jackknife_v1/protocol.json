@@ -1,0 +1,39 @@
+{
+  "schema": "eog.wetland_method_site_jackknife_v1.protocol",
+  "status": "POST_EXPOSURE_DETERMINISTIC_SOURCE_SENSITIVITY_FROZEN_BEFORE_NEW_LEAVE_ONE_SITE_SCORE",
+  "question": "Are the 5 previously verified strict sign reversals under acoustic+visual restriction supported across all original 27 site-deletion checks, or driven by individual influential sites? Extend the same check across all 15 fixed method panels.",
+  "source": {
+    "study": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837; native data Zenodo DOI 10.5281/zenodo.15044115, CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "baseline_lattice_fingerprint": "d9ce91154c34abc1e0619feb803b0a39b7721ef18dcd01c85279d3b6c581f254",
+    "baseline_lattice_success_run_id": 43710742795
+  },
+  "fixed_design": {
+    "sites": "Original Q1 27 sites, excluding kis-banyato and vadasz-turjan: 13 intervention, 6 control, 8 artificial; all 27 unique native site IDs, remove each exactly once",
+    "source_observation": "site×species source-positive if any original recorded row has species count>0; four method positive witness sets source-authenticated as in lattice v1",
+    "method_panels": "ALL 15 previously fixed nonempty subsets of acoustic, visual, dipnet, bottletrap (4 singles, 6 pairs, 4 triples, 1 all)",
+    "site_drop": "exactly one original site removed for each held-out case; keep source species and method detections unaltered at remaining sites; decrement only that site's category denominator",
+    "contrasts": "9 species × intervention−control, intervention−artificial, artificial−control (27 per panel and site drop), exact cross-product sign from site-positive counts, not a fitted model",
+    "matched_baseline": "for every leave-one-site-out scenario compare method-restricted subset against ALL-METHOD source support on SAME 26 retained sites, not against the original full-27 baseline",
+    "baseline_27": "also preserve previous 15-panel full-27 signs and 5 AV sign reversals as regression checks"
+  },
+  "fixed_endpoints": [
+    "15 panels ×27 held-out site IDs ×27 category comparisons =10935 contrast outcome rows including full-method signs, subset signs and tie transitions",
+    "for each of the original five AV strict reversal contrasts, count the site deletions (of 27) where the exact strict reversal persists, disappears to a tie, or same-sign; group-specific deletion breakdown",
+    "for every method panel: min/median/max strict sign reversals over 27 site deletions, number of deleted-site scenarios with at least one and with zero strict reversals, contrast-level site sensitivity",
+    "for original full-method baseline itself: number of 27 site deletions where baseline sign changes (excluding tied transitions), explicitly separate from method reversal persistence",
+    "for each original full-27 strict reversal: zero/tie sensitivity; do not classify any tie as sign reversal",
+    "full four-method panel must have zero method-induced sign reversals in all deleted-site checks, AV complete full-27 regression exactly five, all source site/method mask and site roster SHA checks",
+    "machine-readable complete per-contrast CSV, per-panel-by-site summary CSV, per-original-five persistence summary CSV, fixed result fingerprint"
+  ],
+  "inference_limits": [
+    "This is repeated deterministic leave-one-source-site-out sensitivity of an observed 27-site study; 27 leave-one-out outcomes are not independent field replications, CIs, p-values, or permutation tests.",
+    "Small group denominators are 13,6,8 before site removal and 12/13,5/6,7/8 after; sign flips may reflect tiny margins and category effort differences.",
+    "Method recording coverage/detection effort and seasonal closure remain unverified; missing source method row does not prove method not deployed, and 0 in a subset cannot mean confirmed biological absence.",
+    "Site deletion analyses support only robustness of descriptive source-record positivity contrasts and no causal restoration, abiotic/biotic/movement A/B/M, occupancy or EOG-WF superiority claims.",
+    "Do not modify frozen EOG-WF 3/31/3 endpoint accounting, author source data, or merge Draft PR #697."
+  ]
+}

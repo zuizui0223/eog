@@ -1,0 +1,43 @@
+{
+  "schema": "eog.wetland_native_visit_ledger_v1.protocol",
+  "status": "POST_EXPOSURE_SOURCE_GRAIN_AUDIT_FIXED_BEFORE_EXECUTABLE_RUN",
+  "goal": "Reconstruct source-observed date-distinct visit groups without arbitrary 20-row pseudo-repeat normalization; preserve method missingness explicitly and verify source-positive site-species OR.",
+  "input": {
+    "source": "Mizsei and Wenner (2025), Zenodo 10.5281/zenodo.15044115; CC BY 4.0",
+    "frogcs_repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_path": "research/external/zenodo_15044115/wetland_amp_surv_data.csv",
+    "sites_path": "research/external/zenodo_15044115/wetland_amp_site_data.csv",
+    "surveys_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_analysis_cohorts": {
+      "Q1": "Exclude kis-banyato, vadasz-turjan",
+      "Q2": "Include only ci==intervention"
+    }
+  },
+  "grain": {
+    "native_csv_row": "Original observation row; not established independent physical trap/visit.",
+    "composite_key": "surv=site:method:doy exactly 381/381; grouping key may repeat for bottletraps.",
+    "date_visit": "Recorded distinct site × ISO calendar date: a potential repeat-visit group, NOT proven exchangeable or closure-valid occupancy replicate.",
+    "method_day": "Site × date × method; all original rows retained and positive evidence combined via Boolean OR (not count summation or ID deduplication).",
+    "unrecorded_method": "NA / NOT_RECORDED, never 0, never a negative observation.",
+    "recorded_method_no_detection": "OBSERVED_NONDETECTION, not confirmed biological absence.",
+    "recorded_method_positive": "RECORDED_POSITIVE, unmodified source positive evidence."
+  },
+  "checks": [
+    "Native CSV SHA and roster exact, 29 original sites, 381 rows, nine species.",
+    "Q1 27 sites/351 native rows/144 source-positive site×species; Q2 13 sites/188 rows/77 positives.",
+    "Site×date and site×date×method counts and per-site visit-span distribution in days.",
+    "Daily site×date×species OR reconciles losslessly to native site×species recorded positives.",
+    "Four-method site-day-status table preserves no-method samples as NA and only derives method-group non-detections when method is recorded.",
+    "Every raw native CSV row remains attached to exactly one date+method group, even when the composite key repeats.",
+    "Tabulate number of source-positive site×species pairs detected in a single date or method.",
+    "Produce SHA-stamped JSON + method×visit×species long CSV + daily×species long CSV, no likelihood or model fitting."
+  ],
+  "prohibited": [
+    "Do not infer individual trap identity, independent effort, closure across dates, or ecological occupancy probability.",
+    "Do not estimate authors' published unmarked coefficients or causal management effects.",
+    "Do not treat missing method as zero, replicate a row, remove conflicting source rows or sum counts across uncertain physical units.",
+    "No A/B/M mechanism conclusion, fourth EOG-WF prediction endpoint, or merging Draft PR."
+  ]
+}

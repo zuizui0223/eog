@@ -1,0 +1,60 @@
+{
+  "schema": "eog.wetland_method_channel_lattice_v1.protocol",
+  "status": "POST_EXPOSURE_SOURCE_METHOD_ENUMERATION_FIXED_BEFORE_NEW_15_SUBSET_COMPUTATION",
+  "goal": "Disentangle which of the four recorded survey-method families accounts for the five previously established source-prevalence direction reversals among Q1 wetland categories, using a complete 15-subset observation-method lattice and source-anchored per-site species records.",
+  "source": {
+    "study": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837, original data Zenodo 10.5281/zenodo.15044115 CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "sites_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_Q1": "27 sites, 351 source rows, 13 intervention, 6 control, 8 artificial; 9 native taxa",
+    "previous_verified_method_group_fingerprint": "7b70fefd1dbab168db77ab7ce7f774c115619471a23419aea87daf18c43c9da2",
+    "previous_verified_5_of_27_reversals": true
+  },
+  "fixed_design": {
+    "method_order": [
+      "acoustic",
+      "visual",
+      "dipnet",
+      "bottletrap"
+    ],
+    "subsets": "ALL 15 nonempty subsets of four methods, ordered by size and lexicographic original-method order; 4 singles, 6 pairs, 4 three-method panels, 1 full panel; do not search for preferred subset after outcome",
+    "positivity": "at each original site × native species, positive if at least one raw observed source row in included methods has count>0 (Boolean OR), exact date/row unchanged; no new resampling",
+    "categories": [
+      "intervention",
+      "control",
+      "artificial"
+    ],
+    "comparisons": [
+      "intervention_minus_control",
+      "intervention_minus_artificial",
+      "artificial_minus_control"
+    ],
+    "contrasts": "27 taxon×category contrasts; signs from integer site-count cross-product. Strict reversal only positive↔negative, excluding zeros/ties; all compared against full four-method source evidence",
+    "primary_endpoints": [
+      "For each method subset: exact retained native-positive pairs out of full 144 and per-category positive pair counts, native site-level support and method-row day coverage",
+      "Number and identity of strict direction reversals across all 27 fixed taxon×category contrasts versus four-method full source",
+      "All four leave-one-method-out three-method panels: number/identity of native positives exclusively dependent on excluded method; contrast reversals",
+      "Evidence monotonicity certificate across 15 subset masks: A⊆B implies O(A)⊆O(B), source-positive must never be created",
+      "Minimal method-cardinality subsets that reproduce all 144 full native source-positive site×species pairs, if any",
+      "Minimal method-cardinality subsets that preserve exactly all 27 baseline category sign directions, noting that preserved signs do not imply full evidence recovery",
+      "Per-method positive witness exclusivity and Shapley-style allocation of each site×species positive among the k method families that detected it as 1/k each; explicit descriptive accounting, not ecology/mechanism attribution"
+    ],
+    "deliverables": [
+      "method-subset summary CSV of 15 rows",
+      "method-subset × 27 contrasts long CSV (405 rows)",
+      "source-positive site×species (144 rows) method capture and exclusivity table",
+      "result JSON with fixed fingerprints, SHA checks, tests and source-grade nonclaims"
+    ]
+  },
+  "stop": [
+    "Post-exposure deterministic re-expression of the same source observations: no independent ecological replication or prospective hypothesis-test status.",
+    "Methods represented in the original CSV are not verified deployment; the paper describes dipnet in regular sessions while the CSV represents dipnet rows for a subset of site dates.",
+    "Method omission is missing source-positive evidence, never a biologically verified absence.",
+    "Subsets contain unequal observational channels/effort; do not compare them as equally sampled treatments or infer causal effects.",
+    "Shapley-style share is an accounting allocation among correlated recorded methods; not proportional detection probability, effort, mechanism or actual population size.",
+    "No occupancy likelihood, field-closure test, treatment effect, causal A/B/M, true number of compatible EOG worlds or new EOG-WF scored endpoint.",
+    "No merging of Draft PR #697."
+  ]
+}

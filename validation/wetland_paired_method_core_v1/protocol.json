@@ -1,0 +1,54 @@
+{
+  "schema": "eog.wetland_paired_method_core_v1.protocol",
+  "status": "POST_EXPOSURE_SOURCE_METHOD_PROFILE_FIXED_BEFORE_CI_SCORE",
+  "question": "Can a complete recorded acoustic+visual pair be extracted at every authentic site×date, and how much full four-method source-positive evidence would be lost or retained in such a strictly paired recorded-method panel?",
+  "source": {
+    "authors": "Wenner et al. (2025), Global Ecology and Conservation 62 e03837",
+    "article_doi": "10.1016/j.gecco.2025.e03837",
+    "data_doi": "10.5281/zenodo.15044115",
+    "copyright": "CC BY 4.0",
+    "repo": "zuizui0223/frogcs",
+    "commit": "5e2f0a87c639df373fa2700b29403d2ab417a1cc",
+    "survey_sha256": "45146ee7a97c8086a53d13c3f19a060b51fe2ca1a42cb1aa9c42bbac67877ddd",
+    "site_sha256": "93064521563b04d8c264639463abf9806eea7aa34f502d7d45bedd42ebec0319",
+    "original_methods_statement": "Paper §2.2 says acoustic, visual and dipnet used in each ordinary field survey; missing dipnet method rows in released CSV do not prove dipnet was not deployed."
+  },
+  "fixed_inputs": {
+    "cohorts": [
+      "archived_all",
+      "published_q1",
+      "published_q2"
+    ],
+    "cohort_q1": "Exclude kis-banyato and vadasz-turjan",
+    "cohort_q2": "ci == intervention",
+    "method_core": [
+      "acoustic",
+      "visual"
+    ],
+    "noncore": [
+      "dipnet",
+      "bottletrap"
+    ],
+    "visit_group": "recorded site×calendar date",
+    "species": "all 9 original native species",
+    "source_positive": "native count>0 on at least one original raw row for site×species or site×date×species; Boolean OR",
+    "uniqueness": "require exactly one acoustic and one visual CSV row for every site×date; fail closed for duplicates or missing pairs",
+    "no_20_row_resampling": true
+  },
+  "endpoints_fixed": [
+    "Count site×date groups with exactly one row of each core method (full coverage contract).",
+    "Compare original all-method source-positive site×species sets with acoustic+visual-only sets, at cohort and species level, including losses exclusive to aquatic methods.",
+    "Compare original all-method source-positive site×date×species sets with paired-core positives, reporting method-specific daily complementary detection.",
+    "Record source-count per method and exact raw-row ID and date in an auditable 2-method×date×species long CSV.",
+    "Track original method rows for dipnet and bottletrap separately; missing row means NOT REPRESENTED IN CSV, not evidence method was not actually deployed in the field.",
+    "Conserve no source evidence by modification: everything is an analysis view, not a changed original dataset."
+  ],
+  "stop": [
+    "This is post-exposure: exploratory values have been inspected and CI assertions validate replay, not preregistered external hypothesis support.",
+    "Recorded core method rows across all dates do not certify comparable effort, observer duration, method deployment or detection independence.",
+    "Original article reports dipnet use on all standard visits despite many CSV dates having no dipnet row: cannot call missing row a method not conducted.",
+    "AV source-positive subset omissions are unknown/not detected by paired methods, not true biological absence.",
+    "Species-dependent detectability can cause group-level shifts; do not claim causal habitat filter, movement M, biotic interactions, or restoration treatment effect.",
+    "No original unmarked coefficient estimation or new fourth EOG-WF scored endpoint. Leave PR Draft/unmerged."
+  ]
+}
