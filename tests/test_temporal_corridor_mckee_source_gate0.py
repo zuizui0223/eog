@@ -95,7 +95,7 @@ def test_network_audit_requests_only_two_exact_public_api_json_endpoints(fixture
     ("missing_digest", "digestType"),
     ("broken_version", "canonical"),
     ("partial_roster", "incomplete"),
-    ("bad_size", "byte size"),
+    ("bad_size", "size"),
 ])
 def test_invalid_metadata_fails_closed(fixture_documents, patch, label):
     proto, dataset, files = copy.deepcopy(fixture_documents)
