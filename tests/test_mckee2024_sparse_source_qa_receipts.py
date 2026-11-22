@@ -68,7 +68,7 @@ def test_poststop_format_diagnosis_is_not_a_retune():
         "YYYY-MM-DD": 10835,
     }
     assert row["attribute_easting"]["all_negative_records"] == 28953
-    assert row["original_gate2_STOP_retained"] is True
+    assert row["source_QC_outcome"] == "STOP_UNRESOLVED_TIMESTAMP_PRECISION_AND_CRS_SEMANTICS"
     assert row["individual_timestamps_exported"] is False
     assert row["dense_2hr_holdout_opened"] is False
 
@@ -89,7 +89,7 @@ def test_midnight_hypothesis_beats_noon_but_remains_conditional():
     assert midnight["fraction_10_to_14h"] > 0.95
     assert noon["fraction_10_to_14h"] < 0.25
     assert noon["duplicate_timestamp_pairs"] == 10421
-    assert r["date_only_interpretation_approved"] is False
+    assert "Neither midnight imputation nor EPSG:5070 is automatically accepted" in r["inference_limit"]
 
 
 def test_crs_evidence_retains_source_wkt_conflict_and_per_world_counts():
