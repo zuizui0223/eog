@@ -145,7 +145,63 @@ def qualify_documents(protocol: dict, dataset: dict, files: dict) -> dict:
     return result
 
 
-def audit(*, fetch=None, protocol_path: Path = PROTOCOL_PATH) -> dict:
+def verify_frozen_metadata(observed: dict, frozen: dict) -> dict:
+    """Require publisher's metadata to match the post-Gate0 source receipt.
+
+    This is *not* independently verifying source file bytes; it only rejects
+    metadata drift from the first successful authorized publisher API audit.
+    """
+    if observed.get("schema") != SCHEMA or observed.get("status") != "SOURCE_METADATA_IDENTITY_QUALIFIED__NO_TRACK_ROWS":
+        raise ValueError("Cannot verify frozen source without successful public metadata audit")
+    if frozen.get("schema") != "eog.temporal_corridor_mckee2024.gate0_publisher_metadata_frozen.v1":
+        raise ValueError("Unexpected frozen publisher metadata schema")
+    if frozen.get("status") != "SOURCE_DECLARED_METADATA_FROZEN__NO_GPS_FILE_BYTES":
+        raise ValueError("Frozen source receipt has wrong evidence level")
+    pinned = {
+        "doi": frozen["source_doi"],
+        "publisher_dataset_id": frozen["publisher_dataset_id"],
+        "version_id": frozen["publisher_version_id"],
+        "publisher_version_number": frozen["publisher_version_number"],
+        "dataset_json_fingerprint": frozen["publisher_dataset_json_fingerprint"],
+        "file_roster_json_fingerprint": frozen["publisher_file_roster_json_fingerprint"],
+        "protocol_fingerprint": frozen["protocol_fingerprint"],
+    }
+    for key, expected in pinned.items():
+        if observed.get(key) != expected:
+            raise ValueError(f"Frozen publisher metadata identity drift: {key}")
+    expected_files = sorted(
+        (
+            item["name"], item["file_id"], item["version_id"],
+            item["size_bytes"], item["digest_type"],
+            item["publisher_declared_sha256"],
+            item["metadata_fingerprint"],
+        )
+        for item in frozen["files"]
+    )
+    incoming_files = sorted(
+        (
+            item["name"], item["file_id"], item["version_id"],
+            item["size_bytes"], item["source_declared_digest_type"],
+            item["source_declared_digest"],
+            item["metadata_fingerprint"],
+        )
+        for item in observed["files"]
+    )
+    if expected_files != incoming_files:
+        raise ValueError("Frozen publisher file roster size/hash/identity drift")
+    if (
+        frozen.get("all_binary_payloads_downloaded") is not False
+        or frozen.get("dense_2h_tracks_read") is not False
+        or frozen.get("GPS_rows_read") is not False
+        or observed.get("file_payloads_downloaded") is not False
+        or observed.get("dense_2h_holdout_opened") is not False
+        or observed.get("GPS_records_read") is not False
+    ):
+        raise ValueError("Frozen gate cannot certify any raw GPS file access")
+    return {"status": "MATCHES_FROZEN_GATE0_PUBLISHER_METADATA", "source_file_bytes_verified": False}
+
+
+def audit(*, fetch=None, protocol_path: Path = PROTOCOL_PATH, frozen_path: Path | None = None) -> dict:
     protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
     pinned_url = protocol["fixed_source"]["api_dataset_url"]
     def api(url):
@@ -167,7 +223,11 @@ def audit(*, fetch=None, protocol_path: Path = PROTOCOL_PATH) -> dict:
         files = api(files_url)
         if not isinstance(files, dict):
             raise TypeError("Dryad file metadata must be an object")
-        return qualify_documents(protocol, dataset, files)
+        result = qualify_documents(protocol, dataset, files)
+        if frozen_path is not None:
+            frozen = json.loads(frozen_path.read_text(encoding="utf-8"))
+            result["frozen_identity_check"] = verify_frozen_metadata(result, frozen)
+        return result
     except (OSError, urllib.error.URLError, TimeoutError, TypeError, ValueError, KeyError, json.JSONDecodeError) as exc:
         return {
             "schema": SCHEMA,
@@ -190,8 +250,9 @@ def audit(*, fetch=None, protocol_path: Path = PROTOCOL_PATH) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--verify-frozen", type=Path, default=None)
     args = parser.parse_args()
-    result = audit()
+    result = audit(frozen_path=args.verify_frozen)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({
