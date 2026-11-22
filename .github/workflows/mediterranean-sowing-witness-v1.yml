@@ -1,0 +1,54 @@
+name: Mediterranean seed-introduction constraint witness v1
+on:
+  pull_request:
+    paths:
+      - 'validation/mediterranean_sowing_constraint_witness_v1/**'
+      - 'benchmarks/mediterranean_sowing_source_gate_v1.py'
+      - 'benchmarks/mediterranean_sowing_witness_score_v1.py'
+      - 'tests/test_mediterranean_sowing_source_gate_v1.py'
+      - 'tests/test_mediterranean_sowing_witness_score_v1.py'
+      - '.github/workflows/mediterranean-sowing-witness-v1.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-and-stage-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install pytest
+      - name: Offline integrity and stage-witness tests
+        run: |
+          python -m pytest -q tests/test_mediterranean_sowing_source_gate_v1.py tests/test_mediterranean_sowing_witness_score_v1.py
+      - name: Get original experiment source with official Dryad digest
+        run: |
+          python benchmarks/mediterranean_sowing_source_gate_v1.py --output-dir /tmp/mediterranean_sowing_v1
+        env:
+          DRYAD_TOKEN: ${{ secrets.DRYAD_TOKEN }}
+      - name: Run source-gated experimental germination witness scoring
+        run: |
+          python benchmarks/mediterranean_sowing_witness_score_v1.py --source-dir /tmp/mediterranean_sowing_v1 --output /tmp/mediterranean_sowing_v1/witness_result.json
+      - name: Archive source receipt and results, no original experimental input file
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mediterranean-sowing-constraint-witness-v1
+          path: |
+            /tmp/mediterranean_sowing_v1/source_gate.json
+            /tmp/mediterranean_sowing_v1/witness_result.json
+          if-no-files-found: warn
+
+      - name: Fail closed on unverified source or unscored experiment
+        run: |
+          python - <<'PY'
+          import json
+          root='/tmp/mediterranean_sowing_v1/'
+          source=json.load(open(root+'source_gate.json'))
+          result=json.load(open(root+'witness_result.json'))
+          assert source['status']=='SOURCE_BYTES_VERIFIED_NOT_SCORED', source['status']
+          assert result['status']!='SOURCE_STOP_NO_SCORE', result['status']
+          PY
