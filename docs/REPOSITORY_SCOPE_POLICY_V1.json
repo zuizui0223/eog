@@ -5,18 +5,17 @@
   "owner_documents": {
     "fungal_grassland": "https://github.com/zuizui0223/knk/blob/main/migration/source_inventory_20261122.json",
     "neon": "https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/SOURCE_MANIFEST.json",
-    "ledger": "docs/REPOSITORY_BOUNDARY.md"
+    "ledger": "docs/REPOSITORY_BOUNDARY.md",
+    "structural": "https://github.com/zuizui0223/Structural/blob/main/archive/eog_structural_legacy_20261122/SOURCE_MANIFEST.json"
   },
   "allowed_manuscript_subdirectories": [
     "bam_counterfactual_identifiability",
     "bam_identifiability",
     "conditional_structural_value",
-    "figure_data",
     "inferential_openness",
     "neon_metacommunity_redundancy",
     "neon_small_mammal_continuity",
     "paper_ready",
-    "result_tables",
     "submission"
   ],
   "legacy_redirect_only": {
@@ -36,7 +35,10 @@
     "validation/eog_dominance_tail_history_storage_v35",
     "validation/eog_alternaria_binary_components_v36",
     "validation/eog_alternaria_genotype_generality_v37",
-    "validation/eog_mechanistic_ceiling_v38"
+    "validation/eog_mechanistic_ceiling_v38",
+    "figures",
+    "manuscript/figure_data",
+    "manuscript/result_tables"
   ],
   "disallowed_code_patterns": [
     "benchmarks/run_eog_*(?:leopold|grassland_above_below|identity_storage|arrival_role|role_mapping|history_level_leverage|dominance_tail|alternaria|wood_decomposer)*.py"
@@ -75,5 +77,14 @@
     "scientific_stops": 31,
     "administrative_exclusions": 3
   },
-  "note": "The gate enforces ownership, not scientific validity. Historical empirical method benchmarks and source/protocol audit receipts remain in EOG. Add a new manuscript lane only by explicit boundary-policy revision."
+  "note": "Ownership regression only: KNK, NEON, and Structural biological manuscript assets stay in their canonical repositories; EOG keeps method code, finite-world exact tests, frozen methods evidence and all adverse comparators. No external scoring.",
+  "structural_doc_stub_globs": [
+    "manuscript/structural*.md",
+    "manuscript/figure_[1-5]*.md",
+    "manuscript/submission/STRUCTURAL_VISUAL_QA_RECEIPT_*.md"
+  ],
+  "structural_disallowed_paper_script_globs": [
+    "manuscript/build_structural_*.py",
+    "tests/test_structural_*.py"
+  ]
 }

@@ -88,3 +88,27 @@ def test_method_cores_and_evidence_denominator_are_retained():
     ):
         assert expected in result, f"frozen methodological endpoint missing: {expected}"
     assert (ROOT / "docs/REPOSITORY_BOUNDARY.md").is_file()
+
+
+def test_structural_paper_handoff_is_redirect_only():
+    """Retired Structural paper scripts/figures stay with Structural, not EOG."""
+    p = _policy()
+    for pattern in p["structural_disallowed_paper_script_globs"]:
+        assert not list(ROOT.glob(pattern)), f"retired Structural script returned: {pattern}"
+    for path in ("figures", "manuscript/figure_data", "manuscript/result_tables"):
+        assert not (ROOT / path).exists(), f"Structural paper-only folder reintroduced: {path}"
+    count = 0
+    for pattern in p["structural_doc_stub_globs"]:
+        for path in ROOT.glob(pattern):
+            count += 1
+            text = path.read_text(encoding="utf-8")
+            assert "https://github.com/zuizui0223/Structural" in text, path
+            assert len(text.encode("utf-8")) < 2048, path
+    assert count >= 20, "historical Structural paper links removed or reactivated"
+    for core in (
+        "src/eog/v2/world_reconstruction.py",
+        "src/eog/v2/metacommunity_connectivity.py",
+        "tests/test_metacommunity_connectivity.py",
+        "docs/result_inventory/EMPIRICAL_RESULTS.md",
+    ):
+        assert (ROOT / core).is_file(), f"core EOG methods evidence missing: {core}"
