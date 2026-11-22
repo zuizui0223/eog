@@ -1,0 +1,82 @@
+{
+  "schema": "eog.fixed_source_hypothesis_sensitivity_v1.protocol",
+  "status": "POST_EXPOSURE_SYNTHETIC_64_GRAPH_SOURCE_HYPOTHESIS_ENUMERATION_DESIGN_FIXED_BEFORE_NATIVE_COMPUTATION",
+  "scientific_question": "Given a frozen candidate EOG transition rule universe and positive-occurrence roster, how much of rule compatibility is contingent on choosing one hypothetical FIXED source rather than another?",
+  "prior_art": "docs/eog_original_idea_world_universe_v6_result.md already established certificate persistence after SOURCE+barrier+analyst world-universe growth; v8 quantified lifetime/threatened certificates. This new API does not rescore those experiments, expand their world universe, or repeat their closed endpoint.",
+  "api_scope": {
+    "entry": "eog.v2.traversability.audit_fixed_source_hypotheses",
+    "inputs": "same Mapping[str,DynamicTransitionOperator] for every hypothesis; same full positive node IDs, max_steps, support_floor, support_tolerance; candidate_source_hypotheses mapping hypothesis_id→one or more distinct source IDs explicitly included in positive roster; every hypothesis leaves >=1 non-source target.",
+    "calculation": "For each source hypothesis, call existing compare_occurrence_transition_rules with fixed_source_ids and report rule IDs compatible with all remaining observed positive targets. Count source-robust rule IDs in intersection, source-possible rule IDs in union, source-dependent rule IDs in union minus intersection, and impossible-under-all-declared-source-hypotheses IDs in complement.",
+    "claim_boundary": "source IDs are candidate assumptions, not verified ancestral sources, current-state colonization evidence or calibrated movement probabilities. This is a static comparison, not annual sequential_world_forecast. Do not label source-hypothesis intersection as ecological robustness outside the finite declared candidate universe.",
+    "fail_closed": "Reject empty operator/hypothesis mapping, duplicate/unknown source IDs, hypothesis keys collision/blank, sources not in positive observations, source set consuming all observations, operators with mismatched node IDs/order, numeric contract invalid; never open or fit response data."
+  },
+  "known_truth_synthetic_test": {
+    "node_ids": [
+      "A",
+      "B",
+      "C"
+    ],
+    "all_simple_directed_graphs": 64,
+    "edge_bit_order": [
+      "A>B",
+      "A>C",
+      "B>A",
+      "B>C",
+      "C>A",
+      "C>B"
+    ],
+    "one_step_loss_support": 1,
+    "full_positive_observations": [
+      "A",
+      "B",
+      "C"
+    ],
+    "alternative_singleton_sources": {
+      "from_A": [
+        "A"
+      ],
+      "from_B": [
+        "B"
+      ],
+      "from_C": [
+        "C"
+      ]
+    },
+    "expected_per_source_compatible_graphs": {
+      "from_A": 16,
+      "from_B": 16,
+      "from_C": 16
+    },
+    "expected_source_possible_union": 37,
+    "expected_source_robust_intersection": 1,
+    "expected_source_dependent": 36,
+    "expected_source_impossible_all": 27,
+    "proof": "Each of three source alternatives forces the two outgoing edges from that source; 16 graphs per source. Pairwise intersections force four distinct edges, each 4 graphs; triple intersection forces six edges, 1 graph. Inclusion-exclusion union = 3·16−3·4+1=37. Intersection=1.",
+    "second_panel": {
+      "positive_observations": [
+        "A",
+        "B"
+      ],
+      "alternative_sources": {
+        "from_A": [
+          "A"
+        ],
+        "from_B": [
+          "B"
+        ]
+      },
+      "expected_per_source": 32,
+      "expected_union": 48,
+      "expected_intersection": 16,
+      "expected_contingent": 32,
+      "expected_excluded": 16
+    }
+  },
+  "stop": {
+    "original_wetland_source_only": "Existing PR #697 contains real observed source-positive method/date provenance but no confirmed ancestral sources; do not apply synthetic graph source hypotheses as real wetland movements.",
+    "historical_source_proof": false,
+    "new_EOG_WF_scored_endpoint": false,
+    "closed_3_scored_31_scientific_STOP_3_admin_exclusions_unchanged": true,
+    "draft_PR_698_stays_unmerged": true
+  }
+}

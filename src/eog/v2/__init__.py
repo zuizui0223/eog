@@ -56,6 +56,18 @@ _TRAVERSABILITY_EXPORTS: Final[tuple[str, ...]] = (
     "OccurrenceRuleComparison",
     "evaluate_occurrence_rule_compatibility",
     "compare_occurrence_transition_rules",
+    "RetainedTargetSourceChange",
+    "OccurrenceEvidenceFilterAudit",
+    "audit_occurrence_evidence_filter",
+    "FixedSourceHypothesisResult",
+    "FixedSourceRuleStatus",
+    "FixedSourceHypothesisSensitivity",
+    "audit_fixed_source_hypotheses",
+    "FixedSourceHypothesisIdentifiability",
+    "summarize_fixed_source_hypothesis_identifiability",
+    "DeclaredDirectedEdgeEvidence",
+    "DirectedNetworkEvidenceSourceProjection",
+    "audit_declared_directed_network_evidence",
 )
 
 _VALIDATION_EXPORTS: Final[tuple[str, ...]] = (

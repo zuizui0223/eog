@@ -1,0 +1,79 @@
+{
+  "schema": "eog.v2.occurrence_evidence_filter_source_policy_guard_v1.protocol",
+  "status": "PRE_EXECUTION_SCOPE_FROZEN_IN_SEPARATE_MAINLINE_PR",
+  "purpose": "Add a safe API to compare the same candidate EOG transition rules before/after positive observation filtering without incorrectly applying fixed-source world-set monotonicity to self-excluded peer-source compatibility.",
+  "data_and_model_scope": {
+    "source_context": "Prior Draft PR #697 authentic wetland date×method gate shows real recorded positive witness loss, but supplies NO calibrated graph/source nodes. The new API's tests use only synthetic directed A/B/C rules, not ecological field world evidence.",
+    "source_module": "src/eog/v2/occurrence_constraints.py",
+    "existing_API": "compare_occurrence_transition_rules, evaluate_occurrence_rule_compatibility",
+    "frozen_operator_input": "One shared Mapping[str, DynamicTransitionOperator] passed once to both calls; threshold/max_steps/sources also single arguments so contract cannot drift between runs.",
+    "source_policies": [
+      "fixed",
+      "self_excluded"
+    ],
+    "filter_contract": "full and filtered must have >=2 unique observed nodes; filtered proper subset of full; retained fixed declared sources cannot be dropped; same node universe.",
+    "output": "Dataclass with full/filtered compatible rule IDs, shared/lost/gained identity sets, frozen fingerprints, per-retained-target changed peer source IDs and support, explicit fixed-source monotonicity guard, data universe certificate.",
+    "compatibility_invariants": "Under fixed source, lost compatible rules when removing positive observation must be zero; self excluded may gain and lose rules and must never claim monotonicity or use EOG fixed-world compare_reconstructions.",
+    "regression": "No existing dataclass signature/result payload/fingerprint altered; new API is opt-in, exported via EOG traversability facade."
+  },
+  "frozen_synthetic_test": {
+    "node_universe": [
+      "A",
+      "B",
+      "C"
+    ],
+    "observation_full": [
+      "A",
+      "B",
+      "C"
+    ],
+    "observation_filtered": [
+      "A",
+      "B"
+    ],
+    "graph_cases": {
+      "hub": [
+        "A>C",
+        "C>A",
+        "B>C",
+        "C>B"
+      ],
+      "isolated_C": [
+        "A>B",
+        "B>A"
+      ],
+      "complete": [
+        "A>B",
+        "B>A",
+        "A>C",
+        "C>A",
+        "B>C",
+        "C>B"
+      ]
+    },
+    "all_64_test": "all 64 directed simple three-node edge masks, fixed source A and self excluded, loss support=1, first-passage max_steps=1",
+    "expected_exact_counts": {
+      "fixed": {
+        "full": 16,
+        "filtered": 32,
+        "lost": 0,
+        "gained": 16
+      },
+      "self_excluded": {
+        "full": 27,
+        "filtered": 16,
+        "shared": 12,
+        "lost": 15,
+        "gained": 4
+      },
+      "retained_peer_source_changes_across_64_graphs": 128
+    }
+  },
+  "scientific_limits": [
+    "This is a prospective software safety guard, not a causal, occupancy or biological model, and adds no EOG-WF endpoint.",
+    "Detected/nondetected species in any field survey are not equated to true absence.",
+    "The native EOG candidate rule universe is not a calibrated universe of true ecological worlds.",
+    "The API reports evidence-dependent peer-source membership without inventing a probabilistic likelihood or monotonicity guarantee.",
+    "Changes do not modify the frozen Draft PR #697 or its 3 scored/31 scientific STOP/3 administrative exclusions."
+  ]
+}

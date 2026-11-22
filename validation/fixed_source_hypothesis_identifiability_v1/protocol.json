@@ -1,0 +1,70 @@
+{
+  "schema": "eog.fixed_source_identifiability_projection_v1.protocol",
+  "status": "POST_EXPOSURE_SYNTHETIC_64_GRAPH_SOURCE_PARTITION_AND_PROJECTION_REVIEW",
+  "scientific_question": "When an exact frozen graph candidate makes one source hypothesis uniquely compatible, does the POSITIVE observation identify that source if graph identity itself remains unknown?",
+  "source": {
+    "repository": "zuizui0223/eog",
+    "base_branch": "main",
+    "working_PR": 698,
+    "prior_analysis": "validation/fixed_source_hypothesis_sensitivity_v1/protocol.json",
+    "prior_work_is_exposed": true,
+    "prior_test": "tests/test_fixed_source_hypothesis_sensitivity.py",
+    "prior_source_cases": "Glanville annual sources are current-state; Algar & Hungarian original wetland sources do not establish ancestry. No new field outcome is opened."
+  },
+  "fixed_inputs": {
+    "graph_universe": "same all 64 directed simple three-node one-step operators on A/B/C, without response-dependent graph selection",
+    "positive_occurrences": [
+      "A",
+      "B",
+      "C"
+    ],
+    "hypothetical_singleton_sources": {
+      "from_A": [
+        "A"
+      ],
+      "from_B": [
+        "B"
+      ],
+      "from_C": [
+        "C"
+      ]
+    },
+    "graph_edges": "A>B,A>C,B>A,B>C,C>A,C>B",
+    "loss_support": 1,
+    "max_steps": 1,
+    "evaluation_API": "eog.v2.traversability.audit_fixed_source_hypotheses",
+    "summarizer_API": "eog.v2.traversability.summarize_fixed_source_hypothesis_identifiability",
+    "inverse_logic": "Project compatible (rule,hypothesis) pairs to source-hypothesis IDs; do not condition on unknown rule after looking at the answer.",
+    "scope": "complete ONLY for fixed synthetic 64 graph × 3 declared source hypothesis panel, not historical sources or natural movement"
+  },
+  "expected": {
+    "zero_compatible_source_hypotheses_per_graph": 27,
+    "exactly_one": 27,
+    "exactly_two": 9,
+    "all_three": 1,
+    "compatible_rule_source_pairs": 48,
+    "sources_still_globally_possible": [
+      "from_A",
+      "from_B",
+      "from_C"
+    ],
+    "globally_unique_source_hypothesis": false,
+    "complete_graph_mask_63_supports_all_three": true,
+    "independent_count_proof": "With 3 disjoint two-edge groups (outgoing edges of A,B,C), each singleton source requires its own two edges. Number of graphs supporting exactly k sources = C(3,k)*3^(3-k). For k=0..3: 27,27,9,1. Joint compatible assignments = 27 + 2*9 + 3=48.",
+    "exemplar_source_unique_given_rule": {
+      "hypothetical_rule": "hub A↔C↔B with no A↔B, one step",
+      "unique_supported_hypothesis": "from_C",
+      "not_evidence_hub_is_real": true
+    },
+    "status_semantics": "globally one hypothesis only if the projection onto source IDs over the entire declared set of compatible rule-source pairs is singleton; zero compatible pairs is a universe falsification status, not identification"
+  },
+  "tests": [
+    "same exact frozen source_hypothesis_result and source_rule_status provenance; reject corrupted audit inconsistencies",
+    "canonicalize graph/source identity so source-hypothesis input order does not change fingerprint",
+    "all 64 graph support-count distribution 27/27/9/1 and 48 pairs",
+    "one selected synthetic hub rule yields conditionally unique C but not independently known historical origin",
+    "complete graph yields three compatible sources and zero conditional uniqueness",
+    "no candidate rule-source support is universe falsified, not a unique source",
+    "no new fourth EOG-WF scored endpoint, PR 697/698 remain Draft/unmerged"
+  ]
+}
