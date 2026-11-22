@@ -1,0 +1,111 @@
+{
+  "schema": "eog.temporal_corridor_mckee2024.source_gate.v1",
+  "status": "FROZEN_PRE_PUBLIC_API_METADATA_ACCESS__NO_TRACK_ROWS",
+  "repository_scope": "methodological validation only; independent from closed EOG-WF 3/31/3",
+  "purpose": "Qualify a single fixed public sparse/dense migration GPS source for prospective within-trajectory evaluation of world-coherent temporal reachability certificates; do not score before later protocol is frozen.",
+  "fixed_source": {
+    "primary_only": true,
+    "doi": "10.5061/dryad.15dv41p51",
+    "publisher": "Dryad",
+    "publication": "McKee et al. 2024, Estimating ungulate migration corridors from sparse movement data",
+    "landing_page": "https://datadryad.org/dataset/doi:10.5061/dryad.15dv41p51",
+    "published_date_from_landing": "2024-07-18",
+    "api_dataset_url": "https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.15dv41p51",
+    "expected_files": [
+      {
+        "name": "GPS12hrs_Locs.zip",
+        "source_landing_file_id": 3334125,
+        "expected_role": "input-only_sparse_12h_movement"
+      },
+      {
+        "name": "GPS2hrs_Locs.zip",
+        "source_landing_file_id": 3334126,
+        "expected_role": "locked_dense_2h_holdout_NO_ACCESS"
+      },
+      {
+        "name": "README.md",
+        "source_landing_file_id": 3334129,
+        "expected_role": "schema_description"
+      }
+    ],
+    "publisher_readme_expected_columns": [
+      "State",
+      "Herd",
+      "SpeciesCommon",
+      "SpeciesScientific",
+      "AID",
+      "SeasonYr",
+      "Season",
+      "Year",
+      "Timestamp",
+      "UTM_E",
+      "UTM_N"
+    ],
+    "publisher_readme_crs": "EPSG:3742 (NAD83(HARN)/UTM zone 12N)",
+    "publisher_time_field": "Timestamp in Mountain Time (MT); require explicit daylight-saving timezone treatment before joining years/seasons",
+    "published_accessible_herds": [
+      "Atlantic Rim mule deer",
+      "Clarks Fork mule deer",
+      "Dubois mule deer",
+      "Jackson elk"
+    ],
+    "restricted_unshared_herds": "Cody elk, Tex Creek mule deer, Lowman elk, Northfork elk; do not seek replacements or count their absent tracks"
+  },
+  "gate0_authorized_access": {
+    "allowed_only": [
+      "official publisher DOI metadata JSON",
+      "official publisher numeric version's file roster JSON"
+    ],
+    "prohibited": [
+      "GPS ZIP binary requests",
+      "README binary requests",
+      "shapefile header or record access",
+      "GPS coordinates/track rows",
+      "holdout 2h tracks",
+      "outcome modeling or metric scoring"
+    ],
+    "allowed_hosts": [
+      "datadryad.org"
+    ],
+    "allowed_exact_api_route_patterns": [
+      "/api/v2/datasets/doi%3A10.5061%2Fdryad.15dv41p51",
+      "/api/v2/versions/{numeric_version_id}/files"
+    ],
+    "request_budget": "one GET per endpoint, no hidden fallback, no cross-host redirects, 25s timeout and max 2 MB JSON payload each",
+    "source_acceptance": [
+      "exact requested DOI and canonical publisher numeric version",
+      "exact three expected file names and original landing file IDs",
+      "no file roster pagination / missing metadata",
+      "every file strictly positive byte size and supported declared hash",
+      "only metadata digest identity, never claim verified downloaded bytes"
+    ],
+    "status_on_error": "HOLD_SOURCE_METADATA_UNVERIFIED; no candidate replacement"
+  },
+  "intended_next_stage_NOT_YET_AUTHORIZED": {
+    "stage": "GATE1_SPARSE_12H_ONLY",
+    "requires_before_opening": "separate, committed byte-verification and header-only transport authorization",
+    "dense_2h_holdout_access": "PROHIBITED_UNTIL_EXACT_FROZEN_ANALYSIS_AND_MASK_LAYOUT",
+    "primary_question": "Can a frozen 12h-input finite-world reachability envelope conservatively cover withheld intermediate 2h observed GPS positions while avoiding trivial near-total geographic coverage?",
+    "primary_guardrail": "false exclusion of heldout GPS fixes at predeclared resolution, with uncertainty buffer and declared candidate-domain denominator",
+    "paired_spatial_efficiency": "possible-set area / predeclared candidate domain, to penalize vacuous overwide envelopes",
+    "external_comparators": [
+      "12h straight-line interpolation corridor with predeclared buffer",
+      "12h-derived Brownian bridge or published FMV reference if implemented without accessing 2h holdout"
+    ],
+    "unit_of_analysis": "migration sequence grouped by AID, SeasonYr and herd; repeated fixes are not independent replicates",
+    "holdout": "2h fixes strictly between adjacent 12h sparse fixes; exclude shared 12h anchors from validation scoring",
+    "score_status": "NOT_FROZEN_AND_NOT_RUN; exact spatial worlds, grid resolution, buffer, eligibility, model scales, comparator implementation, split and uncertainty treatment must be written and code-frozen before 2h rows are accessed",
+    "external_validity_limit": "same original tracks subsampled at 12h: within-track temporal holdout, not independent animals/populations or proof of historical pathway",
+    "no_promotion": "cannot be a fourth EOG-WF endpoint; adverse/STOP outcomes preserved; no score-based choice of a different dataset"
+  },
+  "claim_boundary": {
+    "original_EOG_WF_scored": 3,
+    "original_EOG_WF_favorable": 2,
+    "original_EOG_WF_adverse": 1,
+    "original_EOG_WF_scientific_STOP": 31,
+    "original_EOG_WF_admin_exclusions": 3,
+    "new_predictive_endpoint_authorized": false,
+    "original_protocols_reopened": false,
+    "ecological_colonization_history_identified": false
+  }
+}
