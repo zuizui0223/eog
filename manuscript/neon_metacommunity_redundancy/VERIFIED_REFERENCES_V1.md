@@ -1,28 +1,7 @@
-# Verified references — metacommunity redundancy paper
+# Archived in NEON — VERIFIED_REFERENCES_V1.md
 
-1. Loreau M, Mouquet N, Gonzalez A. 2003. Biodiversity as spatial insurance in
-   heterogeneous landscapes. Proceedings of the National Academy of Sciences USA
-   100:12765-12770. DOI 10.1073/pnas.2235465100.
+This historical NEON biological manuscript/support document is archived byte-for-byte in [NEON](https://github.com/zuizui0223/neon/blob/main/archive/eog_legacy_neon_20261122/manuscript/neon_metacommunity_redundancy/VERIFIED_REFERENCES_V1.md). It is not part of EOG's active mathematical/methodological publication programme.
 
-2. Lamy T, Wang S, Renard D, Lafferty KD, Reed DC, Miller RJ. 2019.
-   Species insurance trumps spatial insurance in stabilizing biomass of a marine
-   macroalgal metacommunity. Ecology 100:e02719. DOI 10.1002/ecy.2719.
+**Scientific caution:** the current [NEON repository](https://github.com/zuizui0223/neon) is in **SUBMISSION HOLD** following a later mammal-scale validity audit. The old 13/16 descriptive result must not be promoted as validated functional redundancy or a robust species-turnover mechanism.
 
-3. Hammond M, Loreau M, de Mazancourt C, Gonzalez A. 2020.
-   Disentangling local, metapopulation, and cross-community sources of stabilization
-   and asynchrony in metacommunities. Ecosphere 11:e03078.
-   DOI 10.1002/ecs2.3078.
-
-4. Thompson PL and colleagues. 2020. A process-based metacommunity framework linking
-   local and regional scale community ecology. Ecology Letters.
-   DOI 10.1111/ele.13568.
-
-5. NEON. 2026. Small mammal box trapping (DP1.10072.001), RELEASE-2026.
-   DOI 10.48443/A83H-TB34.
-
-Positioning rule:
-The manuscript does not claim novelty for metacommunity theory, spatial insurance,
-species turnover, or biodiversity redundancy. Its contribution is the prospective test
-of whether turnover creates an emergent spatial-continuity property, the universal
-absence of such emergence across the fresh denominator, and the resulting distinction
-between complementarity and redundancy for spatial occurrence continuity.
+[Original frozen EOG version](https://github.com/zuizui0223/eog/blob/91240104f9816459cd9555a63555664aff60760b/manuscript/neon_metacommunity_redundancy/VERIFIED_REFERENCES_V1.md).

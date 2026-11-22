@@ -42,7 +42,8 @@ Canonical state:
 
 - **KNK** [ecological assembly-history research](https://github.com/zuizui0223/knk): fungal community/host-state, grassland shoot/root, rank/dominance, v27–v38 protocols, source-only STOPs, and the Ecology Letters manuscript/figure/submission package. Original EOG source files at bd8531144e5ff655334990a664313ebc5e734308 were copied byte-identically before this cleanup.
 - **EOG**: mathematical contracts, exact finite-world and identifiability tests, MRR estimands, generic history-retention statistics, source/protocol audits, and method predictive benchmarks. The 3 EOG-WF independent scores (2 favorable, 1 adverse) remain frozen and unchanged.
-- Other historical ecological case-study and NEON manuscript assets in EOG are *legacy evaluation/provenance only*, not EOG's active biological research or novel ecological claims. Their separate downstream homes are not specified by this migration; do not promote them within EOG.
+- **NEON** [small-mammal ecological programme](https://github.com/zuizui0223/neon): all 80 EOG-era biological manuscript/continuity source files are archived under [neon legacy archive](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122), while NEON's current scientific mainline remains **SUBMISSION HOLD** after later mammal-scale and species-pool validity audits. EOG preserves finite-world, null-ceiling and response-blind protocol **method evidence only**; the old 13/16 descriptive continuity count is not a robust current ecological claim.
+- Other historical ecological test systems retained in EOG are **method-comparator provenance**, not EOG-authored biological discoveries. Island/fragmentation structural development is separately maintained in [Structural](https://github.com/zuizui0223/Structural). See [repository boundary ledger](docs/REPOSITORY_BOUNDARY.md).
 
 ## Scientific center
 

@@ -1,5 +1,7 @@
 # EOG development mainline
 
+> **Methods-only scope update 2026-11-22:** the former EOG NEON mammal manuscript packages are historical and now live under [neon legacy archive](https://github.com/zuizui0223/neon/tree/main/archive/eog_legacy_neon_20261122). The current biological NEON mainline is **SUBMISSION HOLD** after an organism-scale validity audit. Retain any former NEON labels below strictly as frozen method-validation chronology; they must not be read as current biological conclusions. No EOG-WF endpoint or finite-world numerical result was changed.
+
 ## Status
 
 This file is the **single source of truth for the current scientific and release mainline**.
