@@ -1,0 +1,75 @@
+{
+  "schema": "eog.mckee2024.post_stop_official_baggs_extent_crs_locator.v1",
+  "status": "FROZEN_BEFORE_CROSS_SOURCE_SPATIAL_COMPARISON",
+  "date": "2026-11-24",
+  "mainline": "SOURCE_QC_DIAGNOSTIC_ONLY__NO_MOVEMENT_FORECAST",
+  "source": {
+    "original": "10.5061/dryad.15dv41p51",
+    "original_version": 305836,
+    "original_file_id": 3334125,
+    "file_name": "GPS12hrs_Locs.zip",
+    "file_size": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "allowable_herd": "AtlanticRim",
+    "allowed_records": "12-hour GPS Point data and Herd column only",
+    "existing_source_stop": "validation/temporal_corridor_mckee2024/post_stop_crs_geometry_receipt_v1.json"
+  },
+  "independent_geographic_reference": {
+    "provider": "Wyoming Game and Fish Department (WGFD) official designated corridor, hosted via ArcGIS FeatureServer",
+    "exact_url": "https://services6.arcgis.com/cWzdqIyxbijuhPLw/ArcGIS/rest/services/MuleDeerMigrationBaggsWGFDCorridor/FeatureServer",
+    "label": "MuleDeerMigrationBaggsWGFDCorridor",
+    "reported_description": "Northern Dad/Atlantic Rim 38 deer and 90 migration sequences; southern Wild Horse 80 deer and 208 migration sequences; 2005-2016 GPS, WGFD-edited corridor polygons",
+    "public_full_extent_web_mercator_xmin": -12021622.7691,
+    "public_full_extent_web_mercator_ymin": 5012625.0685,
+    "public_full_extent_web_mercator_xmax": -11916202.5626,
+    "public_full_extent_web_mercator_ymax": 5110144.4915,
+    "official_spatial_reference": "EPSG:3857 (ArcGIS WKID 102100)",
+    "provenance_url": "https://services6.arcgis.com/cWzdqIyxbijuhPLw/ArcGIS/rest/services/MuleDeerMigrationBaggsWGFDCorridor/FeatureServer",
+    "external_reference_snapshot": "Web indexed public source; no claims to reidentification of exact independent animals or raw polygons"
+  },
+  "hypotheses": [
+    {
+      "crs": "EPSG:3742",
+      "label": "source_declared"
+    },
+    {
+      "crs": "EPSG:5070",
+      "label": "existing_favored_candidate"
+    },
+    {
+      "crs": "EPSG:5071",
+      "label": "near_indistinguishable_NAD83_HARN_Albers_competitor"
+    },
+    {
+      "crs": "ESRI:102003",
+      "label": "already_listed_negative_control"
+    },
+    {
+      "crs": "EPSG:3857",
+      "label": "already_listed_negative_control"
+    }
+  ],
+  "tests": [
+    "For each eligible AtlanticRim Point: transform from each frozen input CRS to EPSG:3857, tally inside the fixed WGFD full extent (unbuffered); no point maps",
+    "Repeat with fixed 5000-meter buffer around rectangle on every side; do not adjust based on outcomes",
+    "Record number of AtlanticRim rows, finite transformed rows and aggregate inside counts; no individual-level export",
+    "Also report how many CRS candidates cannot be distinguished in the coarse check; do not pick one as true"
+  ],
+  "predeclared_buffer_meters": 5000,
+  "claim_boundary": [
+    "Public WGFD corridor is geographically cross-sourced but may share original animal data; not independent ecological replication",
+    "Spatial rectangle is a bounding envelope of corridor polygons, not the corridor itself: an inside fix is not proven corridor use",
+    "Herd Atlantic Rim vs Baggs/Dad spatial overlap is anticipated but not assumed complete; do not tune bounding box",
+    "Study/source records 2007-2019 vs official reference 2005-2016; historical coverage and collared animals may differ",
+    "Different datum variants EPSG5070 and EPSG5071 are not guaranteed distinguishable by geographic registration",
+    "Publisher .prj/README EPSG3742 discrepancy remains unresolved without documented author processing history",
+    "No dense 2-hour holdout, no model fit, no prospective EOG prediction, no EOG-WF re-scoring"
+  ],
+  "dense_2h_access": false,
+  "source_file_upload_to_github": false,
+  "frozen_eog_wf": {
+    "scored": 3,
+    "scientific_stops": 31,
+    "admin_exclusions": 3
+  }
+}
