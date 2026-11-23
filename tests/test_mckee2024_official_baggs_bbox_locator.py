@@ -22,9 +22,9 @@ def test_official_reference_geometry_and_source_frozen_before_comparison():
     assert p["status"] == "FROZEN_BEFORE_CROSS_SOURCE_SPATIAL_COMPARISON"
     assert r["protocol_commit"] == "4c1d19db6567e34e949fdc98359c36fca5b4b63a"
     assert p["source"]["sha256"] == r["source_sha256"] == SHA
-    assert p["source"]["file_id"] == 3334125
+    assert p["source"]["original_file_id"] == 3334125
     assert p["source"]["allowable_herd"] == "AtlanticRim"
-    assert p["source"]["file_name"] == "GPS12hrs_Locs.zip"
+    assert p["source"]["original_filename"] == "GPS12hrs_Locs.zip"
     assert p["dense_2h_access"] is False
     ref = p["independent_geographic_reference"]
     assert ref["provider"].startswith("Wyoming Game and Fish Department")
