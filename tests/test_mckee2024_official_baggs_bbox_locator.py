@@ -24,7 +24,7 @@ def test_official_reference_geometry_and_source_frozen_before_comparison():
     assert p["source"]["sha256"] == r["source_sha256"] == SHA
     assert p["source"]["original_file_id"] == 3334125
     assert p["source"]["allowable_herd"] == "AtlanticRim"
-    assert p["source"]["original_filename"] == "GPS12hrs_Locs.zip"
+    assert p["source"]["file_name"] == "GPS12hrs_Locs.zip"
     assert p["dense_2h_access"] is False
     ref = p["independent_geographic_reference"]
     assert ref["provider"].startswith("Wyoming Game and Fish Department")
