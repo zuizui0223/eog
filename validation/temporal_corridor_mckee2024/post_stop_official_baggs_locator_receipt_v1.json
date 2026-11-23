@@ -1,0 +1,64 @@
+{
+  "schema": "eog.mckee2024.post_stop_official_baggs_locator_result.v1",
+  "protocol_commit": "4c1d19db6567e34e949fdc98359c36fca5b4b63a",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_size_bytes": 1539661,
+  "all_12h_records": 28953,
+  "AtlanticRim_records": 17248,
+  "wgfd_extent_epsg3857": [
+    -12021622.7691,
+    5012625.0685,
+    -11916202.5626,
+    5110144.4915
+  ],
+  "predeclared_extension_meters": 5000,
+  "crs_diagnostics": [
+    {
+      "input_crs": "EPSG:3742",
+      "finite_transform_count": 17248,
+      "inside_public_full_bbox_count": 0,
+      "inside_full_bbox_plus_5km_count": 0,
+      "bbox_fraction": 0,
+      "bbox_5km_fraction": 0
+    },
+    {
+      "input_crs": "EPSG:5070",
+      "finite_transform_count": 17248,
+      "inside_public_full_bbox_count": 16533,
+      "inside_full_bbox_plus_5km_count": 16812,
+      "bbox_fraction": 0.9585459183673469,
+      "bbox_5km_fraction": 0.974721706864564
+    },
+    {
+      "input_crs": "EPSG:5071",
+      "finite_transform_count": 17248,
+      "inside_public_full_bbox_count": 16533,
+      "inside_full_bbox_plus_5km_count": 16812,
+      "bbox_fraction": 0.9585459183673469,
+      "bbox_5km_fraction": 0.974721706864564
+    },
+    {
+      "input_crs": "ESRI:102003",
+      "finite_transform_count": 17248,
+      "inside_public_full_bbox_count": 0,
+      "inside_full_bbox_plus_5km_count": 0,
+      "bbox_fraction": 0,
+      "bbox_5km_fraction": 0
+    },
+    {
+      "input_crs": "EPSG:3857",
+      "finite_transform_count": 17248,
+      "inside_public_full_bbox_count": 0,
+      "inside_full_bbox_plus_5km_count": 0,
+      "bbox_fraction": 0,
+      "bbox_5km_fraction": 0
+    }
+  ],
+  "independent_source_note": "WGFD-edited public Baggs corridor bbox includes Dad/Atlantic Rim animals; source may share earlier GPS tracks, so this is not independent migration prediction validation.",
+  "crs_author_intent_confirmed": false,
+  "source_prj_epsg_declared": 3742,
+  "two_hour_holdout_opened": false,
+  "raw_coordinates_or_animal_ids_exported": false,
+  "ecological_prediction_scored": false,
+  "EOG_WF_scored_endpoints_unchanged": 3
+}
