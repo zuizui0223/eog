@@ -59,7 +59,7 @@ def _validate_protocol():
         raise ValueError("Unknown protocol")
     if data["status"] != "FROZEN_BEFORE_CROSS_SOURCE_SPATIAL_COMPARISON":
         raise ValueError("Protocol not frozen")
-    if data["source"]["sha256"] != SHA or data["source"]["file_id"] != 3334125:
+    if data["source"]["sha256"] != SHA or data["source"]["original_file_id"] != 3334125:
         raise ValueError("Frozen source differs")
     ref = data["independent_geographic_reference"]
     bounds = tuple(ref[f"public_full_extent_web_mercator_{x}"]
