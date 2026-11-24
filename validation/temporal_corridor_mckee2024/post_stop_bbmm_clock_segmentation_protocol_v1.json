@@ -1,0 +1,75 @@
+{
+  "schema": "eog.mckee2024.source_only_clock_bridge_segmentation.v1",
+  "status": "FROZEN_BEFORE_NEW_SEGMENTATION_COMPUTATION",
+  "date": "2026-11-24",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "file_id": 3334125,
+    "filename": "GPS12hrs_Locs.zip",
+    "size_bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "record_count": 28953,
+    "group_count": 421,
+    "dbf_fields_allowed": [
+      "Herd",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Timstmp"
+    ]
+  },
+  "published_gap_rule": {
+    "source": "McKee et al. 2024 Ecosphere DOI 10.1002/ecs2.4983",
+    "max_seconds": 45000,
+    "min_positive_seconds": 1,
+    "meaning": "No Brownian bridge across successive GPS gaps >12.5h; not ecological dispersal impossibility."
+  },
+  "scenarios": [
+    {
+      "id": "T0_FULL_DAY_UNCERTAINTY",
+      "date_only_clock_seconds": [
+        0,
+        86399
+      ]
+    },
+    {
+      "id": "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW",
+      "date_only_clock_seconds": [
+        0,
+        3600
+      ]
+    }
+  ],
+  "observation_order": "Frozen source-blind T0 lower/upper/DBF ordinal order in Herd×AID×SeasnYr×Season",
+  "clock_reference": "Naive local Mountain wall-clock seconds; no UTC or DST conversion",
+  "segmentation_arms": {
+    "optimistic": "Keep edge whenever any pairwise time assignment fits [1,45000]s; split all other edges",
+    "coherent": "Propagate one reachable time interval per contiguous segment; split and reset at first impossible extension",
+    "conservative": "Keep edge only when every clock assignment for the two consecutive windows fits [1,45000]s"
+  },
+  "aggregate_metrics": [
+    "retained edges, cuts, total segments, segments >=2 records",
+    "records in length>=2 segments",
+    "counts in segment-length bins 1/2/3-5/6-11/12-23/24+",
+    "extra coherent cuts versus optimistic and number of affected source groups",
+    "full-group pairwise-only false chains and effective time segment counts"
+  ],
+  "controls": [
+    "optimistic segments <= coherent segments <= conservative segments",
+    "2-record and 3-record counts must recover frozen PR #748 and PR #749 receipts",
+    "independent exhaustive small-clock partition enumeration validates greedy segmentation",
+    "no raw GPS IDs, exact times or coordinate values in output"
+  ],
+  "data_access": {
+    "dense_2hour_holdout": false,
+    "shapefile_geometry": false,
+    "individual_coordinates_exported": false,
+    "ecological_predictions": false,
+    "source_clock_and_CRS_STOP_retained": true
+  },
+  "original_EOG_WF": {
+    "scored": 3,
+    "scientific_stops": 31,
+    "administrative_exclusions": 3
+  }
+}
