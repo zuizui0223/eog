@@ -40,3 +40,8 @@ Best regards,
 ## Historical-lineage follow-up for sender review (2026-11-24)
 
 The source inquiry above is still **UNSENT**. Versioned GitHub evidence now shows Migration Mapper's app3 as.character(date) sequence-export step existed in **March 2024**, before Dryad publication, but it exported geographic lon/lat with a different field schema. The current app1 as.character change was only committed **August 6, 2024** and the app3 projected x/y export update **September 6, 2024**, both after Dryad July 18. When contacting the author, do not assert that either later code change caused the original file. Ask explicitly whether the archived source was written by the public app3 sequence exporter at a specified historical SHA, an analysis-specific manuscript script, or a separate data-cleaning/export step. A reproducible script plus sessionInfo and original coordinate WKT would be decisive. No email has been sent by this project.
+
+
+## Additional nonauthoritative file-header evidence (not a reason to send without review)
+
+A subsequent SHA-verified read of the original 12h ZIP's central directory and DBF header found **all four ZIP members stamped 2024-06-28 13:23:08** (ZIP local DOS time, offset unspecified) and an internal DBF update date of **2024-06-28**. The Timstmp field is **C(80)**, wide enough for complete HH:MM:SS values, so the date-only strings are not forced by character-field width. Because these dates are mutable packaging/header metadata, they should not be presented in the email as proof of creation date or R version. The central questions remain the original pre-string source times, R script/sessionInfo, timezone handling, and actual XY CRS/WKT. **UNSENT**.
