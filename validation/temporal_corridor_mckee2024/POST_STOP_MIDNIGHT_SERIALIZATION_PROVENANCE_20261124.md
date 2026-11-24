@@ -67,3 +67,8 @@ A [dated historical commit audit](POST_STOP_HISTORICAL_MAPPER_LINEAGE_20261124.m
 **Important negative chronology:** The app1 data cleaning export's as.character addition was committed **August 6, 2024**, *after* the original Dryad publication; the app3 sequence export's shift to projected x/y geometry was committed **September 6, 2024**, also after original Dryad publication. The current post-July statements must not be attributed to the original July ZIP. An app1 x/y CRS-assignment correction on March 26 documents a real related-software bugfix, but does not prove the actual Dryad PRJ error was caused by it.
 
 The exact original source exporter, R version, date-only clock meaning, Mountain/DST convention and original CRS remain unknown. The R 4.3 mechanism remains **strongly compatible but NOT confirmed for this data**, and the original source-QC STOP remains binding.
+
+
+## Additional source-format evidence: original DBF physical width and header date
+
+The [later original archive header inspection](POST_STOP_ARCHIVE_HEADER_PROVENANCE_20261124.md) confirms **Timstmp is a dBASE character field of width 80**, which can hold all 19 characters of a full YYYY-MM-DD HH:MM:SS string. Therefore the 10,835 shortened date values are **not automatically explained by a DBF field too narrow to store complete clock times**. The four original ZIP member headers are marked 2024-06-28 13:23:08 and the internal DBF last-update field is 2024-06-28; this is internally consistent prepublication *metadata*, not authenticated writer origin/time, R version or proof of exact midnight semantics. R4.3-style formatting remains consistent with the original strings but has not been proven as the actual export.

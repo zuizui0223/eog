@@ -1,0 +1,70 @@
+{
+  "schema": "eog.mckee2024.prepublication_original_archive_header_provenance.v1",
+  "status": "FROZEN_BEFORE_NEW_DBF_HEADER_AND_LOCAL_ZIP_METADATA_INSPECTION",
+  "date": "2026-11-24",
+  "question": "Do exact publisher-matched Dryad 12h source ZIP member timestamps, DBF internal last-update field, physical DBF Timstmp width/type and SHP/SHX headers constrain the export chronology and explain why timestamp contents mix 10/19 characters?",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "file_id": 3334125,
+    "filename": "GPS12hrs_Locs.zip",
+    "size_bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "members": [
+      "GPS12hrs_Locs.dbf",
+      "GPS12hrs_Locs.prj",
+      "GPS12hrs_Locs.shp",
+      "GPS12hrs_Locs.shx"
+    ],
+    "no_dense_2h_access": true
+  },
+  "what_to_read": [
+    "ZIP central directory metadata ONLY: each of four members' DOS time/date, CRC32, compressed/uncompressed bytes, compression method, create_system, and encrypted flag",
+    "DBF file *header* 32 bytes and field descriptors ONLY: DBF version, header last-update date (ambiguous year encoding per dBASE spec), record count, field type and width for Timstmp, field total/record length; no DBF row content unless already prior-audited counts in frozen receipts",
+    "SHP 100-byte header: file shape type, total declared bytes; SHX header; no shape point record content",
+    "PRJ text safe to read, report declared WKT coordinate system name and EPSG label without making geographic conversion or coordinate access",
+    "previously audited source timestamp lengths from frozen receipt (10835 date-only,18118 full,0 printed complete midnight); never reclassify without chain of custody"
+  ],
+  "archive_timeline_events": [
+    {
+      "date": "2023-08",
+      "event": "R 4.3 as.character POSIX midnight display behavior publicly documented"
+    },
+    {
+      "date": "2024-03-05",
+      "event": "Migration Mapper app3 source snapshot had as.character(date) before shapefile export, geographic lon/lat geometry"
+    },
+    {
+      "date": "2024-03-25",
+      "event": "Migration Mapper app1 x/y export st_as_sf change"
+    },
+    {
+      "date": "2024-03-26",
+      "event": "Migration Mapper app1 x/y CRS assignment correction"
+    },
+    {
+      "date": "2024-07-18",
+      "event": "Dryad public original dataset publication"
+    },
+    {
+      "date": "2024-08-06",
+      "event": "app1 data time-to-character addition, after publication"
+    },
+    {
+      "date": "2024-09-06",
+      "event": "app3 projected x/y export shift, after publication"
+    }
+  ],
+  "claim_boundaries": [
+    "ZIP DOS timestamp may be set by uploader or ZIP utility and is NOT independently verified author creation time, date, timezone or R version.",
+    "DBF header last-updated date is not a trusted capture timestamp, shapefile export application identifier, or unique provenance proof.",
+    "DBF Timstmp type/width may encode string length but cannot establish whether date-only value meant 00:00:00 or a genuinely missing time without original pre-string values.",
+    "Does not identify true EPSG3742 vs Albers reference system; no 2h dense data, no ecological score, no raw GPS or animal IDs uploaded.",
+    "Original source-QC STOP and EOG-WF 3 scored/31 scientific STOP/3 admin exclusions remain unchanged."
+  ],
+  "output": "One non-identifying metadata JSON receipt, check script, concise dated historical lineage addendum, pytest regression. No raw source bytes in GitHub.",
+  "original_EOG_WF": {
+    "scored": 3,
+    "scientific_stops": 31,
+    "administrative_exclusions": 3
+  }
+}

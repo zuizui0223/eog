@@ -1,0 +1,153 @@
+{
+  "schema": "eog.mckee2024.original_zip_dbf_header_receipt.v1",
+  "status": "CONSISTENT_PREPUBLICATION_HEADER_DATES_NOT_AUTHOR_CREATION_PROOF",
+  "protocol_committed_before_local_header_inspection": "52c99bea76d55cf308551cb46fcf96b7f886408a",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_sha256_verified": true,
+  "source_size_bytes": 1539661,
+  "members": {
+    "GPS12hrs_Locs.dbf": {
+      "DOS_time_local_no_timezone": "2024-06-28T13:23:08",
+      "uncompressed_bytes": 22265243,
+      "compressed_bytes": 1005632,
+      "zip_crc32_hex": "13306200",
+      "zip_compression_method": 8,
+      "zip_creator_system_code": 0
+    },
+    "GPS12hrs_Locs.prj": {
+      "DOS_time_local_no_timezone": "2024-06-28T13:23:08",
+      "uncompressed_bytes": 440,
+      "compressed_bytes": 273,
+      "zip_crc32_hex": "8638338c",
+      "zip_compression_method": 8,
+      "zip_creator_system_code": 0
+    },
+    "GPS12hrs_Locs.shp": {
+      "DOS_time_local_no_timezone": "2024-06-28T13:23:08",
+      "uncompressed_bytes": 810784,
+      "compressed_bytes": 468361,
+      "zip_crc32_hex": "30bd663e",
+      "zip_compression_method": 8,
+      "zip_creator_system_code": 0
+    },
+    "GPS12hrs_Locs.shx": {
+      "DOS_time_local_no_timezone": "2024-06-28T13:23:08",
+      "uncompressed_bytes": 231724,
+      "compressed_bytes": 64933,
+      "zip_crc32_hex": "d7578d93",
+      "zip_compression_method": 8,
+      "zip_creator_system_code": 0
+    }
+  },
+  "identical_member_DOS_timestamps": true,
+  "common_DOS_timestamp": "2024-06-28T13:23:08",
+  "dbf_header": {
+    "version_hex": "0x03",
+    "last_updated_YY_MM_DD_raw": [
+      124,
+      6,
+      28
+    ],
+    "last_updated_parsed_date": "2024-06-28",
+    "record_count": 28953,
+    "header_length_bytes": 385,
+    "record_length_bytes": 769,
+    "language_driver_id_hex": "0x57",
+    "field_descriptors": [
+      {
+        "name": "State",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "Herd",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "SpcsCmm",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "SpcsScn",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "AID",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "SeasnYr",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "Season",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "Year",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "Timstmp",
+        "type": "C",
+        "width": 80,
+        "decimal_places": 0
+      },
+      {
+        "name": "UTM_E",
+        "type": "N",
+        "width": 24,
+        "decimal_places": 15
+      },
+      {
+        "name": "UTM_N",
+        "type": "N",
+        "width": 24,
+        "decimal_places": 15
+      }
+    ],
+    "Timstmp_field_can_fit_full_19_character_string": true
+  },
+  "shape_headers": {
+    "GPS12hrs_Locs.shp": {
+      "file_length_bytes": 810784,
+      "shape_type": 1,
+      "file_code": 9994,
+      "version": 1000
+    },
+    "GPS12hrs_Locs.shx": {
+      "file_length_bytes": 231724,
+      "shape_type": 1,
+      "file_code": 9994,
+      "version": 1000
+    }
+  },
+  "source_prj_projected_wkt_name": "NAD_1983_HARN_UTM_Zone_12N",
+  "DBF_update_date_matches_ZIP_member_date": true,
+  "July_18_2024_Dryad_release_source": "https://datadryad.org/dataset/doi:10.5061/dryad.15dv41p51",
+  "DOS_time_author_creation_proof": false,
+  "DBF_last_update_author_or_original_R_version_proof": false,
+  "date_only_is_exact_midnight_proven": false,
+  "CRS_author_intent_proven": false,
+  "original_source_time_and_CRS_STOP_preserved": true,
+  "dense_2h_GPS_opened": false,
+  "DBF_record_rows_or_SHP_geometry_read": false,
+  "raw_animal_IDs_dates_or_coordinates_exported": false,
+  "ecological_or_EOG_prediction_scored": false,
+  "original_EOG_WF_scored_endpoints": 3
+}
