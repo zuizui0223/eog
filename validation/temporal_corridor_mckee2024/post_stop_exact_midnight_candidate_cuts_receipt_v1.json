@@ -1,0 +1,91 @@
+{
+  "schema": "eog.mckee2024.post_stop_exact_midnight_candidate_cuts_receipt.v1",
+  "status": "MIDNIGHT_RECONSTRUCTION_STRONGLY_PLAUSIBLE_BY_R_43_EXPORT__TIMEZONE_NOT_PROVEN",
+  "pre_access_protocol_commit": "04b5992b8e32bad79415c32c9a745e1b1cbdc93a",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_file_bytes": 1539661,
+  "source_record_count": 28953,
+  "source_group_count": 421,
+  "source_within_group_adjacent_pairs": 28532,
+  "date_only_as_exact_midnight_only_conditional": true,
+  "original_00_00_00_hours_in_complete_strings": 0,
+  "original_date_only_strings": 10835,
+  "per_clock_cut_policy": {
+    "NAIVE_MOUNTAIN_LOCAL": {
+      "T0_FULL_DAY_UNCERTAINTY": {
+        "coherent_cuts": 857,
+        "pairwise_cuts": 793,
+        "additional_coherent_cuts": 64
+      },
+      "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": {
+        "coherent_cuts": 858,
+        "pairwise_cuts": 858,
+        "additional_coherent_cuts": 0
+      },
+      "H_R43_EXACT_MIDNIGHT_CANDIDATE": {
+        "coherent_cuts": 858,
+        "pairwise_cuts": 858,
+        "additional_coherent_cuts": 0
+      }
+    },
+    "AMERICA_DENVER_IANA": {
+      "T0_FULL_DAY_UNCERTAINTY": {
+        "coherent_cuts": 889,
+        "pairwise_cuts": 800,
+        "additional_coherent_cuts": 89
+      },
+      "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": {
+        "coherent_cuts": 890,
+        "pairwise_cuts": 865,
+        "additional_coherent_cuts": 25
+      },
+      "H_R43_EXACT_MIDNIGHT_CANDIDATE": {
+        "coherent_cuts": 959,
+        "pairwise_cuts": 938,
+        "additional_coherent_cuts": 21
+      }
+    }
+  },
+  "H3_paired_cut_comparisons": {
+    "NAIVE_H3_vs_T0": {
+      "common_cuts": 857,
+      "previous_only": 0,
+      "H3_only": 1,
+      "both_retained": 27674,
+      "groups_with_any_difference": 1
+    },
+    "NAIVE_H3_vs_T1": {
+      "common_cuts": 858,
+      "previous_only": 0,
+      "H3_only": 0,
+      "both_retained": 27674,
+      "groups_with_any_difference": 0
+    },
+    "IANA_H3_vs_T0": {
+      "common_cuts": 889,
+      "previous_only": 0,
+      "H3_only": 70,
+      "both_retained": 27573,
+      "groups_with_any_difference": 69
+    },
+    "IANA_H3_vs_T1": {
+      "common_cuts": 890,
+      "previous_only": 0,
+      "H3_only": 69,
+      "both_retained": 27573,
+      "groups_with_any_difference": 69
+    }
+  },
+  "distinct_naive_T1_vs_H3_cut_masks_disagree": false,
+  "distinct_IANA_T1_vs_H3_cut_masks_disagree": true,
+  "R43_exporter_historically_confirmed_for_Dryad": false,
+  "why_not_certified": "Migration Mapper current code serializes dates using as.character, and R4.3 shows midnight truncation, but the precise 2024 Dryad source export script/commit and actual timezone conventions have not been identified.",
+  "original_source_CRS_stop_retained": true,
+  "original_source_timestamp_STOP_retained": true,
+  "no_2_hour_reference_opened": true,
+  "source_geometries_unread": true,
+  "raw_IDs_points_exact_dates_unpublished": true,
+  "no_ecological_model_fit_or_score": true,
+  "original_EOG_WF_frozen_3_31_3": true
+}
