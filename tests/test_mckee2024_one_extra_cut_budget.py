@@ -202,7 +202,7 @@ def test_original_source_only_and_no_2h_or_ecological_score(tmp_path):
     assert receipt["raw_ids_times_coordinates_or_link_indices_exported"] is False
     assert receipt["ecological_prediction_scored"] is False
     assert receipt["original_EOG_WF_scored_endpoints"]==3
-    with pytest.raises(ValueError,match="Precommitted"):
+    with pytest.raises(ValueError,match="Deltas must be sorted"):
         src["classify_budget_links"]([((0,0),)],deltas=(-1,0,1))
     bad=tmp_path/"GPS12hrs_Locs.zip"
     bad.write_bytes(b"not the original source")
