@@ -1,0 +1,174 @@
+{
+  "schema": "eog.mckee2024.post_stop_global_time_window_coherence_receipt.v1",
+  "status": "CONDITIONAL_LOCAL_CLOCK_PATH_COMPOSITION_ONLY__SOURCE_STOP_RETAINED",
+  "protocol_committed_before_new_computation": "82d3be54e7f4689cbda60a43ab15827532b740b8",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_file_size_bytes": 1539661,
+  "source_12h_records": 28953,
+  "source_12h_groups": 421,
+  "group_record_count_min_median_max": [
+    3,
+    46,
+    304
+  ],
+  "max_gap_seconds": 45000,
+  "clock_scenarios": [
+    "T0_FULL_DAY_UNCERTAINTY",
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW"
+  ],
+  "window_counts_by_scenario": {
+    "T0_FULL_DAY_UNCERTAINTY": [
+      {
+        "records_per_window": 2,
+        "all_windows": 28532,
+        "every_pair_possible": 27739,
+        "coherent_whole_window": 27739,
+        "pairwise_only_false_chain": 0,
+        "false_fraction_of_pairwise_possible": 0,
+        "groups_with_any_false_chain_at_this_width": 0
+      },
+      {
+        "records_per_window": 3,
+        "all_windows": 28111,
+        "every_pair_possible": 26764,
+        "coherent_whole_window": 26700,
+        "pairwise_only_false_chain": 64,
+        "false_fraction_of_pairwise_possible": 0.0023912718577193243,
+        "groups_with_any_false_chain_at_this_width": 41
+      },
+      {
+        "records_per_window": 4,
+        "all_windows": 27690,
+        "every_pair_possible": 25861,
+        "coherent_whole_window": 25738,
+        "pairwise_only_false_chain": 123,
+        "false_fraction_of_pairwise_possible": 0.004756196589459031,
+        "groups_with_any_false_chain_at_this_width": 41
+      },
+      {
+        "records_per_window": 6,
+        "all_windows": 26852,
+        "every_pair_possible": 24275,
+        "coherent_whole_window": 24058,
+        "pairwise_only_false_chain": 217,
+        "false_fraction_of_pairwise_possible": 0.00893923789907312,
+        "groups_with_any_false_chain_at_this_width": 40
+      },
+      {
+        "records_per_window": 12,
+        "all_windows": 24421,
+        "every_pair_possible": 20543,
+        "coherent_whole_window": 20153,
+        "pairwise_only_false_chain": 390,
+        "false_fraction_of_pairwise_possible": 0.018984568952928004,
+        "groups_with_any_false_chain_at_this_width": 39
+      },
+      {
+        "records_per_window": 24,
+        "all_windows": 20267,
+        "every_pair_possible": 15789,
+        "coherent_whole_window": 15199,
+        "pairwise_only_false_chain": 590,
+        "false_fraction_of_pairwise_possible": 0.037367787700297674,
+        "groups_with_any_false_chain_at_this_width": 30
+      }
+    ],
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": [
+      {
+        "records_per_window": 2,
+        "all_windows": 28532,
+        "every_pair_possible": 27674,
+        "coherent_whole_window": 27674,
+        "pairwise_only_false_chain": 0,
+        "false_fraction_of_pairwise_possible": 0,
+        "groups_with_any_false_chain_at_this_width": 0
+      },
+      {
+        "records_per_window": 3,
+        "all_windows": 28111,
+        "every_pair_possible": 26637,
+        "coherent_whole_window": 26637,
+        "pairwise_only_false_chain": 0,
+        "false_fraction_of_pairwise_possible": 0,
+        "groups_with_any_false_chain_at_this_width": 0
+      },
+      {
+        "records_per_window": 4,
+        "all_windows": 27690,
+        "every_pair_possible": 25682,
+        "coherent_whole_window": 25682,
+        "pairwise_only_false_chain": 0,
+        "false_fraction_of_pairwise_possible": 0,
+        "groups_with_any_false_chain_at_this_width": 0
+      },
+      {
+        "records_per_window": 6,
+        "all_windows": 26852,
+        "every_pair_possible": 24009,
+        "coherent_whole_window": 24009,
+        "pairwise_only_false_chain": 0,
+        "false_fraction_of_pairwise_possible": 0,
+        "groups_with_any_false_chain_at_this_width": 0
+      },
+      {
+        "records_per_window": 12,
+        "all_windows": 24421,
+        "every_pair_possible": 20119,
+        "coherent_whole_window": 20119,
+        "pairwise_only_false_chain": 0,
+        "false_fraction_of_pairwise_possible": 0,
+        "groups_with_any_false_chain_at_this_width": 0
+      },
+      {
+        "records_per_window": 24,
+        "all_windows": 20267,
+        "every_pair_possible": 15175,
+        "coherent_whole_window": 15175,
+        "pairwise_only_false_chain": 0,
+        "false_fraction_of_pairwise_possible": 0,
+        "groups_with_any_false_chain_at_this_width": 0
+      }
+    ]
+  },
+  "entire_group_counts_by_scenario": {
+    "T0_FULL_DAY_UNCERTAINTY": {
+      "total_groups": 421,
+      "all_pairwise_possible_groups": 230,
+      "globally_coherent_groups": 216,
+      "pairwise_only_false_chain_groups": 14,
+      "groups_with_any_pair_excluded": 191
+    },
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": {
+      "total_groups": 421,
+      "all_pairwise_possible_groups": 216,
+      "globally_coherent_groups": 216,
+      "pairwise_only_false_chain_groups": 0,
+      "groups_with_any_pair_excluded": 205
+    }
+  },
+  "independent_algorithm_validation": "2,500 independently enumerated 2-5-record integer time-window cases (H=5) matched interval-forward DP and discrete time-state dynamic programming in local verification. This is not a biological replication.",
+  "triple_historical_regression": {
+    "T0_pairwise": 26764,
+    "T0_coherent": 26700,
+    "T0_false": 64,
+    "T1_pairwise": 26637,
+    "T1_coherent": 26637,
+    "T1_false": 0
+  },
+  "claim_boundary": {
+    "observational_status": "sparse input time-window model; not a realized movement path",
+    "date_only_midnight_author_verified": false,
+    "clock_reference": "Mountain local naive wall clock; physical UTC/DST elapsed times not verified",
+    "spatial_CRS_author_verified": false,
+    "source_QC_STOP_preserved": true,
+    "fixed_T0_order_not_actual_observation_time_certified": true,
+    "source_IDs_dates_coordinates_exported": false,
+    "SHP_geometry_read": false,
+    "dense_2h_GPS_read": false,
+    "ecological_predictive_score_computed": false,
+    "EOG_WF_frozen_scored": 3,
+    "EOG_WF_frozen_scientific_stops": 31,
+    "EOG_WF_frozen_admin_exclusions": 3
+  }
+}
