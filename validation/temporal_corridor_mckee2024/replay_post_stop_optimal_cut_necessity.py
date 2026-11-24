@@ -47,11 +47,7 @@ def _check_protocol():
         or p["source"]["links"] != 28532
         or p["model"]["gap_seconds"] != [1, GAP]
         or tuple((w["id"],w["cut_expected"]) for w in p["worlds"])
-            != tuple(
-                (name.split("_")[0] + "_" + clock.replace("_MOUNTAIN_LOCAL", "").replace("_IANA", ""),
-                 count)
-                for (name,clock),count in zip(WORLD_ORDER, EXPECTED_GREEDY_CUTS)
-            )
+            != tuple(zip(("T0_NAIVE","T1_NAIVE","T0_IANA","T1_IANA"), EXPECTED_GREEDY_CUTS))
     ):
         raise ValueError("Frozen source/world/clock DAG protocol changed")
     return p
@@ -126,7 +122,20 @@ def optimal_partition_links(time_windows, gap: int = GAP):
             "C" if c and not retain else
             "R" if retain and not c else "O"
         )
-    cut_set,_=segmentation(time_windows)
+    # The previous greedy strategy keeps each longest feasible prefix.
+    # Implement the same rule with an explicit argument so a tiny-clock
+    # independent oracle can test arbitrary maximum positive gaps.
+    cut_set=set()
+    reachable=time_windows[0]
+    for k,allowed in enumerate(time_windows[1:],start=1):
+        nxt=advance(reachable,allowed,gap)
+        if not nxt:
+            cut_set.add(k)
+            reachable=allowed
+        else:
+            reachable=nxt
+    if gap == GAP and cut_set != segmentation(time_windows)[0]:
+        raise AssertionError("Greedy cut choice differs from prior source replay")
     if len(cut_set)!=shortest-1:
         raise AssertionError("Previously frozen greedy has nonoptimal cut count")
     if any(classification[k-1]=="R" for k in cut_set):
