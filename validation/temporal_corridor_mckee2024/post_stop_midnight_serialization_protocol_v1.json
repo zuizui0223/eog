@@ -1,0 +1,85 @@
+{
+  "schema": "eog.mckee2024.post_stop_midnight_string_serialization_diagnostic.v1",
+  "status": "FROZEN_BEFORE_NEW_PHYSICAL_TIMESTAMP_PATTERN_INSPECTION",
+  "date": "2026-11-24",
+  "target": "Test a newly documented R >=4.3 as.character.POSIXt() midnight serialization mechanism in an exact Dryad original 12h DBF; distinguish strong formatting evidence from proof of author export pipeline.",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "publisher_file_id": 3334125,
+    "version_id": 305836,
+    "filename": "GPS12hrs_Locs.zip",
+    "size_bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "n": 28953
+  },
+  "external_primary_evidence": [
+    {
+      "url": "https://stat.ethz.ch/pipermail/r-devel/2023-August/082814.html",
+      "claim": "R Core team discussion shows in R 4.3.1 as.character.POSIXt for exact midnight becomes YYYY-MM-DD rather than YYYY-MM-DD 00:00:00; mixed vector retains timestamps for non-midnight values"
+    },
+    {
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.15dv41p51",
+      "claim": "Data authored with R BBMM workflow; README says MT timestamps and EPSG3742"
+    },
+    {
+      "url": "https://doi.org/10.1002/ecs2.4983",
+      "claim": "12h input is subsampled at about 00/01 and 12/13 Mountain Time; no guarantee of actual 00:00 or R data-export version"
+    },
+    {
+      "url": "https://github.com/jmerkle1/Migration-Mapper/blob/main/app4_uds/wmiScripts/CalcBBMM.R",
+      "claim": "Official named code requires POSIXct and transforms source GPS to user-supplied population grid CRS; it is NOT a frozen pipeline for producing Dryad input shapefile"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H_R43_MIDNIGHT_CHAR",
+      "predicts": "No full HH:MM:SS suffix of exact 00:00:00 exists, because those actual midnight values would be serialized to YYYY-MM-DD; complete timestamps with nonmidnight values are retained. Data pattern supports mechanism but does not prove user ran this transformation."
+    },
+    {
+      "id": "H_TRUE_MISSING_TIME",
+      "predicts": "Date-only timestamps may represent genuinely missing time; other complete records may or may not include midnight; under this mechanism the missing value cannot be filled without provenance."
+    },
+    {
+      "id": "H_OTHER_FORMATTING",
+      "predicts": "A different export/serialization path could yield the same observed date-only strings; observing R's pattern is not causal identification."
+    }
+  ],
+  "allowed_fields": [
+    "Timstmp",
+    "Herd",
+    "AID",
+    "SeasnYr",
+    "Season"
+  ],
+  "allowed_input_only_aggregates": [
+    "Count exact date-only strings YYYY-MM-DD; full datetime strings YYYY-MM-DD HH:MM:SS; other/malformed strings",
+    "Count complete strings with HH:MM:SS == 00:00:00 (critical R43 prediction), and complete HH:MM:SS == 01:00:00, 12:00:00, 13:00:00",
+    "Count complete hour 00 with nonzero minute or second; aggregate histogram of full timestamp (hour,minute,second) patterns, but export ONLY hour-wise counts, minutes/seconds-zero totals and overall midnight-exact absence; no dates/IDs",
+    "Within prior group key, number of date-only records with immediately consecutive complete 12-hour-like fixes and number of source-record groups with mixed complete and date-only timestamp representations",
+    "Under an explicitly hypothetical date-only == 00:00:00, count nonduplicated within-group timestamps, and within 10–14h successive intervals, retaining the previously frozen source ordering"
+  ],
+  "stop_if": [
+    "Exact SHA mismatch or ZIP unsafe",
+    "unexpected physical field header or timestamp strings",
+    "too few timestamps to diagnose mechanism"
+  ],
+  "criteria": {
+    "direct_R_source_conversion_script_found": "not yet",
+    "if_full_midnight_count_is_zero": "CONSISTENT_WITH_R43_MIDNIGHT_SHORTENING_NOT_PROVEN",
+    "if_full_midnight_count_positive": "STRICT_R43_ONE_TO_ONE_SHORTENING_INCOMPLETE_OR_ALTERNATIVE",
+    "timezone_and_DST": "unresolved, neither R character default nor local clock conversion determines absolute UTC"
+  },
+  "prohibitions": [
+    "No opening dense 2h ZIP",
+    "No migration corridor EOG or BBMM score",
+    "No geometry, no source coordinate data",
+    "No committed raw GPS/animal IDs/dates/source values",
+    "No automatic filling of date-only values in preexisting original source",
+    "Do not rewrite original QC STOP or prior conditional clock-world receipts"
+  ],
+  "frozen_EOG_WF": {
+    "scored": 3,
+    "scientific_stops": 31,
+    "administrative_exclusions": 3
+  }
+}
