@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter, defaultdict
 from datetime import datetime, timedelta
+from itertools import permutations
 import hashlib
 import json
 from pathlib import Path
@@ -31,6 +32,7 @@ H = 45000
 EPOCH = datetime(1970, 1, 1)
 PAIR_PROTO = HERE / "post_stop_time_interval_identifiability_protocol_v1.json"
 TRIPLE_PROTO = HERE / "post_stop_triplet_time_coherence_protocol_v1.json"
+ORDER_PROTO = HERE / "post_stop_triplet_order_permutation_protocol_v1.json"
 T0 = "T0_FULL_DAY_UNCERTAINTY"
 T1 = "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW"
 
@@ -324,14 +326,88 @@ def triple_audit(groups) -> dict:
     }
 
 
+def order_audit(groups) -> dict:
+    """Permute three *declared* observed windows, not unknown GPS outcomes.
+
+    A fixed-order false chain is claimed to be ordering-robust only
+    when the triple is infeasible under all 3! permutations of its
+    already-declared input time intervals.
+    """
+    p = json.loads(ORDER_PROTO.read_text(encoding="utf-8"))
+    if (
+        p.get("schema") != "eog.mckee2024.post_stop_triple_record_order_permutation_sensitivity.v1"
+        or p.get("status") != "FROZEN_BEFORE_REORDERING_SENSITIVITY_CALCULATION"
+        or p.get("source_sha256") != SHA256
+    ):
+        raise ValueError("Permutation sensitivity must have a precommitted protocol")
+    result = {}
+    for label, index in ((T0, 1), (T1, 2)):
+        counts = Counter()
+        group_any_rescue = 0
+        group_false_chain_rescue = 0
+        for group in groups.values():
+            rescued = False
+            false_chain_rescued = False
+            for j in range(len(group) - 2):
+                triplet = group[j:j + 3]
+                windows = [
+                    (
+                        item[0],
+                        item[1] - 1 if index == 1 and item[3] == "date"
+                        else item[index],
+                    )
+                    for item in triplet
+                ]
+                pairwise = _triple_pair_possible(windows)
+                fixed = time_triplet_possible(windows)
+                any_order = any(
+                    time_triplet_possible([windows[k] for k in ordering])
+                    for ordering in permutations((0, 1, 2))
+                )
+                counts["triples"] += 1
+                counts["fixed_order_infeasible"] += int(not fixed)
+                counts["any_permutation_feasible"] += int(any_order)
+                counts["all_permutations_infeasible"] += int(not any_order)
+                if not fixed and any_order:
+                    counts["fixed_infeasible_but_reorder_feasible"] += 1
+                    rescued = True
+                if pairwise and not fixed:
+                    counts["fixed_false_chain"] += 1
+                    if any_order:
+                        counts["fixed_false_chain_rescued_by_permutation"] += 1
+                        false_chain_rescued = True
+                    else:
+                        counts["fixed_false_chain_infeasible_under_all_permutations"] += 1
+            group_any_rescue += int(rescued)
+            group_false_chain_rescue += int(false_chain_rescued)
+        counts["groups_with_any_reorder_rescue"] = group_any_rescue
+        counts["groups_with_fixed_false_chain_reorder_rescue"] = group_false_chain_rescue
+        if counts["triples"] != 28111:
+            raise ValueError("Frozen triple denominator drifted")
+        result[label] = dict(counts)
+    return {
+        "schema": "eog.mckee2024.post_stop_triple_record_order_sensitivity_replay.v1",
+        "status": "CONDITIONAL_ALL_SIX_OBSERVATION_ORDERS_ONLY__SOURCE_STOPS_RETAINED",
+        "source_sha256_verified": True,
+        "source_records": RECORDS,
+        "groups": len(groups),
+        "triple_denominator": 28111,
+        "per_scenario": result,
+        "dense_2h_holdout_opened": False,
+        "coordinates_read_or_exported": False,
+        "ecological_score_computed": False,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-zip", type=Path, required=True)
-    parser.add_argument("--stage", choices=("pair", "pair_v2", "triplet"), required=True)
+    parser.add_argument("--stage", choices=("pair", "pair_v2", "triplet", "order"), required=True)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     protocol = (
-        TRIPLE_PROTO if args.stage == "triplet"
+        ORDER_PROTO if args.stage == "order"
+        else TRIPLE_PROTO if args.stage == "triplet"
         else PAIR_V2_PROTO if args.stage == "pair_v2"
         else PAIR_PROTO
     )
@@ -339,7 +415,8 @@ def main():
         raise SystemExit("Frozen stage contract missing; refusing source data")
     groups, _ = _source_rows(args.source_zip)
     result = (
-        triple_audit(groups) if args.stage == "triplet"
+        order_audit(groups) if args.stage == "order"
+        else triple_audit(groups) if args.stage == "triplet"
         else pair_audit(groups, integer_closed=args.stage == "pair_v2")
     )
     content = json.dumps(result, sort_keys=True, indent=2) + "\n"
