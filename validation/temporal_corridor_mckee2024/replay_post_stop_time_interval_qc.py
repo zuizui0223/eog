@@ -135,18 +135,25 @@ def _source_rows(archive: Path):
     return groups, precision
 
 
-def pair_status(a, b, index: int):
-    """Pairwise temporal *possibility*, not a real animal-movement edge.
+def pair_status(a, b, index: int, *, integer_closed: bool = False):
+    """Pairwise gap-only classification; no biological dispersal inference.
 
-    T0 uses the documented upper-exclusive next-midnight endpoint,
-    deliberately withholds universal truth on endpoint equality.
+    The historical v1 comparison used T0 next-midnight upper-exclusive
+    endpoints as mathematical infima. The separately frozen v2 uses exact
+    whole-second clock precision and closes that date-only upper bound
+    at 23:59:59, retaining the historical v1 behavior when requested.
     """
     al, au = a[0], a[index]
     bl, bu = b[0], b[index]
+    if integer_closed and index == 1:
+        if a[3] == "date":
+            au -= 1
+        if b[3] == "date":
+            bu -= 1
     min_gap = bl - au
     max_gap = bu - al
-    possible = max_gap > 0 and min_gap <= H
-    robust = min_gap > 0 and max_gap <= H
+    possible = max_gap >= 1 and min_gap <= H
+    robust = min_gap >= 1 and max_gap <= H
     return (
         "robust" if robust else
         "contingent" if possible else "excluded",
@@ -178,8 +185,20 @@ def _triple_pair_possible(windows, max_gap=H):
     return possible(windows[0], windows[1]) and possible(windows[1], windows[2])
 
 
-def pair_audit(groups) -> dict:
+PAIR_V2_PROTO = HERE / "post_stop_time_endpoint_seconds_protocol_v2.json"
+
+
+def pair_audit(groups, *, integer_closed: bool = False) -> dict:
     stage = json.loads(PAIR_PROTO.read_text(encoding="utf-8"))
+    if integer_closed:
+        v2 = json.loads(PAIR_V2_PROTO.read_text(encoding="utf-8"))
+        if (
+            v2.get("schema") != "eog.mckee2024.post_stop_time_endpoint_seconds_correction.v2"
+            or v2.get("status") != "FROZEN_AFTER_V1_ENDPOINT_AUDIT_BEFORE_CORRECTED_RECOMPUTATION"
+            or v2.get("source_sha256") != SHA256
+            or v2["pair_criterion"]["possible"] != "max_gap >= 1 AND min_gap <= 45000"
+        ):
+            raise ValueError("Exact-second correction contract must be precommitted")
     if (
         stage.get("schema") != "eog.mckee2024.post_stop_12h_time_interval_identifiability.v1"
         or stage.get("status") != "FROZEN_BEFORE_NEW_INTERVAL_GAP_COMPUTATION"
@@ -195,7 +214,9 @@ def pair_audit(groups) -> dict:
         for group in groups.values():
             g = Counter()
             for left, right in zip(group, group[1:]):
-                status, ambiguous = pair_status(left, right, index)
+                status, ambiguous = pair_status(
+                    left, right, index, integer_closed=integer_closed
+                )
                 c[status] += 1
                 c["total_pairs"] += 1
                 g[status] += 1
@@ -206,7 +227,7 @@ def pair_audit(groups) -> dict:
                     types["-".join(sorted((left[3], right[3]))) ] += 1
                 else:
                     crosses[
-                        pair_status(left, right, 1)[0] + "=>" + status
+                        pair_status(left, right, 1, integer_closed=integer_closed)[0] + "=>" + status
                     ] += 1
             if len(group) > 1:
                 c["groups_all_robust"] += int(g["robust"] == len(group) - 1)
@@ -217,8 +238,14 @@ def pair_audit(groups) -> dict:
             raise ValueError("Frozen adjacent pair denominator drifted")
         out[label] = dict(c)
     return {
-        "schema": "eog.mckee2024.post_stop_time_pair_replay.v1",
-        "status": "LOCAL_TIME_PAIR_INTERPRETATIONS_ONLY__STOP_PRESERVED",
+        "schema": (
+            "eog.mckee2024.post_stop_time_pair_replay.v2"
+            if integer_closed else "eog.mckee2024.post_stop_time_pair_replay.v1"
+        ),
+        "status": (
+            "EXACT_INTEGER_SECONDS_LOCAL_TIME_ONLY__STOP_PRESERVED"
+            if integer_closed else "LOCAL_TIME_PAIR_INTERPRETATIONS_ONLY__STOP_PRESERVED"
+        ),
         "source_sha256_verified": True,
         "records": RECORDS,
         "groups": len(groups),
@@ -300,14 +327,21 @@ def triple_audit(groups) -> dict:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--source-zip", type=Path, required=True)
-    parser.add_argument("--stage", choices=("pair", "triplet"), required=True)
+    parser.add_argument("--stage", choices=("pair", "pair_v2", "triplet"), required=True)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    protocol = PAIR_PROTO if args.stage == "pair" else TRIPLE_PROTO
+    protocol = (
+        TRIPLE_PROTO if args.stage == "triplet"
+        else PAIR_V2_PROTO if args.stage == "pair_v2"
+        else PAIR_PROTO
+    )
     if not protocol.exists():
         raise SystemExit("Frozen stage contract missing; refusing source data")
     groups, _ = _source_rows(args.source_zip)
-    result = pair_audit(groups) if args.stage == "pair" else triple_audit(groups)
+    result = (
+        triple_audit(groups) if args.stage == "triplet"
+        else pair_audit(groups, integer_closed=args.stage == "pair_v2")
+    )
     content = json.dumps(result, sort_keys=True, indent=2) + "\n"
     if args.output:
         args.output.write_text(content, encoding="utf-8")
