@@ -1,0 +1,85 @@
+{
+  "schema": "eog.mckee2024.post_stop_official_nadcon5_5070_5071_sensitivity.v1",
+  "status": "FROZEN_BEFORE_ACQUIRING_OFFICIAL_CONUS_DATUM_GRID_AND_NEW_COORDINATE_RECOMPUTATION",
+  "date": "2026-11-24",
+  "goal": "Resolve prior purely technical 5070 vs 5071 datum-grid unavailability with official PROJ-data grid; compare full-source displacement and fixed-grid flips under both approximate fallback and available official NADCON5 operation, preserving author-intended CRS STOP.",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "file_id": 3334125,
+    "filename": "GPS12hrs_Locs.zip",
+    "size_bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "records": 28953,
+    "member_name": "GPS12hrs_Locs.shp",
+    "source_geometry_scope": "only Point x/y of SHA verified 12h .shp; no DBF rows, animal identifiers, timestamps, 2h holdout or heldout predictions"
+  },
+  "reference": {
+    "prior_main_commit": "509acf43348947b8bcb5824f54bc946b231c7a82",
+    "prior_report": "validation/temporal_corridor_mckee2024/POST_STOP_5070_5071_DATUM_SENSITIVITY_20261124.md",
+    "prior_receipt": "validation/temporal_corridor_mckee2024/post_stop_5070_5071_datum_grid_sensitivity_receipt_v1.json",
+    "prior_local_ballpark_median_m": 1.155895,
+    "prior_local_ballpark_max_m": 1.200898,
+    "prior_cut_flip_counts_for_grid_widths": {
+      "100": 602,
+      "250": 233,
+      "500": 114,
+      "1000": 62,
+      "5000": 8
+    },
+    "prior_best_available": false
+  },
+  "official_grid": {
+    "provider": "NOAA NADCON5 via OSGeo PROJ-data open grid CDN",
+    "filename": "us_noaa_nadcon5_nad83_1986_nad83_harn_conus.tif",
+    "url": "https://cdn.proj.org/us_noaa_nadcon5_nad83_1986_nad83_harn_conus.tif",
+    "official_index": "https://cdn.proj.org/",
+    "purpose": "EPSG:4269 NAD83 to EPSG:4152 NAD83(HARN) in CONUS, as required for EPSG:5070 to EPSG:5071 candidate CRS comparison",
+    "must_record": [
+      "grid filesize, downloaded original SHA256, TIFF byte-signature, actual PROJ operation and accuracy metadata",
+      "pyproj/PROJ version and data directory; grid availability pre and post installation"
+    ],
+    "data_safety": "Do not commit downloaded TIFF or modified original GPS ZIP; use temporary grid directory isolated from project."
+  },
+  "candidate_crs": [
+    "EPSG:5070",
+    "EPSG:5071"
+  ],
+  "coordinate_outputs": [
+    "for each raw x/y source Point, compute source-as-5070 WGS84 lon/lat versus source-as-5071 WGS84 lon/lat with exact official NOAA datum grid available; aggregate geodesic offsets quantiles min/median/p95/max in metres",
+    "same comparison with original no-grid ballpark fallback as separate baseline, and quantiles of (grid-backed offset minus fallback offset)",
+    "map both candidate geographic positions into EPSG:3857 with explicit datum transformation operations; same pre-frozen grid origin x=-12021622.7691 y=5012625.0685 and cell widths 100/250/500/1000/5000m; paired cell equality and flips",
+    "include metadata of chosen TransformerGroup operation and whether it is best_available and any warning/unavailable alternative; do not claim position error bound or author native CRS from this comparison",
+    "no raw GPS XY, individual positions, timestamp, animal ID or movement route exported"
+  ],
+  "numerical_policy": {
+    "source_coordinates": "the exact same raw XY interpreted alternatively as EPSG5070 or EPSG5071",
+    "max_expected_input_count": 28953,
+    "grid_origin_webmercator_m": [
+      -12021622.7691,
+      5012625.0685
+    ],
+    "cell_widths_m": [
+      100,
+      250,
+      500,
+      1000,
+      5000
+    ],
+    "geodesic": "pyproj.Geod(ellps='WGS84').inv; report metres and descriptive quantiles",
+    "grid_requirements": "Force network off after local official grid installed; assert best_available=True for EPSG:5070→EPSG:5071 in a wholly private temporary PROJ user data directory (or record failure and STOP).",
+    "no_posthoc_selection": "No changes to CRS candidates, cell widths/origin or choice of points after examining output."
+  },
+  "hard_stops": [
+    "Do not open/read or download 2h heldout original source",
+    "Do not rewrite source PRJ or DBF coordinates",
+    "Do not use unofficial or unknown-origin datum grid",
+    "Do not elevate 5070/5071 to certified native CRS; publisher still declares EPSG:3742",
+    "Do not infer GPS precision, migration route, EOG forecast or independent validation",
+    "Record inability to download or missing best-available operation rather than fabricate corrected numerical outputs."
+  ],
+  "original_EOG_WF": {
+    "scored": 3,
+    "scientific_stops": 31,
+    "admin_exclusions": 3
+  }
+}
