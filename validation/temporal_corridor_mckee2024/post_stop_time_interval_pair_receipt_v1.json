@@ -1,0 +1,69 @@
+{
+  "schema": "eog.mckee2024.post_stop_12h_time_interval_pair_audit.v1",
+  "status": "CONDITIONAL_LOCAL_CLOCK_PAIR_INTERVAL_AUDIT__TIME_CRS_STOPS_UNCHANGED",
+  "protocol_sha_commit": "0db021f77bbcf6bda0f434b01e7cc5f899287620",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_file_bytes": 1539661,
+  "source_dbf_records": 28953,
+  "within_group_total": 421,
+  "observed_full_datetime_count": 18118,
+  "observed_date_only_count": 10835,
+  "source_data_fields_accessed": [
+    "Herd",
+    "AID",
+    "SeasnYr",
+    "Season",
+    "Timstmp"
+  ],
+  "within_group_pairs": 28532,
+  "pair_timestamp_types": {
+    "date-date": 61,
+    "date-full": 21363,
+    "full-full": 7108
+  },
+  "pair_status_by_time_scenario": {
+    "T0_FULL_DAY_UNCERTAINTY": {
+      "robust": 6327,
+      "contingent": 21412,
+      "excluded": 793,
+      "ambiguous_order": 10767,
+      "total_pairs": 28532,
+      "groups_all_robust": 40,
+      "groups_any_contingent": 277,
+      "groups_any_excluded": 191,
+      "groups_any_ambiguous": 277
+    },
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": {
+      "robust": 17034,
+      "contingent": 10640,
+      "excluded": 858,
+      "ambiguous_order": 0,
+      "total_pairs": 28532,
+      "groups_all_robust": 40,
+      "groups_any_contingent": 277,
+      "groups_any_excluded": 205,
+      "groups_any_ambiguous": 0
+    }
+  },
+  "transition_between_scenarios": {
+    "contingent=>contingent": 10640,
+    "contingent=>excluded": 65,
+    "contingent=>robust": 10707,
+    "excluded=>excluded": 793,
+    "robust=>robust": 6327
+  },
+  "maximum_nominal_gap_hours": 12.5,
+  "time_reference": "naive Mountain Time wall-clock (source declared); no timezone offset, UTC or DST correction",
+  "time_window_T0": "YYYY-MM-DD day-only interpreted as all possible times from 00:00 to next midnight, upper exclusive",
+  "time_window_T1": "YYYY-MM-DD day-only interpreted as 00:00 through 01:00 inclusive (publication-schedule sensitivity only)",
+  "pairwise_warning": "A pairwise possible relation does not establish a globally coherent entire observation sequence; local interval assignments may conflict when chained.",
+  "physical_elapsed_time_certified": false,
+  "geodetic_CRS_confirmed": false,
+  "raw_data_or_identifiers_exported": false,
+  "SHP_geometry_records_read": false,
+  "dense_2h_holdout_opened": false,
+  "ecological_forecast_or_score_computed": false,
+  "source_QC_STOP_retained": true,
+  "EOG_WF_frozen_3_31_3": true
+}

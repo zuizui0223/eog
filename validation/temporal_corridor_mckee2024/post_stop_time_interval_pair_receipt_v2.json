@@ -1,0 +1,61 @@
+{
+  "schema": "eog.mckee2024.post_stop_12h_time_interval_pair_audit.v2",
+  "status": "EXACT_DISCRETE_SECONDS_END_OF_DAY_REVIEW__ALL_LINK_CLASSES_UNCHANGED",
+  "correction_protocol_commit": "4cc96cfbb60051b21bcddda7831436429448f3a4",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_records": 28953,
+  "groups": 421,
+  "pairs": 28532,
+  "time_windows_T0": "integer seconds 00:00:00..23:59:59 closed",
+  "time_windows_T1": "integer seconds 00:00:00..01:00:00 closed",
+  "pair_status_by_time_scenario": {
+    "T0_FULL_DAY_UNCERTAINTY": {
+      "robust": 6327,
+      "contingent": 21412,
+      "excluded": 793,
+      "total_pairs": 28532,
+      "ambiguous_order": 10707,
+      "groups_all_robust": 40,
+      "groups_any_contingent": 277,
+      "groups_any_excluded": 191,
+      "groups_any_ambiguous": 277
+    },
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": {
+      "robust": 17034,
+      "contingent": 10640,
+      "excluded": 858,
+      "total_pairs": 28532,
+      "ambiguous_order": 0,
+      "groups_all_robust": 40,
+      "groups_any_contingent": 277,
+      "groups_any_excluded": 205,
+      "groups_any_ambiguous": 0
+    }
+  },
+  "pair_status_changes_from_historical_v1": {
+    "robust": 0,
+    "contingent": 0,
+    "excluded": 0,
+    "T0_ambiguous_order": -60,
+    "T1_ambiguous_order": 0,
+    "triple_possible_links": 0,
+    "triple_false_chain": 0
+  },
+  "transition_between_scenarios": {
+    "contingent=>contingent": 10640,
+    "contingent=>excluded": 65,
+    "contingent=>robust": 10707,
+    "excluded=>excluded": 793,
+    "robust=>robust": 6327
+  },
+  "preserved_triple_result": {
+    "T0_pairwise_possible_but_globally_infeasible": 64,
+    "T1_pairwise_possible_but_globally_infeasible": 0
+  },
+  "evidence_boundary": "Method/input-QC, not observed migration. Exact time at date-only records, source CRS, UTC/DST, dense 2h and EOG score remain unresolved/unopened.",
+  "dense_2h_opened": false,
+  "SHP_geometry_records_read": false,
+  "source_QC_STOPS_preserved": true,
+  "EOG_WF_frozen_3_31_3": true
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "eog.mckee2024.post_stop_12h_time_interval_identifiability.v1",
+  "status": "FROZEN_BEFORE_NEW_INTERVAL_GAP_COMPUTATION",
+  "date": "2026-11-24",
+  "purpose": "Quantify which observed successive sparse 12h GPS intervals can be certified to satisfy the source paper's <=12.5h Brownian-bridge gap rule without inferring missing clock time or scoring any movement predictions.",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "dryad_version": 305836,
+    "file_id": 3334125,
+    "filename": "GPS12hrs_Locs.zip",
+    "size_bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "record_count": 28953,
+    "expected_full_timestamp_count": 18118,
+    "expected_date_only_count": 10835,
+    "physical_fields": [
+      "Herd",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Timstmp"
+    ],
+    "prohibit": [
+      "SHP geometry records",
+      "UTM_E or UTM_N or other spatial columns",
+      "2h GPS or any hidden outcomes",
+      "identifier-level outputs"
+    ]
+  },
+  "clock_interpretations": [
+    {
+      "id": "T0_FULL_DAY_UNCERTAINTY",
+      "date_only_lower": "00:00",
+      "date_only_upper_exclusive": "next day 00:00",
+      "meaning": "all possible local civil times in the stated date; does not infer missing clock time"
+    },
+    {
+      "id": "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW",
+      "date_only_lower": "00:00",
+      "date_only_upper_inclusive": "01:00",
+      "meaning": "sensitivity to published ~00:00/01:00 clock schedule; not a verified actual time or filled-in dataset"
+    }
+  ],
+  "observed_full_time": "YYYY-MM-DD HH:MM:SS records are treated as exact local civil timestamps only; not certified absolute UTC instants",
+  "reference_clock": "Mountain Time, source local wall clock. NO conversion to UTC or DST correction; ordinary subtraction can diverge from physical elapsed hours across daylight-saving transitions.",
+  "same_record_date_only_semantics": "T0 is conservative range, T1 is a sensitivity scenario, neither alters source records.",
+  "group_key": [
+    "Herd",
+    "AID",
+    "SeasnYr",
+    "Season"
+  ],
+  "sort_rule": "per group ascending lower time bound, then upper bound, then original physical DBF row ordinal; pairwise order ambiguity must be reported",
+  "pair_definition": "adjacent records after fixed sorting within each complete group, total expected pairs = 28953 - number of groups; no implicit cross-animal or cross-season pairs",
+  "max_bridge_gap_hours": 12.5,
+  "threshold_provenance": "McKee et al (2024) Ecosphere doi:10.1002/ecs2.4983; max interval 12.5 hours in both traditional 2h and sparse 12h BBMM procedures",
+  "gap_interval_math": {
+    "lower_hours": "next.lower - current.upper",
+    "upper_hours": "next.upper - current.lower",
+    "possible": "upper_gap > 0 AND lower_gap <= 12.5",
+    "robust": "lower_gap > 0 AND upper_gap <= 12.5",
+    "contingent": "possible AND NOT robust",
+    "excluded": "NOT possible (pairwise temporal bridge threshold only; not biological impossibility)",
+    "ambiguous_order": "lower_gap <= 0",
+    "global_path_warning": "Independent pairwise possible edges cannot be concatenated into a globally possible trajectory without one coherent assignment to all unknown timestamps."
+  },
+  "output": [
+    "number of groups, records and adjacent pairs",
+    "full-full/date-full/date-date pair counts",
+    "per T0 and T1 counts robust, contingent, excluded, ambiguous-order",
+    "counts of pairs newly robust under T1 but not T0; never mark as factual midnight recovery",
+    "counts of groups with all pairwise edges robust, and with any uncertain edge",
+    "no IDs, exact dates, raw times, coordinates, sample trajectories, model scores"
+  ],
+  "stops": [
+    "source ZIP hash or member structure fails",
+    "unexpected timestamp format or missing group key",
+    "expected group-pair denominator mismatch",
+    "any interpreted UTC/DST time adjustment or nonfrozen threshold",
+    "any 2h access or ecological prediction attempt"
+  ],
+  "scope_boundary": {
+    "source_time_QC_STOP_preserved": true,
+    "source_CRS_QC_STOP_preserved": true,
+    "independent_ecological_validation": false,
+    "dense_2h_holdout_opened": false,
+    "realized_migration_route_identified": false,
+    "predictive_score_authorized": false,
+    "EOG_WF_scored_endpoints": 3,
+    "EOG_WF_scientific_stops": 31,
+    "EOG_WF_admin_exclusions": 3
+  }
+}

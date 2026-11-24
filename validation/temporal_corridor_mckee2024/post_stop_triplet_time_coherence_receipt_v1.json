@@ -1,0 +1,50 @@
+{
+  "schema": "eog.mckee2024.post_stop_triplet_time_coherence_receipt.v1",
+  "status": "CONDITIONAL_12H_TIME_WINDOW_LOCAL_VS_GLOBAL_COHERENCE__NO_GPS_PREDICTION",
+  "protocol_commit": "8221f67d86a03636a319005b58fd4c317836c42c",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_file_size_bytes": 1539661,
+  "original_12h_records": 28953,
+  "animal_season_groups": 421,
+  "within_group_triplets": 28111,
+  "clock_resolution_seconds": 1,
+  "gap_min_seconds": 1,
+  "gap_max_seconds": 45000,
+  "observation_order": "frozen T0 ascending lower time bound, then upper time bound, then DBF ordinal; both scenarios same ordering",
+  "results": {
+    "T0_FULL_DAY_UNCERTAINTY": {
+      "total_triplets": 28111,
+      "both_edges_pairwise_possible": 26764,
+      "globally_feasible_among_two_possible": 26700,
+      "globally_feasible_all_triplets": 26700,
+      "pairwise_possible_but_globally_infeasible": 64,
+      "at_least_one_pairwise_impossible": 1347,
+      "groups_with_any_false_chain": 41,
+      "false_chain_timestamp_precision_signatures": {
+        "FDD": 59,
+        "FDF": 5
+      }
+    },
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": {
+      "total_triplets": 28111,
+      "both_edges_pairwise_possible": 26637,
+      "globally_feasible_among_two_possible": 26637,
+      "globally_feasible_all_triplets": 26637,
+      "pairwise_possible_but_globally_infeasible": 0,
+      "at_least_one_pairwise_impossible": 1474,
+      "groups_with_any_false_chain": 0,
+      "false_chain_timestamp_precision_signatures": {}
+    }
+  },
+  "independent_formula_check": "10,000 independent randomized integer-window triples with brute force enumeration produced 10,000/10,000 formula agreements (fixed seed 0), not a field replicate",
+  "inference_limit": "Pairwise possible time gap does not guarantee globally time-coherent arrival assignments; T1 midnight time window is conditional and not source-confirmed.",
+  "source_time_zone_and_DST_verified": false,
+  "original_source_CRS_author_intent_verified": false,
+  "original_source_QC_STOP_preserved": true,
+  "two_hour_dense_holdout_opened": false,
+  "shp_geometry_or_coordinate_records_read": false,
+  "animal_ids_or_exact_timestamps_exported": false,
+  "ecological_prediction_scored": false,
+  "EOG_WF_frozen_3_31_3": true
+}
