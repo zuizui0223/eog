@@ -52,3 +52,8 @@ A separate [UNSENT author-question draft](SOURCE_AUTHOR_QUERY_DRAFT_20261124.md)
 ### Direct evidence links
 
 [Dryad original publication](https://datadryad.org/dataset/doi%3A10.5061/dryad.15dv41p51) · [Historical March app3 code](https://github.com/jmerkle1/Migration-Mapper/blob/affaea1ee55830638e20fe712908de188214e2ac/app3_sequenceWriting/scripts/app3_calcSequences.R) · [Aug app1 post-publication change](https://github.com/jmerkle1/Migration-Mapper/commit/dc32cf3618c079057d067783cf9c8bbf3592dcb5) · [Sep app3 post-publication change](https://github.com/jmerkle1/Migration-Mapper/commit/4786f018b8283f030b9092275d7399499365b8ce) · [R-devel change](https://stat.ethz.ch/pipermail/r-devel/2023-August/082814.html).
+
+
+## Original archived-file header triangulation (later source-only audit, 2026-11-24)
+
+The exact publisher-matched 12h ZIP adds a modest contemporaneous metadata clue: [header-only audit](POST_STOP_ARCHIVE_HEADER_PROVENANCE_20261124.md) finds **identical 2024-06-28 13:23:08 ZIP DOS timestamps** in all four source members and **2024-06-28** in the original DBF last-update field, between the prepublication March code and the July Dryad release. ZIP/DBF header dates may be set or preserved by packaging software and cannot certify the authors' actual export date, R version, exact source script, timestamps' UTC meaning, or author source CRS. The DBF Timstmp character width is **80**, ruling out a physically *too-short* character field as the necessary explanation for date-only values while leaving software serialization hypotheses unproven.
