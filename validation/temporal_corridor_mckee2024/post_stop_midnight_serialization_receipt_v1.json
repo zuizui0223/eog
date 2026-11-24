@@ -1,0 +1,77 @@
+{
+  "schema": "eog.mckee2024.post_stop_midnight_serialization_receipt.v1",
+  "status": "STRONG_PATTERN_CONSISTENCY_WITH_R_4_3_POSIXt_CHARACTER_MIDNIGHT_SHORTENING_NOT_CAUSAL_PROOF",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_file_bytes": 1539661,
+  "protocol_committed_before_new_inspection": "24bb56e8c62e298d91196e3ac2361d0e2ac93314",
+  "timestamp_shapes": {
+    "date_only": 10835,
+    "full_datetime": 18118,
+    "unexpected": 0
+  },
+  "original_records": 28953,
+  "original_group_count": 421,
+  "exact_midnight_000000_among_complete_datetime_strings": 0,
+  "hour_zero_but_nonmidnight_among_complete_datetime_strings": 379,
+  "full_datetime_hour_histogram": {
+    "12": 11489,
+    "13": 3057,
+    "00": 379,
+    "01": 3193
+  },
+  "complete_hour_one_exact_010000": 3105,
+  "complete_hour_twelve_exact_120000": 11037,
+  "complete_hour_thirteen_exact_130000": 2958,
+  "complete_datetime_minute_and_second_both_zero": 17100,
+  "complete_datetime_nonzero_minute_or_second": 1018,
+  "groups_with_both_date_only_and_complete_datetime": 277,
+  "groups_with_at_least_one_complete_datetime": 421,
+  "groups_with_at_least_one_date_only": 277,
+  "conditional_date_only_as_midnight_QC": {
+    "total_within_group_adjacent_pairs": 28532,
+    "gap_between_10_and_14_hours": 27678,
+    "exact_duplicate_source_times": 0,
+    "date_only_earlier_following_full_count": 10713,
+    "date_only_earlier_following_full_10_to_14h": 10707,
+    "full_preceding_date_only_count": 10650,
+    "full_preceding_date_only_10_to_14h": 10640
+  },
+  "external_source_checks": [
+    {
+      "url": "https://stat.ethz.ch/pipermail/r-devel/2023-August/082814.html",
+      "finding": "R 4.3.1 as.character.POSIXt drops 00:00:00 to YYYY-MM-DD per element while keeping nonmidnight HH:MM:SS."
+    },
+    {
+      "url": "https://github.com/jmerkle1/Migration-Mapper/blob/main/app3_sequenceWriting/scripts/app3_calcSequences.R",
+      "finding": "Migration Mapper export (current default branch, lines 56–65 and 290–297) calls as.character on POSIX date then st_as_sf with config master CRS before export. Historical Dryad export commit not identified."
+    },
+    {
+      "url": "https://github.com/jmerkle1/Migration-Mapper/blob/main/app1_dataCleaning/scripts/app1_ui.R",
+      "finding": "Current application data cleaning export (lines 241–245) likewise calls as.character on timestamp field before st_write."
+    },
+    {
+      "url": "https://github.com/jmerkle1/Migration-Mapper/blob/main/app4_uds/wmiScripts/CalcBBMM.R",
+      "finding": "README-linked BBMM input helper expects POSIXct and st_transform to a population grid CRS; does not document this dataset's original GPS coordinate CRS."
+    },
+    {
+      "url": "https://r-spatial.github.io/sf/reference/st_as_sf.html",
+      "finding": "sf st_as_sf(coords=,crs=) assigns the supplied CRS; this code path does not reproject XY without st_transform."
+    }
+  ],
+  "source_exporter_identified_for_exact_Dryad_ZIP": false,
+  "original_R_version_for_Dryad_export_verified": false,
+  "as_character_posixct_use_in_cited_software": true,
+  "mechanistic_hypothesis_supported_not_proven": true,
+  "prior_T0_full_day_clock_results_are_counterfactual_if_midnight_is_true": true,
+  "author_confirmation_needed": [
+    "actual original export code and R version",
+    "whether date-only values represent precisely 00:00:00",
+    "author-intended original CRS and how UTM zone 12N PRJ was attached",
+    "whether Mountain Time timestamps were stored as fixed MST or DST-aware local civil time"
+  ],
+  "dense_2h_holdout_opened": false,
+  "raw_animal_ID_dates_coordinates_or_tracks_exported": false,
+  "ecological_prediction_scored": false,
+  "original_EOG_WF_3_31_3_unchanged": true
+}
