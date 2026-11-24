@@ -53,12 +53,12 @@ The [offline regression tests](../../tests/test_mckee2024_official_nadcon5_grid_
 
 **Command once the grid is available locally on an environment with a PROJ installation**:
 
-\`\`\`bash
+```bash
 python validation/temporal_corridor_mckee2024/replay_post_stop_official_nadcon5_grid.py \
   --source-zip /path/to/GPS12hrs_Locs.zip \
   --official-grid /private/trusted/us_noaa_nadcon5_nad83_1986_nad83_harn_conus.tif \
   --output /private/output/mckee_verified_grid_sensitivity.json
-\`\`\`
+```
 
 ## Scientific STOP remains
 
