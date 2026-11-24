@@ -1,0 +1,48 @@
+{
+  "schema": "eog.mckee2024.post_stop_clock_cut_location_overlap.v1",
+  "status": "FROZEN_BEFORE_CROSS_SCENARIO_CUT_LOCATION_COMPARISON",
+  "parent_main_commit": "8878ce754ee05ec6c6fc960f9f2fcb1e7486cb3f",
+  "question": "T0 coherent requires 857 source-time link cuts, T1 pairwise/coherent 858: do the two conditional input scenarios cut the SAME adjacent record links, or do totals conceal different break positions?",
+  "source": {
+    "file": "GPS12hrs_Locs.zip",
+    "size": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "within_group_adjacent_links": 28532,
+    "groups": 421,
+    "permitted_fields": [
+      "Herd",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Timstmp"
+    ]
+  },
+  "frozen_two_arms": {
+    "A": "T0_FULL_DAY_UNCERTAINTY coherent forward interval minimum breaks: 857",
+    "B": "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW pairwise/forward coherent breaks: 858"
+  },
+  "method": "Build cut index sets with the frozen source-blind T0 chronological order within each animal-season group. Compare the same within-group adjacent record ordinal edges under both source clock scenarios without generating external GPS coordinates or individual timestamps.",
+  "metrics": [
+    "number of links cut by both A and B",
+    "number cut by A only",
+    "number cut by B only",
+    "number retained by both",
+    "Jaccard coefficient of cuts, and of retained edges, with fixed shared denominator",
+    "number of dependent animal-season groups with any A vs B cut disagreement",
+    "counts of T0-only and T1-only cuts conditional on prior T0 pair status (robust/contingent/excluded)",
+    "verify A cuts 857, B cuts 858, source groups 421 and link denominator 28532"
+  ],
+  "constraints": [
+    "no ID/time/coordinate samples or per-animal reports in output",
+    "no withheld 2h GPS, geometry, movement model, prediction score or threshold tuning",
+    "do not treat similar or identical cut masks as proof of correct source clock or realized Brownian bridge path",
+    "retain historical original source clock/CRS STOP and existing EOG-WF 3/31/3"
+  ],
+  "interpretation": "Overlap is conditional on the frozen source representation and two hypothetical clock windows, not a prospective biological validation.",
+  "heldout_2h_access": false,
+  "EOG_WF_frozen": {
+    "scored": 3,
+    "scientific_stops": 31,
+    "admin_exclusions": 3
+  }
+}
