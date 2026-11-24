@@ -1,0 +1,79 @@
+{
+  "schema": "eog.mckee2024.official_nadcon5_grid_integrity_manifest.v1",
+  "purpose": "Pin official NOAA NAD83(1986)→NAD83(HARN) CONUS GTG datum grid metadata before any correct transformation, and document failed network fetch in sandbox.",
+  "official_grid": {
+    "filename": "us_noaa_nadcon5_nad83_1986_nad83_harn_conus.tif",
+    "url": "https://cdn.proj.org/us_noaa_nadcon5_nad83_1986_nad83_harn_conus.tif",
+    "original_byte_size": 3522682,
+    "sha256": "e12ac2e886edafe616e0994c610ad3daa01db17c00d0e9938145d956f249fc2f",
+    "type": "HORIZONTAL_OFFSET",
+    "source_crs": "EPSG:4269",
+    "target_crs": "EPSG:4152",
+    "source_agency": "US National Oceanographic and Atmospheric Administration (NOAA)",
+    "area_of_use": "USA - Conterminous",
+    "official_licensing": "open_license=true according to PROJ database",
+    "primary_metadata_provenance": {
+      "source_repo": "OSGeo/PROJ-data",
+      "source_file": "files.geojson",
+      "branch": "master",
+      "git_blob_sha": "de494d5669d976abb650c4d730fa893964e3fdc0",
+      "official_url": "https://github.com/OSGeo/PROJ-data/blob/master/files.geojson",
+      "primary_index": "https://cdn.proj.org/",
+      "pinned_feature_index_key": "properties.name"
+    }
+  },
+  "exact_source_GPS_ZIP_SHA": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "preacquisition_protocol_commit": "28352d5a0aafc5404d1a3652b632b98b9889d4fa",
+  "local_tested_environment": {
+    "pyproj": "3.7.2",
+    "PROJ": "9.5.1",
+    "PROJ_network_enabled": false
+  },
+  "actual_download_attempt": {
+    "attempted_in_this_turn": true,
+    "user_provided_grid_file": false,
+    "download_tool_result": "ERROR download failed",
+    "container_curl_head_result": "curl: (6) Could not resolve host: cdn.proj.org",
+    "local_file_found": false,
+    "official_grid_sha_verified_against_file": false,
+    "grids_installed": false,
+    "TransformerGroup_5070_to_5071_best_available": false,
+    "fallback_operation": "Inverse of Conus Albers + Ballpark geographic offset from NAD83 to NAD83(HARN) + Conus Albers",
+    "fallback_operation_accuracy_m": -1,
+    "preferred_unavailable_grid_operation_accuracy_m": 0.05,
+    "preferred_unavailable_operation": "Inverse of Conus Albers + NAD83 to NAD83(HARN) (47) + Conus Albers"
+  },
+  "historical_offline_baseline_reproduced_in_turn": {
+    "raw_sparses_x_y_count": 28953,
+    "median_WGS84_geodesic_difference_m": 1.155895,
+    "max_WGS84_geodesic_difference_m": 1.200898,
+    "grid_flip_counts": {
+      "100": 602,
+      "250": 233,
+      "500": 114,
+      "1000": 62,
+      "5000": 8
+    },
+    "grid_origin_EPSG3857_m": [
+      -12021622.7691,
+      5012625.0685
+    ],
+    "status": "BALLPARK_FALLBACK_ONLY_NOT_OFFICIAL_DATUM_SHIFT"
+  },
+  "results": {
+    "official_grid_best_available_operation_executed": false,
+    "official_grid_corrected_geodesic_displacement_m": null,
+    "official_grid_corrected_grid_flip_counts": null,
+    "source_author_true_CRS_verified": false,
+    "source_datum_accuracy_bound_valid": false
+  },
+  "remediation": "On a network-enabled machine download EXACT official filename, verify bytes=3522682 and SHA=e12ac2e886edafe616e0994c610ad3daa01db17c00d0e9938145d956f249fc2f, then in network-disabled pyproj set grid search data directory and require TransformerGroup.best_available=True for 5070→5071 before computing any official-datum sensitivity. Never replace or upload original GPS binaries.",
+  "guarantees": {
+    "source_time_and_CRS_QC_STOP_retained": true,
+    "dense_2h_holdout_sealed": true,
+    "ecological_prediction_not_scored": true,
+    "EOG_WF_scored": 3,
+    "EOG_WF_scientific_STOPS": 31,
+    "EOG_WF_admin_exclusions": 3
+  }
+}
