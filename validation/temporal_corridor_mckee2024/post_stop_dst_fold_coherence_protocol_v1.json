@@ -1,0 +1,81 @@
+{
+  "schema": "eog.mckee2024.post_stop_local_clock_vs_timezone_gap_audit.v1",
+  "status": "FROZEN_PRE_SOURCE_TIMESTAMP_TO_UTC_CONVERSION",
+  "date": "2026-11-24",
+  "purpose": "Diagnose whether the 857/858 time-coherent BBMM gap-cut masks obtained from naive Mountain wall-clock seconds are sensitive to daylight-saving-time and repeated local hours; no 2h holdout, geometry or EOG scoring.",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "file_id": 3334125,
+    "filename": "GPS12hrs_Locs.zip",
+    "bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "records": 28953,
+    "groups": 421,
+    "fields": [
+      "Herd",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Timstmp"
+    ]
+  },
+  "previous_evidence": {
+    "source_cut_overlap_main_commit": "49b72bf42fdef7ba950541a446c31a8b427cf482",
+    "T0_naive_coherent_cuts": 857,
+    "T1_naive_coherent_cuts": 858,
+    "T0_and_T1_common_naive_cuts": 857,
+    "source_time_CRS_STOP_retained": true
+  },
+  "common_eligibility": {
+    "min_gap_seconds": 1,
+    "max_gap_seconds": 45000,
+    "within_group_order": "prior T0 ascending lower/upper original DBF row ordinal, fixed for all cases",
+    "coherent_segmentation": "longest feasible prefix then cut before first infeasible observation, restart with that observation's original allowed time set"
+  },
+  "alternative_time_interpretations": [
+    {
+      "id": "NAIVE_MOUNTAIN_LOCAL",
+      "meaning": "previous local naive wall-clock seconds; not UTC"
+    },
+    {
+      "id": "FIXED_MST_UTC_MINUS_07",
+      "meaning": "all source local times treated as fixed UTC-07, negative control; should yield EXACT same gap-cut masks as local naive"
+    },
+    {
+      "id": "AMERICA_DENVER_IANA",
+      "meaning": "conditional civil Mountain time with actual historical IANA America/Denver DST offset changes and both legal folds of repeated local exact hour"
+    }
+  ],
+  "observation_time_domains": {
+    "T0_FULL_DAY_UNCERTAINTY": "date-only any local civil second 00:00:00–23:59:59 inclusive",
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": "date-only any local civil second 00:00:00–01:00:00 inclusive",
+    "full": "exact given local wall second, but on a fall-back ambiguous repeated hour preserve all distinct valid IANA fold instants; skip nonexistent civil time if any, report an explicit STOP",
+    "conversion": "For a full civil-day date under America/Denver, UTC interval from local midnight to following local midnight minus 1s; for T1 near-midnight on fall-back day, represent 00:00–01:00 (first-fold) plus additional 01:00 second-fold singleton, NOT convex hull across the excluded hour; for exact fold ambiguity use disjoint UTC singleton alternatives",
+    "confidence": "IANA TZ does not establish whether original publisher stored DST-aware civil time; this is an explicit sensitivity, not an imputation"
+  },
+  "numerical_method": "Keep each allowed timestamp as sorted non-overlapping closed UTC integer-second interval(s). From each reachable [a,b], one positive 1..45000s transition reaches [a+1,b+45000]. Union and intersect with the next observation's allowed intervals; merge overlapping or adjacent seconds only. No synthetic merging across gaps. Cut and reset when intersection empty.",
+  "report": [
+    "all 421 groups, 28953 records, 28532 source-adjacent links",
+    "counts of exact-time source records with ambiguous DST fold and nonexistent local times; count date-only source records on fall-back and spring transition local dates",
+    "coherent cut count for T0 and T1 under all three temporal interpretations",
+    "paired exact link cut overlaps between original NAIVE and FIXED_MST, and between NAIVE and AMERICA_DENVER: common, naive-only, Denver-only, both kept, and affected-group count",
+    "pairwise-optimistic link counts and extra coherent cuts under the IANA world, for both T0 and T1",
+    "no individual IDs/coordinates/exact times/source UTC values or time-window examples"
+  ],
+  "controls": [
+    "FIXED MST must have exactly identical coherent cut masks as NAIVE under both clock scenarios",
+    "NAIVE must reproduce 857 T0 and 858 T1 cuts and 857 common",
+    "A directed pair alone agrees with union interval propagation; difference only due to inter-record coherent assignments",
+    "independent small union-interval brute-force integer time enumeration with multiple disjoint legal instants",
+    "IANA results may differ; preserve as conditional sensitivity, not proof of actual observation timestamp conversion",
+    "fail closed on source checksum mismatch, unrecognized time shape, unknown IANA zone or nonexistent exact local wall time"
+  ],
+  "prohibitions": [
+    "no 2hour dense GPS, no SHP geometry, no coordinate or herd-level output, no original source ZIP in GitHub, no EOG prediction or BBMM fit, no silent true-CRS correction, no retrofit of previous frozen results"
+  ],
+  "original_EOG_WF": {
+    "scored": 3,
+    "scientific_stops": 31,
+    "administrative_exclusions": 3
+  }
+}
