@@ -130,6 +130,7 @@ def read_headers(source_zip: Path) -> dict:
     return {
         "schema": "eog.mckee2024.original_zip_dbf_header_receipt.v1",
         "status": "CONSISTENT_PREPUBLICATION_HEADER_DATES_NOT_AUTHOR_CREATION_PROOF",
+        "protocol_committed_before_local_header_inspection": "52c99bea76d55cf308551cb46fcf96b7f886408a",
         "source_sha256": ZIP_SHA256,
         "source_sha256_verified": True,
         "source_size_bytes": ZIP_SIZE,
