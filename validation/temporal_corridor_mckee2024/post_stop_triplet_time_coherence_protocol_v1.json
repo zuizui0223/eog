@@ -1,0 +1,43 @@
+{
+  "schema": "eog.mckee2024.post_stop_triplet_time_coherence.v1",
+  "status": "FROZEN_BEFORE_NEW_3_RECORD_TIME_FEASIBILITY_COMPUTATION",
+  "pair_protocol": "validation/temporal_corridor_mckee2024/post_stop_time_interval_identifiability_protocol_v1.json",
+  "pair_receipt": "validation/temporal_corridor_mckee2024/post_stop_time_interval_pair_receipt_v1.json",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "question": "Whether individually possible adjacent 12.5h time-gap edges can fail as a globally coherent three-record time assignment",
+  "input_permission": "original 12h DBF Herd/AID/SeasnYr/Season/Timstmp in private memory; no other fields or geometry or 2h data",
+  "sorting": "same frozen T0 lower-bound/upper-bound/physical-row-index ordering in all scenarios",
+  "arithmetic": "integer one-second naive Mountain wall-clock; no UTC or DST adjustment",
+  "windows": {
+    "T0_FULL_DAY_UNCERTAINTY": "date-only integer seconds 00:00:00..23:59:59 inclusive",
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW": "date-only integer seconds 00:00:00..01:00:00 inclusive; sensitivity only",
+    "full_timestamp": "one fixed timestamp second"
+  },
+  "maximum_allowed_gap_seconds": 45000,
+  "minimum_allowed_forward_gap_seconds": 1,
+  "algorithm": {
+    "first_middle_lower": "A1=max(L1,L0+1)",
+    "first_middle_upper": "B1=min(U1,U0+45000)",
+    "third_lower": "A2=max(L2,A1+1)",
+    "third_upper": "B2=min(U2,B1+45000)",
+    "global_possible": "A1<=B1 && A2<=B2",
+    "pair1_possible": "U1>=L0+1 && L1<=U0+45000",
+    "pair2_possible": "U2>=L1+1 && L2<=U1+45000",
+    "false_chain": "pair1_possible && pair2_possible && !global_possible"
+  },
+  "output": [
+    "total triples",
+    "two-pair locally possible triples",
+    "globally feasible triples",
+    "pairwise-only false-chain triples and impacted groups",
+    "timestamp precision signature type counts only"
+  ],
+  "strict_boundaries": [
+    "no individual ID or timestamp exported",
+    "no GPS geometry or 2h holdout",
+    "no EOG forecast or other biological inference",
+    "source time and CRS STOPs unchanged",
+    "3/31/3 EOG-WF frozen"
+  ],
+  "frozen_before_new_triple_computation": true
+}
