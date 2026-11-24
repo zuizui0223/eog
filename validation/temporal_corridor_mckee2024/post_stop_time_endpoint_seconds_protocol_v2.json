@@ -1,0 +1,37 @@
+{
+  "schema": "eog.mckee2024.post_stop_time_endpoint_seconds_correction.v2",
+  "status": "FROZEN_AFTER_V1_ENDPOINT_AUDIT_BEFORE_CORRECTED_RECOMPUTATION",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "parent_v1_pair_receipt": "validation/temporal_corridor_mckee2024/post_stop_time_interval_pair_receipt_v1.json",
+  "parent_v1_triplet_receipt": "validation/temporal_corridor_mckee2024/post_stop_triplet_time_coherence_receipt_v1.json",
+  "trigger": "After V1 initial counts, 60 pairs were observed with T0 lower-gap exactly 0 and four pairs exactly at 45000s; half-open T0 end-of-day was approximated by its unattainable upper endpoint. Freeze 1-second inclusivity semantics to avoid false possible at equality; retain v1 receipts as historical.",
+  "resolution": "Timestamp source is second-resolution DBF text. Interpret date-only civil day as closed integer seconds [00:00:00,23:59:59] (equivalent to [00:00,next-midnight) on that lattice). T1 remains [00:00:00,01:00:00] inclusive. Complete timestamp is one exact second.",
+  "same_12h_source_and_groups": true,
+  "source_fields_allowed": [
+    "Herd",
+    "AID",
+    "SeasnYr",
+    "Season",
+    "Timstmp"
+  ],
+  "physical_clock": "naive local Mountain civil time; no UTC or DST conversion",
+  "pair_criterion": {
+    "min_gap_seconds": "next.lower - current.upper_inclusive",
+    "max_gap_seconds": "next.upper_inclusive - current.lower",
+    "robust": "min_gap >= 1 AND max_gap <= 45000",
+    "possible": "max_gap >= 1 AND min_gap <= 45000",
+    "contingent": "possible AND NOT robust",
+    "excluded": "NOT possible",
+    "no_biological_impossibility_claim": true
+  },
+  "triple_criterion": "Reuse already frozen v1 exact integer-second triple algorithm, with T0 day end 23:59:59 inclusive; no spatial worlds or GPS outcome predictions.",
+  "comparison": "Report v1-v2 count deltas, not overwriting frozen originals; recompute pair status-crossing and T0/T1 triple composition using same source ordering",
+  "constraints": [
+    "2h holdout unopened",
+    "no geometry or coordinate fields",
+    "no individual IDs or timestamps in output",
+    "no guessing DST",
+    "source and CRS STOPs preserved",
+    "original EOG-WF 3/31/3 frozen"
+  ]
+}
