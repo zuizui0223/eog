@@ -56,3 +56,8 @@ The original EOG-WF empirical results remain **3 scored / 31 scientific STOP / 3
 - [Post-STOP time/coordinate patterns](post_stop_field_diagnostic_receipt_v1.json)
 - [Midnight/noon and candidate-CRS comparison](post_stop_semantics_hypothesis_receipt_v1.json)
 - [Full 12h geometry vs attribute consistency](post_stop_crs_geometry_receipt_v1.json)
+
+
+## Subsequent source provenance correction candidate (2026-11-24)
+
+A later [R 4.3 POSIX datetime formatting audit](POST_STOP_MIDNIGHT_SERIALIZATION_PROVENANCE_20261124.md) found a potentially important reinterpretation of this historical source-QC STOP: R 4.3 and newer can output **exact-midnight POSIXct timestamps as YYYY-MM-DD with no printed 00:00:00**, and public Migration Mapper code contains a date-time as.character-to-Shapefile export path. In the exact 12h source, **all 10,835 date-only values** coexist with **zero fully printed 00:00:00**, despite 379 other fully specified 00-hour nonmidnight values. Therefore the assumption that these are truly *temporally unknown* fixes is **not proven**, and the full-day uncertainty T0 analyses should be interpreted as a conditional stress-test until the actual author file-generation pipeline is verified. This does not retroactively change the original diagnostic thresholds or receipts, does not confirm exact-midnight time or DST interpretation, and does not lift the independent CRS/data-author verification requirement.
