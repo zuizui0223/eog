@@ -1,0 +1,81 @@
+{
+  "schema": "eog.mckee2024.albers_datum_grid_sensitivity.v1",
+  "status": "FROZEN_PRE_ORIGINAL_POINT_TRANSFORM",
+  "date": "2026-11-24",
+  "question": "Does the unresolved 5070 vs 5071 geodetic datum label materially alter transformed sparse GPS position and fixed-grid membership? Do not mistake ballpark fallback for certified equivalence.",
+  "input": {
+    "source_doi": "10.5061/dryad.15dv41p51",
+    "original_zip": "GPS12hrs_Locs.zip",
+    "size_bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "permitted_records": "all 28,953 SHP Point geometry records only; no DBF data, animal IDs, dates, trajectories or 2h GPS",
+    "source_prj_declared": "EPSG:3742 (contradicted by geographic tests)",
+    "candidate_A": "EPSG:5070",
+    "candidate_B": "EPSG:5071",
+    "reference_EPSG": "EPSG:3857",
+    "grid_origin_in_reference_meters": [
+      -12021622.7691,
+      5012625.0685
+    ],
+    "origin_provenance": "frozen official WGFD Baggs ArcGIS full extent in earlier independent-source gate",
+    "frozen_input_fingerprint_ref": "validation/temporal_corridor_mckee2024/post_stop_official_baggs_locator_receipt_v1.json"
+  },
+  "transformation_policy": {
+    "grid_downloads_allowed": false,
+    "PROJ_NETWORK": "OFF",
+    "record_pyproj_version": true,
+    "record_PROJ_version": true,
+    "record_TransformerGroup_best_available_for_5070_to_5071": true,
+    "record_missing_grid_names_first_10_only": true,
+    "record_fallback_transformer_description_and_accuracy": true,
+    "use_installed_offline_PROJ_pipeline_only": true,
+    "if_best_operation_missing": "CONDITIONAL_BALLPARK_ONLY; never claim true datum uncertainty bound or author intent",
+    "allowed_input_CRS_only": [
+      "EPSG:5070",
+      "EPSG:5071"
+    ],
+    "compare_geographic_displacement_with_WGS84_Geod": true,
+    "common_planar_projection": "EPSG:3857",
+    "WGS84_geodesic_quantiles": [
+      0,
+      0.5,
+      0.95,
+      0.99,
+      1
+    ],
+    "planar_position_difference_quantiles": [
+      0,
+      0.5,
+      0.95,
+      0.99,
+      1
+    ]
+  },
+  "sensitivity": {
+    "grid_size_m": [
+      100,
+      250,
+      500,
+      1000,
+      5000
+    ],
+    "grid_index_rule": "floor((x-origin_x)/size) and floor((y-origin_y)/size) in EPSG3857",
+    "fixed_grid_origin_only": true,
+    "all_source_points_in_denominator": true,
+    "record_number_and_fraction_of_points_with_identical_grid_cell_under_both_assumptions": true,
+    "equal_area_relative_distance_note": "XY coordinates remain identical; raw planar pairwise distances and RAW-XY graph edges are exactly identical by construction regardless of geodetic CRS metadata."
+  },
+  "exclusion_and_stop": [
+    "no raw point coordinate exported or stored in GitHub; aggregate values only",
+    "no DBF records, GPS timestamps, individual identities, 2h holdout, baseline scores or model fit",
+    "if any transformation returns nonfinite outputs, preserve as STOP",
+    "missing best NAD83-to-HARN transformation is an explicit accuracy limitation, NOT a certificate of full CRS equivalence",
+    "do not unfreeze older SOURCE_QC_STOP, overwrite original .prj or assert EPSG5070/5071 as author-intended",
+    "report results as method-input sensitivity only, not biological evidence, EOG-WF endpoint 4 or a 2h prediction"
+  ],
+  "frozen_EOG_WF": {
+    "scored": 3,
+    "scientific_stops": 31,
+    "administrative_exclusions": 3
+  }
+}
