@@ -29,11 +29,19 @@ Each pair's possible elapsed gap is bounded by [later.lower − earlier.upper, l
 | Robust (all times satisfy strict positive and <=12.5h) | 6,327 (22.2%) | 17,034 (59.7%) |
 | Contingent (depends on allowed time choice) | 21,412 (75.0%) | 10,640 (37.3%) |
 | Excluded by this local-clock gap rule | 793 (2.8%) | 858 (3.0%) |
-| Ambiguous positive ordering under the interval bound | 10,767 | 0 |
+| Ambiguous positive ordering under the interval bound | **10,707** (corrected one-second endpoint; legacy v1: 10,767) | 0 |
 
 Types of original adjacent pairs: complete/complete **7,108**; complete/date-only **21,363**; date-only/date-only **61**. The T0→T1 analysis moves **10,707** contingent pairs to robust and **65** contingent pairs to excluded; 10,640 remain contingent. Changing the assumed clock interval changes the set of admissible transitions substantially.
 
 The [pair receipt](post_stop_time_interval_pair_receipt_v1.json) records all count identities, the explicit 28,532 denominator, full time uncertainty, zero-outcome access and unchanged source STOP.
+
+## Exact-second endpoint review (v2, after v1 audit)
+
+A further audit found a mathematical boundary subtlety: T0 full-day intervals were described as upper-exclusive (ending *just before* next midnight), but the initial pair function compared against the unattainable next-midnight endpoint as though it were included. This affected the **ambiguous ordering flag for 60 pairs**, but **none of the robust/contingent/excluded pair classes and none of the 64 triple contradictions**.
+
+Rather than silently edit the original evidence, a [separate exact-second correction protocol](post_stop_time_endpoint_seconds_protocol_v2.json) was committed at 4cc96cfbb60051b21bcddda7831436429448f3a4 **before** re-evaluating the full original 12h ZIP. At DBF timestamp resolution of one second, T0 is represented precisely by the closed integer-second interval from 00:00:00 to 23:59:59. Its true minimum positive gap to a subsequent next-midnight observation is at least one second, not zero. All main pair status totals remain exactly the same; T0 ambiguous-order count changes from 10,767 to **10,707**. T1 is unchanged. The original v1 receipt is retained for transparent provenance, while the [v2 receipt](post_stop_time_interval_pair_receipt_v2.json) is the canonical ordering-ambiguity count.
+
+This is a method-definition correction, not observational evidence for midnight, the source CRS, actual animal movement, or model forecasting.
 
 ## Result 2: two individually possible links may not share one time assignment
 
