@@ -44,3 +44,7 @@ The contrast illustrates two *source-data methodological* failure modes: indepen
 The original Dryad README and original PRJ explicitly declare EPSG:3742, whereas the coordinates are geographically consistent with Albers-family EPSG:5070/5071. Original author-intended CRS, exact date-only timestamp semantics and Mountain Time/DST handling remain unresolved. No SHP geometry, withheld 2h GPS, ecological model or prospective score was accessed here. Original EOG-WF remains strictly **3 scored (2 favorable/1 adverse), 31 scientific STOPs, 3 administrative exclusions**.
 
 The user-facing science STOP stays open in [issue #745](https://github.com/zuizui0223/eog/issues/745). Before opening dense 2h holdout data, source semantics and an independent prediction protocol must be separately certified.
+
+## Addendum — an optimal minimum-cut count need not specify unique cut positions
+
+A [subsequent minimum-partition ensemble audit](POST_STOP_OPTIMAL_CUT_NECESSITY_20261124.md) confirms that the greedy coherent partition has the **minimum cut count** reported above, but this optimum is **nonunique** in some source groups. In T0 naive, 857 greedy breaks include **793 forced locations and 64 optional selected locations**; 64 other optional source links can serve as alternatives in equally minimal segmentations. Therefore, the 64 additional clock-coherence cuts do not correspond to 64 uniquely forced link positions. The 857/858/889/890 counts here remain historical input-method results, not author-time or animal-route facts.
