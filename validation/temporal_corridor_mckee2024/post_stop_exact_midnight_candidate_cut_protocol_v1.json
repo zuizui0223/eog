@@ -1,0 +1,60 @@
+{
+  "schema": "eog.mckee2024.post_stop_exact_midnight_serializer_candidate.v1",
+  "status": "FROZEN_BEFORE_ANY_NEW_SOURCE_CUT_COMPARISON_FOR_MIDNIGHT_CANDIDATE",
+  "source": {
+    "filename": "GPS12hrs_Locs.zip",
+    "bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "records": 28953,
+    "groups": 421,
+    "adjacent_links": 28532,
+    "only_DBF_fields": [
+      "Herd",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Timstmp"
+    ],
+    "geometry_disallowed": true
+  },
+  "candidate_clock": {
+    "id": "H_R43_DATE_ONLY_IS_EXACT_MIDNIGHT",
+    "date_only_datetime": "Interpret printed YYYY-MM-DD as precisely YYYY-MM-DD 00:00:00 in *local* Mountain wall clock, for sensitivity ONLY.",
+    "full_datetime": "Leave YYYY-MM-DD HH:MM:SS as exactly its printed time.",
+    "original_export_provenance_confirmed": false,
+    "hypothesis_provenance": "R 4.3+ as.character.POSIXt truncates exactly midnight; cited Migration Mapper current sequence exporter uses as.character(date) followed by Shapefile output. The exact Dryad exporter commit is not identified.",
+    "naive_clock": "no UTC offset or DST normalization; compare to previously frozen T0/T1 NAIVE",
+    "America_Denver": "conditional IANA DST-aware conversion; include BOTH legal UTC alternatives for ambiguous autumn full timestamps, no fold for midnight unless actually ambiguous",
+    "source_order": "same prior source-blind sorting by T0 lower/upper time and original DBF ordinal, NO reordering against heldout"
+  },
+  "rule": "Each source adjacent time gap must be integer seconds 1..45000 (12.5h), and a feasible segment uses one consistent time assignment through all consecutive records; split before first infeasible successor.",
+  "pinned_historical_controls": {
+    "T0_NAIVE_coherent_cuts": 857,
+    "T1_NAIVE_coherent_cuts": 858,
+    "T0_IANA_coherent_cuts": 889,
+    "T1_IANA_coherent_cuts": 890,
+    "T0_T1_NAIVE_shared": 857,
+    "date_only_count": 10835,
+    "no_complete_midnight_count": 0
+  },
+  "requested_outputs": [
+    "Per H3 clock (NAIVE and America/Denver) pairwise and globally coherent greedy cut counts",
+    "Compare H3 NAIVE paired cut mask with T0 NAIVE and T1 NAIVE: shared, earlier-only, H3-only, retained-both, and affected group count",
+    "Compare H3 IANA cut mask with T0 IANA and T1 IANA, same counts",
+    "Number of exact complete-full ambiguous local clock folds under IANA and number of nonexistent exact local times",
+    "Number of source records that remain time-incomplete under H3 (hypothetically 0) versus the original actual-source 10,835 date-only strings",
+    "No raw IDs, dates, coordinates, exact time strings, or individual track outcomes"
+  ],
+  "strict_limits": [
+    "Do not assert that H3 is author-confirmed or replace original source timestamps",
+    "Do not retroactively invalidate prior counterfactual T0/T1 world numerical results; if H3 is true, interpret T0 as overpermissive conceptual stress-test",
+    "Do not open sealed 2h dense GPS, fit BBMM, infer ecological path, score EOG, or add independent EOG-WF endpoint",
+    "Continue original CRS ambiguity EPSG3742 vs Albers 5070/5071 and missing datum grids as STOP",
+    "All four prior T0/T1 cut-mask totals must reconcile before H3 comparisons are accepted"
+  ],
+  "original_EOG_WF": {
+    "scored": 3,
+    "scientific_STOPS": 31,
+    "admin_exclusions": 3
+  }
+}
