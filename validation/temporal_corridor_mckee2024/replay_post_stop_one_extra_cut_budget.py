@@ -44,7 +44,7 @@ def _validate():
         or p["partition_budget"]["delta_allowed_cuts_per_group"] != [0, 1, 2]
         or [(w["id"], w["scenario"], w["clock"]) for w in p["worlds"]]
             != [(n, s, c) for n, (s,c) in zip(SHORT_NAMES, WORLDS)]
-        or p["original_EOG_WF"] != {"scored": 3, "favorable": 2, "adverse": 1,
+        or p["frozen_EOG_WF"] != {"scored": 3, "favorable": 2, "adverse": 1,
                                     "scientific_stops": 31, "admin_exclusions": 3}
     ):
         raise ValueError("Precommitted source/clock/cut-budget gate was changed")
@@ -83,7 +83,9 @@ def classify_budget_links(time_windows, *, max_gap=GAP, deltas=DELTAS):
         raise ValueError("Deltas must be sorted unique nonnegative integers")
     adj = _edge_dag(time_windows, max_gap)
     n=len(time_windows)
-    inf=n+2
+    # Use real infinity. With an all-singleton group, n+2 may equal
+    # minimum_blocks+2 and create a false retaining block at budget +2.
+    inf=float("inf")
     prefix=[inf]*(n+1)
     prefix[0]=0
     for i in range(n):
@@ -123,7 +125,7 @@ def classify_budget_links(time_windows, *, max_gap=GAP, deltas=DELTAS):
             cut_cost=prefix[k]+suffix[k]
             retain_cost=min_retain[k]
             cut=cut_cost<=optimum+delta
-            retain=retain_cost<=optimum+delta
+            retain=retain_cost!=inf and retain_cost<=optimum+delta
             if not (cut or retain):
                 raise AssertionError("Source link has no within-budget partition")
             flags.append("O" if cut and retain else "C" if cut else "R")
