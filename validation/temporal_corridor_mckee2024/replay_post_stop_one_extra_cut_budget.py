@@ -45,7 +45,7 @@ def _validate():
         or [(w["id"], w["scenario"], w["clock"]) for w in p["worlds"]]
             != [(n, s, c) for n, (s,c) in zip(SHORT_NAMES, WORLDS)]
         or p["frozen_EOG_WF"] != {"scored": 3, "favorable": 2, "adverse": 1,
-                                    "scientific_stops": 31, "admin_exclusions": 3}
+                                    "scientific_stops": 31, "administrative_exclusions": 3}
     ):
         raise ValueError("Precommitted source/clock/cut-budget gate was changed")
     return p
