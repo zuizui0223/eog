@@ -185,7 +185,7 @@ def test_producer_fails_closed_on_invalid_input_and_locks_scientific_claims(tmp_
     check=ns["optimal_partition_links"]
     with pytest.raises(ValueError,match="nonempty"):
         check([])
-    with pytest.raises(ValueError,match="positive integral"):
+    with pytest.raises(ValueError,match="Positive integral"):
         check([((0,0),)],gap=0)
     bad=tmp_path/"GPS12hrs_Locs.zip"
     bad.write_bytes(b"not real GPS")
