@@ -84,6 +84,7 @@ def test_grid_path_rejected_before_2h_or_source_coordinate_read(tmp_path):
 
 
 def test_source_only_grid_grid_math_synthetic_identity_is_zero_displacement():
+    pytest.importorskip("pyproj", reason="Optional grid-backed geodetic runtime not present in minimal CI")
     fn=m["_exact_displacement"]
     points=np.tile(np.asarray(( -1_000_000.0, 2_100_000.0)),(m["N"],1))
     r=fn(points,points.copy())
@@ -95,6 +96,7 @@ def test_source_only_grid_grid_math_synthetic_identity_is_zero_displacement():
 
 
 def test_source_only_grid_math_synthetic_shift_and_invalid_coordinates():
+    pytest.importorskip("pyproj", reason="Optional grid-backed geodetic runtime not present in minimal CI")
     fn=m["_exact_displacement"]
     raw=np.tile(np.asarray((-1_000_000.0,2_100_000.0)),(m["N"],1))
     corrected=raw.copy()
