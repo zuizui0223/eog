@@ -191,3 +191,41 @@ def test_v2_uses_last_second_of_day_not_unattainable_next_midnight():
     assert new_ambiguous is False
     # Both pair classifications still respect the original 12.5h criterion.
     assert status(date, next_midnight, 2, integer_closed=True)[0] == "excluded"
+
+
+
+def test_all_six_orderings_cannot_rescue_original_64_false_chains():
+    from itertools import permutations
+    p = _load(ROOT / "post_stop_triplet_order_permutation_protocol_v1.json")
+    row = _load(ROOT / "post_stop_triplet_order_permutation_receipt_v1.json")
+    assert p["status"] == "FROZEN_BEFORE_REORDERING_SENSITIVITY_CALCULATION"
+    assert row["protocol_commit"] == "c2e8e87e5c5fbd46e322b32204fb00ef640b34d0"
+    assert row["source_sha256"] == SOURCE_SHA
+    assert row["all_3_factorial_permutations_checked"] is True
+    t0 = row["T0_FULL_DAY_UNCERTAINTY"]
+    assert t0["triples"] == 28111
+    assert t0["fixed_false_chain"] == 64
+    assert t0["fixed_false_chain_rescued_by_permutation"] == 0
+    assert t0["fixed_false_chain_infeasible_under_all_permutations"] == 64
+    assert t0["fixed_infeasible_but_reorder_feasible"] == 167
+    assert t0["groups_with_any_reorder_rescue"] == 75
+    assert t0["all_permutations_infeasible"] + t0["any_permutation_feasible"] == 28111
+    assert row["T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW"]["fixed_false_chain"] == 0
+    assert row["dense_2h_holdout_opened"] is False
+    assert row["individual_ids_exact_timestamps_coordinates_exported"] is False
+
+    # This is a synthetic witness of an ordering-independent false chain.
+    impossible = [(0, 0), (1, 20), (25, 25)]
+    assert MODULE["_triple_pair_possible"](impossible, max_gap=10)
+    assert all(
+        not MODULE["time_triplet_possible"]([impossible[i] for i in order], max_gap=10)
+        for order in permutations((0, 1, 2))
+    )
+    # Separately, a wrongly sorted but consistent physical time sequence is
+    # rescued by some order: ordering matters for *other* triplets.
+    wrongly_ordered = [(20, 20), (0, 0), (10, 10)]
+    assert not MODULE["time_triplet_possible"](wrongly_ordered, max_gap=10)
+    assert any(
+        MODULE["time_triplet_possible"]([wrongly_ordered[i] for i in order], max_gap=10)
+        for order in permutations((0, 1, 2))
+    )
