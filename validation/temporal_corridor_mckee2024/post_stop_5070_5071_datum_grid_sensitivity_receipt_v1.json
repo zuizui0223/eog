@@ -1,0 +1,97 @@
+{
+  "schema": "eog.mckee2024.albers_datum_grid_sensitivity_result.v1",
+  "status": "CONDITIONAL_OFFLINE_BALLPARK__BEST_DATUM_GRID_UNAVAILABLE",
+  "protocol_commit_before_point_transform": "fa92cedd60378e48b477aa8b022d20d635c07423",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_file_size": 1539661,
+  "sparse_points": 28953,
+  "coordinate_hypotheses": [
+    "EPSG:5070",
+    "EPSG:5071"
+  ],
+  "comparison_crs": "EPSG:3857",
+  "comparison_grid_origin_m": [
+    -12021622.7691,
+    5012625.0685
+  ],
+  "PROJ_network_enabled": false,
+  "pyproj_version": "3.7.2",
+  "PROJ_version": "9.5.1",
+  "best_available_datum_operation": false,
+  "available_operation_count": 1,
+  "unavailable_operation_count": 45,
+  "missing_grid_names_first_10": [
+    "us_noaa_nadcon5_nad83_1986_nad83_harn_conus.tif",
+    "us_noaa_ethpgn.tif",
+    "us_noaa_wthpgn.tif",
+    "us_noaa_FL.tif",
+    "us_noaa_emhpgn.tif",
+    "us_noaa_WO.tif",
+    "us_noaa_mihpgn.tif",
+    "us_noaa_cnhpgn.tif",
+    "us_noaa_nvhpgn.tif",
+    "us_noaa_mnhpgn.tif"
+  ],
+  "available_datum_operation_description": [
+    {
+      "description": "Inverse of Conus Albers + Ballpark geographic offset from NAD83 to NAD83(HARN) + Conus Albers",
+      "accuracy_m": -1
+    }
+  ],
+  "planar_3857_displacement_m": {
+    "minimum": 1.520287,
+    "median": 1.541077,
+    "p95": 1.683195,
+    "p99": 1.688844,
+    "maximum": 1.695198
+  },
+  "WGS84_geodesic_displacement_m": {
+    "minimum": 1.147606,
+    "median": 1.155895,
+    "p95": 1.196588,
+    "p99": 1.19805,
+    "maximum": 1.200898
+  },
+  "fixed_grid_agreement": [
+    {
+      "grid_width_m": 100,
+      "same_cell_count": 28351,
+      "different_cell_count": 602,
+      "same_cell_fraction": 0.9792076814147066
+    },
+    {
+      "grid_width_m": 250,
+      "same_cell_count": 28720,
+      "different_cell_count": 233,
+      "same_cell_fraction": 0.9919524747003765
+    },
+    {
+      "grid_width_m": 500,
+      "same_cell_count": 28839,
+      "different_cell_count": 114,
+      "same_cell_fraction": 0.9960625841881671
+    },
+    {
+      "grid_width_m": 1000,
+      "same_cell_count": 28891,
+      "different_cell_count": 62,
+      "same_cell_fraction": 0.997858598418126
+    },
+    {
+      "grid_width_m": 5000,
+      "same_cell_count": 28945,
+      "different_cell_count": 8,
+      "same_cell_fraction": 0.9997236901184678
+    }
+  ],
+  "all_raw_xy_pairwise_distances_identical_by_construction": true,
+  "author_intended_CRS_verified": false,
+  "source_CRS_STOP_unchanged": true,
+  "dense_2hour_GPS_opened": false,
+  "DBF_records_opened": false,
+  "raw_points_or_individual_IDs_exported": false,
+  "prediction_scored": false,
+  "original_EOG_WF_scored_endpoints_unchanged": 3,
+  "methodological_note": "Provisional cell label stability in one frozen origin; without best NAD83-HARN grids this is NOT a certified upper bound on true geodetic datum discrepancy. CRS author intent and time-zone ambiguities remain blocking to confirmatory empirical test."
+}
