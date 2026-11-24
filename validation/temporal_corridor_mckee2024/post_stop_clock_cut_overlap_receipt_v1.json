@@ -1,0 +1,37 @@
+{
+  "schema": "eog.mckee2024.post_stop_clock_cut_location_overlap_receipt.v1",
+  "status": "CONDITIONAL_TWO_CLOCK_SCENARIO_CUT_OVERLAP__SOURCE_STOPS_RETAINED",
+  "protocol_commit_before_comparison": "d74eb7360a603fae790af5df9b8b95162cc2e7be",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_file_bytes": 1539661,
+  "source_records": 28953,
+  "source_groups": 421,
+  "consecutive_link_count": 28532,
+  "T0_full_day_coherent_cuts": 857,
+  "T1_near_midnight_coherent_and_optimistic_cuts": 858,
+  "link_cut_retention_table": {
+    "cut_both": 857,
+    "cut_T0_only": 0,
+    "cut_T1_only": 1,
+    "retained_both": 27674
+  },
+  "cut_jaccard": 0.9988344988344988,
+  "retained_link_jaccard": 0.9999638663053297,
+  "groups_with_any_cut_disagreement": 1,
+  "groups_with_T0_only_cut": 0,
+  "groups_with_T1_only_cut": 1,
+  "T0_only_cuts_by_T0_pair_status": {},
+  "T1_only_cuts_by_T0_pair_status": {
+    "contingent": 1
+  },
+  "actual_BBMM_or_movement_path_fitted": false,
+  "author_exact_date_only_clock_verified": false,
+  "source_CRS_author_verified": false,
+  "dense_2h_GPS_accessed": false,
+  "SHP_geometry_or_coordinates_accessed": false,
+  "individual_IDs_exact_times_or_links_exported": false,
+  "EOG_predictive_score_computed": false,
+  "EOG_WF_scored_count_unchanged": 3,
+  "note": "All 857 T0 coherent break locations are also present among T1 conditional breaks; only one additional source link is cut by T1. This is conditional on same frozen ordering, 12.5h source gap rule and clock windows; no ecological path or source-time truth certified."
+}
