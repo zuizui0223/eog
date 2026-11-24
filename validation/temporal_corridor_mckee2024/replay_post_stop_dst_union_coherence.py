@@ -13,7 +13,8 @@ from collections import Counter
 from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
-from zoneinfo import ZoneInfo
+from platform import python_version
+from zoneinfo import ZoneInfo, TZPATH
 
 from replay_post_stop_time_interval_qc import _source_rows, EPOCH, SHA256
 
@@ -24,6 +25,19 @@ SCENARIOS = ("T0_FULL_DAY_UNCERTAINTY", "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW")
 CLOCKS = ("NAIVE_MOUNTAIN_LOCAL", "FIXED_MST_UTC_MINUS_07", "AMERICA_DENVER_IANA")
 DENVER = ZoneInfo("America/Denver")
 UTC = timezone.utc
+
+
+def _system_tzdb_version() -> str:
+    """Best-effort actual system TZDB version, not the Python package version."""
+    for root in TZPATH:
+        marker = Path(root) / "tzdata.zi"
+        try:
+            first = marker.open(encoding="utf-8").readline().strip()
+        except OSError:
+            continue
+        if first.startswith("# version "):
+            return first.removeprefix("# version ")
+    return "unknown_system_or_python_package_source"
 
 
 def _seconds_naive(d: datetime) -> int:
@@ -206,6 +220,8 @@ def audit(groups: dict) -> dict:
         "records": 28953, "groups": 421, "adjacent_links": 28532,
         "naive_local_vs_fixed_MST_masks_identical": True,
         "zone": "America/Denver",
+        "local_iana_tzdb_version": _system_tzdb_version(),
+        "local_py_version": python_version(),
         "fold_and_date_only_transition_counts": dict(diagnostics),
         "clock_gap_arm_counts": results,
         "naive_vs_iana_coherent_cut_paired_counts": paired,
