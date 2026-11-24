@@ -1,0 +1,109 @@
+{
+  "schema": "eog.mckee2024.source_only_optimality_slack_link_identifiability.v1",
+  "status": "FROZEN_BEFORE_ANY_NEW_12H_LINK_RETENTION_BUDGET_ANALYSIS",
+  "date": "2026-11-24",
+  "question": "Does a time link that is forced retained/cut among all EXACT minimum-segment partitions remain so when each animal-season source group is allowed one or two extra cuts beyond its minimum? Separate locally impossible time pairs from minimum-objective artifacts.",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "dryad_file_id": 3334125,
+    "original_filename": "GPS12hrs_Locs.zip",
+    "size_bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "groups": 421,
+    "records": 28953,
+    "adjacent_pairs": 28532,
+    "only_permitted_DBF_fields": [
+      "Herd",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Timstmp"
+    ],
+    "no_point_geometry": true,
+    "no_dense_GPS2h": true
+  },
+  "reference": {
+    "previous_optimal_ensemble_merge_commit": "6be3ae873e9145acfdba0eb427bccc6c281559ba",
+    "previous_optimal_receipt": "validation/temporal_corridor_mckee2024/post_stop_optimal_cut_necessity_receipt_v1.json",
+    "previous_world_min_cuts": [
+      857,
+      858,
+      889,
+      890
+    ],
+    "previous_forced_cut": [
+      793,
+      858,
+      800,
+      865
+    ],
+    "previous_forced_retain": [
+      27611,
+      27674,
+      27554,
+      27617
+    ]
+  },
+  "worlds": [
+    {
+      "id": "T0_NAIVE",
+      "scenario": "T0_FULL_DAY_UNCERTAINTY",
+      "clock": "NAIVE_MOUNTAIN_LOCAL"
+    },
+    {
+      "id": "T1_NAIVE",
+      "scenario": "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW",
+      "clock": "NAIVE_MOUNTAIN_LOCAL"
+    },
+    {
+      "id": "T0_IANA",
+      "scenario": "T0_FULL_DAY_UNCERTAINTY",
+      "clock": "AMERICA_DENVER_IANA"
+    },
+    {
+      "id": "T1_IANA",
+      "scenario": "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW",
+      "clock": "AMERICA_DENVER_IANA"
+    }
+  ],
+  "time_rule": "One shared assignment of integer-second observation instants per contiguous segment, positive 1..45000-second gaps. Keep source-blind T0 lower/upper/DBF row-ordinal ordering, no synthetic date-only timestamp imputation, no DST assertion as author truth.",
+  "partition_budget": {
+    "delta_allowed_cuts_per_group": [
+      0,
+      1,
+      2
+    ],
+    "definition": "At budget delta, allow ANY feasible contiguous segmentation of that group with cut count <= minimum cut count + delta. Minimum cut count measured separately for each source group and world. Additional cuts are OPTIONAL; no exact-budget forced increases.",
+    "classification": {
+      "mandatory_cut": "Every within-budget partition cuts the adjacent link.",
+      "mandatory_retain": "Every within-budget partition retains the adjacent link.",
+      "optional": "At least one within-budget partition cuts and at least one retains."
+    },
+    "algorithm": "Enumerate feasible segment DAG i->j. Shortest prefix and suffix segment counts d0, dn; minimum segments S=d0[N]. For any internal boundary k, min segments of a partition cutting k = d0[k]+dn[k]. Minimum segments retaining link k = min_{i<k<j feasible block} d0[i]+1+dn[j]. A state allowed if cost <=S+delta. Classify using boolean feasibility of each state, do not assume which greedy solution is chosen.",
+    "theorem_to_validate": "For arbitrary nonempty time-window unions and hereditary contiguous block feasibility, delta>=1 guarantees every link can be cut in some allowed partition; any pairwise-feasible link can be retained in some partition with at most one more cut than optimal by isolating its two records. Thus with delta=1 mandatory retention=0 and mandatory cuts are exactly locally infeasible pairs; delta=2 cannot alter these classifications. This is a mathematical theorem under the declared segment objective, not a biological source claim."
+  },
+  "outputs": [
+    "per world and each delta=0,1,2: forced-cut/optional/forced-retain source-adjacent link totals, groups with >=1 optional link",
+    "verify delta=0 bit-for-bit same link classes/aggregate counts as previous frozen #753 result",
+    "per world: locally impossible pairs counted from exact allowed UTC interval-union propagation; compare to delta>=1 forced-cut count and previous #750/#752 optimistic cut counts",
+    "across all 4 worlds per delta: mandatory cut in all worlds, mandatory retained in all worlds, non-universally determined links; counts by non-identifying joint class patterns only",
+    "count of source links whose status changed between delta=0 and delta=1, grouped by three-status source class and clock world only",
+    "an independent exhaustive 400–600 small synthetic 2–6 record worlds with nonconvex integer-interval sets, comparing all feasible partitions at <=min+delta, all three status flags"
+  ],
+  "hard_controls": [
+    "exact source SHA and member list gate before reading DBF group/time columns; no 2h opened",
+    "minimum segments per world reproduce 857,858,889,890 previous aggregate cuts",
+    "delta0 status sums and universal patterns match previous source-frozen PR753 receipt",
+    "delta1 and delta2 forced-retain must be zero for all source links; forced-cut must agree with individually impossible link masks",
+    "source cutoff 12.5h and IANA Timezone folded alternatives remain conditional",
+    "no raw herd names, individual IDs, exact dates, UTC times, link coordinates or per-track partition examples exported",
+    "previous source-QC STOPs remain in place, not a fourth EOG-WF endpoint"
+  ],
+  "frozen_EOG_WF": {
+    "scored": 3,
+    "favorable": 2,
+    "adverse": 1,
+    "scientific_stops": 31,
+    "administrative_exclusions": 3
+  }
+}
