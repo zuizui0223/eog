@@ -60,13 +60,29 @@ Those two existential assignments need not assign **the same time_B**. To certif
 | **Pairwise possible but no joint triple** | **64** | **0** |
 | Groups containing at least one false chain | **41** | **0** |
 
-**Ordering limitation:** triples are defined by the precommitted deterministic sort on *lower timestamp bounds*, then upper bounds, then original DBF row ordinal. For uncertain date-only records this ordering need not be the actual chronological order. Thus 64 means no joint assignment **for those frozen ordered triples**, not an ordering-independent impossibility of the three records. The 10,707 T0 ambiguous-order pairs quantify one part of that uncertainty. No order reconstruction from withheld 2h fixes is allowed.
+**Ordering limitation and follow-up check:** the initial triples are defined by a fixed sort on *lower time bounds*, upper bounds and DBF ordinal. Because date-only records have unknown true clock times, their actual chronological order can differ. To distinguish a sorting artifact from an unavoidable three-window incompatibility, a **separate six-permutation audit** was frozen and run as described below; no withheld 2h fixes were used.
 
 The T0 false chains have only timestamp precision patterns **FDD (59)** or **FDF (5)**, where F is a full timestamp and D is date-only. This is a conditional *real-input instance* of a general quantifier-composition failure, not an observed failed migration or independent biological replication. The T1 outcome demonstrates that the phenomenon can disappear under a stronger clock assumption; it does **not** demonstrate that T1 is the correct underlying time.
 
 Example of the logical problem in integer hours, using a 10h threshold: record A fixed at t=0, B unknown in [1,20], C fixed at t=25. The A→B pair can be realized using B≤10, and the B→C pair using B≥15, but no single B timestamp satisfies both. This counterexample contains **no animal's locations or individual identities**.
 
 The [triplet receipt](post_stop_triplet_time_coherence_receipt_v1.json) retains the exact 64/0 comparison and the group-level count without any exact timestamp, original point coordinate or animal ID.
+
+## Result 3: exact sensitivity to all six record orders
+
+The [separate ordering protocol](post_stop_triplet_order_permutation_protocol_v1.json) was committed at c2e8e87e5c5fbd46e322b32204fb00ef640b34d0 **before** enumerating all 3! record permutations. It reuses the originally selected triple set, one-second closed interval endpoints, source-Dryad SHA and 12.5h gap limit. It does **not** infer the actual chronological order or fit a movement model.
+
+| Triplet ordering feasibility | T0 full-day uncertainty | T1 hypothetical 00–01 |
+|---|---:|---:|
+| Triples not feasible under frozen order | 1,411 | 1,474 |
+| Of these, feasible under another of six orders | **167** | 0 |
+| Triples impossible under all six orders | 1,244 | 1,474 |
+| **Original pairwise-only false chains remaining impossible under all six orders** | **64 / 64** | **0 / 0** |
+| Groups with an order-rescuable triple | 75 | 0 |
+
+This is a substantive distinction. Some failures *are* artifacts of the fixed sort (167 under T0), but **none of the 64 pairwise-only false chains is rescued** by permuting the same three intervals. The 64 are therefore an **ordering-invariant incompatibility inside the declared T0 full-day clock-world**, not merely a mistake in sorting uncertain timestamps. They are still not real migration failures: T1's stronger *unverified* 00–01 assumption eliminates the pattern, and Mountain Time / daylight-saving semantics are unresolved.
+
+The [permutation receipt](post_stop_triplet_order_permutation_receipt_v1.json) preserves the full denominator and aggregate records, with no individual route, timestamp, or coordinate disclosure.
 
 ## Evidence boundary and next inference gate
 
