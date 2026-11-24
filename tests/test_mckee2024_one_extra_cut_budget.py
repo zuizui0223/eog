@@ -209,3 +209,17 @@ def test_original_source_only_and_no_2h_or_ecological_score(tmp_path):
     from replay_post_stop_time_interval_qc import _source_rows
     with pytest.raises(ValueError,match="filename or byte size"):
         _source_rows(bad)
+
+
+
+def test_infinite_unreachable_pair_cost_does_not_become_finite_at_plus_two():
+    """Regression: a finite n+2 sentinel falsely admits impossible pairs at +2."""
+    fn=src["classify_budget_links"]
+    for n in range(2, 7):
+        # Every source adjacent pair exceeds a ten-second gap.
+        windows=tuple(((i*1000,i*1000),) for i in range(n))
+        result=fn(windows,max_gap=10)
+        assert result["minimum_cut_count"]==n-1
+        assert all(result["pair_impossible"])
+        for delta in (0,1,2):
+            assert result["class_by_delta"][delta]==("C",)*(n-1)
