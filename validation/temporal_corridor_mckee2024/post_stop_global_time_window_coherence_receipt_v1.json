@@ -170,5 +170,15 @@
     "EOG_WF_frozen_scored": 3,
     "EOG_WF_frozen_scientific_stops": 31,
     "EOG_WF_frozen_admin_exclusions": 3
-  }
+  },
+  "protocol_precommitted": true,
+  "ordering_fixed_to_prior_T0_source_blind_rule": true,
+  "UTC_or_DST_clock_alignment_verified": false,
+  "source_author_CRS_verified": false,
+  "ecological_movement_route_inferred": false,
+  "2h_holdout_data_opened": false,
+  "SHP_coordinates_opened": false,
+  "raw_animal_IDs_times_or_locations_exported": false,
+  "EOG_forecast_scored": false,
+  "closed_EOG_WF_scored_endpoints": 3
 }
