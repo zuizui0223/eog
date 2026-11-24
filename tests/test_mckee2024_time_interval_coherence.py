@@ -154,3 +154,40 @@ def test_wrong_local_archive_rejected_without_reading_gps_data(tmp_path):
         assert receipt["raw_data_or_identifiers_exported"] is False if (
             "raw_data_or_identifiers_exported" in receipt
         ) else receipt["animal_ids_or_exact_timestamps_exported"] is False
+
+
+
+def test_v2_exact_integer_second_endpoint_correction_is_separate_and_auditable():
+    v1 = _load(PAIR)
+    p = _load(ROOT / "post_stop_time_endpoint_seconds_protocol_v2.json")
+    corrected = _load(ROOT / "post_stop_time_interval_pair_receipt_v2.json")
+    assert p["status"] == "FROZEN_AFTER_V1_ENDPOINT_AUDIT_BEFORE_CORRECTED_RECOMPUTATION"
+    assert corrected["correction_protocol_commit"] == (
+        "4cc96cfbb60051b21bcddda7831436429448f3a4"
+    )
+    assert corrected["source_sha256"] == SOURCE_SHA
+    old0 = v1["pair_status_by_time_scenario"]["T0_FULL_DAY_UNCERTAINTY"]
+    now0 = corrected["pair_status_by_time_scenario"]["T0_FULL_DAY_UNCERTAINTY"]
+    old1 = v1["pair_status_by_time_scenario"]["T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW"]
+    now1 = corrected["pair_status_by_time_scenario"]["T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW"]
+    for status in ("robust", "contingent", "excluded"):
+        assert now0[status] == old0[status]
+        assert now1[status] == old1[status]
+    assert old0["ambiguous_order"] == 10767
+    assert now0["ambiguous_order"] == 10707
+    assert now1["ambiguous_order"] == old1["ambiguous_order"] == 0
+    assert corrected["pair_status_changes_from_historical_v1"]["T0_ambiguous_order"] == -60
+    assert corrected["preserved_triple_result"]["T0_pairwise_possible_but_globally_infeasible"] == 64
+
+
+def test_v2_uses_last_second_of_day_not_unattainable_next_midnight():
+    status = MODULE["pair_status"]
+    date = (0, 86400, 3600, "date", 0)
+    next_midnight = (86400, 86400, 86400, "full", 1)
+    legacy_status, legacy_ambiguous = status(date, next_midnight, 1)
+    new_status, new_ambiguous = status(date, next_midnight, 1, integer_closed=True)
+    assert legacy_status == new_status == "contingent"
+    assert legacy_ambiguous is True
+    assert new_ambiguous is False
+    # Both pair classifications still respect the original 12.5h criterion.
+    assert status(date, next_midnight, 2, integer_closed=True)[0] == "excluded"
