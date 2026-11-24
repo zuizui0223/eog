@@ -35,3 +35,8 @@ Best regards,
 - Open source-qualification STOP: https://github.com/zuizui0223/eog/issues/745.
 
 **Response required to lift STOP:** A sufficiently authoritative mapping from archived timestamp strings to true observed GPS times, including fixed MST versus DST handling, and original x/y projection identity. The author response may resolve either question separately; do not automatically lift the other. Do not download/open the withheld dense 2h GPS before a separately frozen scoring protocol.
+
+
+## Historical-lineage follow-up for sender review (2026-11-24)
+
+The source inquiry above is still **UNSENT**. Versioned GitHub evidence now shows Migration Mapper's app3 as.character(date) sequence-export step existed in **March 2024**, before Dryad publication, but it exported geographic lon/lat with a different field schema. The current app1 as.character change was only committed **August 6, 2024** and the app3 projected x/y export update **September 6, 2024**, both after Dryad July 18. When contacting the author, do not assert that either later code change caused the original file. Ask explicitly whether the archived source was written by the public app3 sequence exporter at a specified historical SHA, an analysis-specific manuscript script, or a separate data-cleaning/export step. A reproducible script plus sessionInfo and original coordinate WKT would be decisive. No email has been sent by this project.
