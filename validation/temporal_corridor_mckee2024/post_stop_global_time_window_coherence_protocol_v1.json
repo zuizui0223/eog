@@ -1,0 +1,102 @@
+{
+  "schema": "eog.mckee2024.post_stop_full_segment_time_coherence.v1",
+  "status": "FROZEN_BEFORE_NEW_WINDOW_LENGTH_OR_GROUP_COHERENCE_COMPUTATION",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "dryad_version_id": 305836,
+    "original_filename": "GPS12hrs_Locs.zip",
+    "expected_size_bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "source_records": 28953,
+    "groups": 421,
+    "permitted_columns": [
+      "Herd",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Timstmp"
+    ]
+  },
+  "reference_prior": {
+    "pr_748_merge_commit": "99419377d573075bd823d03d61a808196d93bbc5",
+    "second_precision_protocol": "validation/temporal_corridor_mckee2024/post_stop_time_endpoint_seconds_protocol_v2.json",
+    "triple_permutation_receipt": "validation/temporal_corridor_mckee2024/post_stop_triplet_order_permutation_receipt_v1.json",
+    "original_time_CRS_STOP_retained": true
+  },
+  "central_question": "How often do adjacent individually possible time-gap links overstate the possibility of one shared globally coherent clock assignment across whole contiguous windows or an entire fixed animal-season sequence?",
+  "timestamp_windows": [
+    {
+      "scenario": "T0_FULL_DAY_UNCERTAINTY",
+      "date_only": "inclusive 00:00:00–23:59:59 local civil seconds"
+    },
+    {
+      "scenario": "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW",
+      "date_only": "inclusive 00:00:00–01:00:00 local civil seconds; NOT verified truth"
+    }
+  ],
+  "full_timestamp_rule": "One exact local civil second (naive datetime; not an actual UTC fix)",
+  "group_key": [
+    "Herd",
+    "AID",
+    "SeasnYr",
+    "Season"
+  ],
+  "ordering": "Same frozen T0 lower-second, T0 upper-second, original DBF ordinal in each group, never reorder for optimal results",
+  "permitted_gap_seconds": {
+    "lower": 1,
+    "upper": 45000
+  },
+  "pair_possible_formula": "U_next >= L_current+1 && L_next <= U_current+45000",
+  "coherent_window_forward_rule": "Start reachable integer interval [L0,U0]; next reachable [max(L_next,prev_min+1), min(U_next,prev_max+45000)]; infeasible if new_min > new_max; test all records in SAME fixed window using this one coherent feasible interval, never composing independently chosen pair witnesses.",
+  "window_lengths": [
+    2,
+    3,
+    4,
+    6,
+    12,
+    24
+  ],
+  "for_each_window_length_report": [
+    "total number of within-group contiguous windows",
+    "windows with ALL adjacent pairs separately possible",
+    "windows for which one globally coherent time assignment exists",
+    "pairwise-only false-chain windows and fraction of pairwise-possible windows",
+    "number of distinct groups having >=1 false-chain window"
+  ],
+  "entire_group_report": [
+    "group total of 421, records distribution as rounded aggregate quantiles",
+    "groups with all adjacent pairs separately possible",
+    "groups globally coherent in the fixed complete record order",
+    "pairwise-only false-chain groups (all pairwise possible but globally infeasible)",
+    "groups with any adjacent pair failing the gap rule"
+  ],
+  "mandatory_controls": [
+    "For k=2, pairwise possible == globally feasible and false-chain count 0.",
+    "For k=3, T0 pairwise possible 26764, globally feasible 26700, false-chain 64; T1 pairwise/global 26637, false-chain 0, matching frozen PR748 receipt.",
+    "Independent bounded integer-window brute-force oracle (not EOG helper) covering 2–5 record chains and edge cases.",
+    "Windows must satisfy 0 <= globally feasible <= pairwise possible <= total; no score promotion.",
+    "Use only original 12h DBF fields, no point geometry or individual IDs/timestamp values exported."
+  ],
+  "disallowed": [
+    "choose window lengths or thresholds after inspecting results",
+    "reorder real observations to maximize feasibility",
+    "re-inject a new source or switch timestamp interpretations within one sequence",
+    "read/derive any 2-hour GPS or ecological response; EOG models and BBMM not fitted",
+    "claim a globally correct historical route or physical clock elapsed time across DST",
+    "use coordinates/CRS to rescue time incompatibility"
+  ],
+  "output_security": "Aggregate counts and total/percentage only; no herd-specific, individual-specific or timestamp-level data",
+  "historical_claim_boundary": {
+    "source_clock_uncertainty_unresolved": true,
+    "source_CRS_conflict_unresolved": true,
+    "dense_2h_holdout_sealed": true,
+    "prospective_model_scoring_authorized": false,
+    "closed_EOG_WF": {
+      "scored": 3,
+      "favorable": 2,
+      "adverse": 1,
+      "scientific_stops": 31,
+      "administrative_exclusions": 3
+    }
+  }
+}
