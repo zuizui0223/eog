@@ -69,7 +69,7 @@ def test_source_export_path_claims_bound_to_exact_commit_versions():
     pre = r["historical_commits"][0]
     assert "as.character" in " ".join(pre["direct_line_evidence"])
     assert "masterCrs4326" in " ".join(pre["direct_line_evidence"])
-    assert "lon/lat" in pre["supported"]
+    assert "lon/lat" in " ".join(pre["direct_line_evidence"])
     after = r["historical_commits"][3:]
     assert after[0]["relative_to_dryad_publication"] == "AFTER_2024_07_18"
     assert after[1]["relative_to_dryad_publication"] == "AFTER_2024_07_18"
