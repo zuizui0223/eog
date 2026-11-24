@@ -1,0 +1,26 @@
+{
+  "schema": "eog.mckee2024.post_stop_triple_record_order_permutation_sensitivity.v1",
+  "status": "FROZEN_BEFORE_REORDERING_SENSITIVITY_CALCULATION",
+  "parent_triplet_protocol": "validation/temporal_corridor_mckee2024/post_stop_triplet_time_coherence_protocol_v1.json",
+  "parent_triple_receipt": "validation/temporal_corridor_mckee2024/post_stop_triplet_time_coherence_receipt_v1.json",
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "scientific_question": "Of the 64 three-record false chains under the declared deterministic sort, how many remain temporally infeasible even if one of all six record permutations is allowed?",
+  "reason": "10,707 T0 adjacent pairs have ambiguous temporal ordering under exact 1-second bounds; fixed-order false chains must not be promoted to ordering-invariant impossibility.",
+  "allowed_only": [
+    "inspect exactly the same 12h original DBF group/time fields",
+    "use frozen deterministic adjacent-triplet selection for the denominator and source identity",
+    "enumerate all 3!=6 permutations of the three already selected record interval windows without choosing based on heldout data",
+    "count number of fixed-order false chains rescued by any permutation and number impossible under all permutations, by T0 and T1",
+    "record aggregate counts only"
+  ],
+  "time_windows": "Use exact integer-second closed bounds T0 date-only [00:00:00,23:59:59] and T1 date-only [00:00:00,01:00:00]; same naive local wall clock and gap 1..45000 s.",
+  "algorithm": "For each of the 64 fixed-order false-chain triples in T0, use exact triple feasibility formula on all six permutations; count restored by at least one alternative order. Also report T0 and T1 all-fixed-infeasible triples that any permutation can rescue.",
+  "constraints": [
+    "This is a diagnostic upper bound on ordering-related logical feasibility, not reconstruction of actual observation order or animal paths",
+    "No original record IDs, timestamps, coordinates or any representative triple exported",
+    "No dense 2h, no model score or causal inference",
+    "Do not revise prior frozen pair or triple numerators without an explicit correction protocol",
+    "Historical source clock and CRS STOPs unchanged",
+    "Original EOG-WF 3/31/3 frozen"
+  ]
+}
