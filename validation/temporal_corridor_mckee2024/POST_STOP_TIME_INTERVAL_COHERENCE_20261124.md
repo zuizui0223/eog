@@ -60,6 +60,8 @@ Those two existential assignments need not assign **the same time_B**. To certif
 | **Pairwise possible but no joint triple** | **64** | **0** |
 | Groups containing at least one false chain | **41** | **0** |
 
+**Ordering limitation:** triples are defined by the precommitted deterministic sort on *lower timestamp bounds*, then upper bounds, then original DBF row ordinal. For uncertain date-only records this ordering need not be the actual chronological order. Thus 64 means no joint assignment **for those frozen ordered triples**, not an ordering-independent impossibility of the three records. The 10,707 T0 ambiguous-order pairs quantify one part of that uncertainty. No order reconstruction from withheld 2h fixes is allowed.
+
 The T0 false chains have only timestamp precision patterns **FDD (59)** or **FDF (5)**, where F is a full timestamp and D is date-only. This is a conditional *real-input instance* of a general quantifier-composition failure, not an observed failed migration or independent biological replication. The T1 outcome demonstrates that the phenomenon can disappear under a stronger clock assumption; it does **not** demonstrate that T1 is the correct underlying time.
 
 Example of the logical problem in integer hours, using a 10h threshold: record A fixed at t=0, B unknown in [1,20], C fixed at t=25. The A→B pair can be realized using B≤10, and the B→C pair using B≥15, but no single B timestamp satisfies both. This counterexample contains **no animal's locations or individual identities**.
