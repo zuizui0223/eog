@@ -1,0 +1,231 @@
+{
+  "schema": "eog.mckee2024.post_stop_one_extra_cut_budget_receipt.v1",
+  "status": "PLUS_ONE_CUT_COLLAPSES_OPTIMIZATION_CONDITIONAL_RETENTION__SOURCE_STOP",
+  "protocol_commit_before_source_analysis": "17d3611d0333893e9d23e72eeeb261c568020c04",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_bytes": 1539661,
+  "records": 28953,
+  "groups": 421,
+  "links": 28532,
+  "source_time_scenarios": [
+    "T0_FULL_DAY_UNCERTAINTY:NAIVE_MOUNTAIN_LOCAL",
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:NAIVE_MOUNTAIN_LOCAL",
+    "T0_FULL_DAY_UNCERTAINTY:AMERICA_DENVER_IANA",
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:AMERICA_DENVER_IANA"
+  ],
+  "per_delta_per_world": {
+    "0": {
+      "T0_NAIVE": {
+        "forced_cut": 793,
+        "optional": 128,
+        "forced_retain": 27611,
+        "groups": 421,
+        "minimum_cuts": 857
+      },
+      "T1_NAIVE": {
+        "forced_cut": 858,
+        "optional": 0,
+        "forced_retain": 27674,
+        "groups": 421,
+        "minimum_cuts": 858
+      },
+      "T0_IANA": {
+        "forced_cut": 800,
+        "optional": 178,
+        "forced_retain": 27554,
+        "groups": 421,
+        "minimum_cuts": 889
+      },
+      "T1_IANA": {
+        "forced_cut": 865,
+        "optional": 50,
+        "forced_retain": 27617,
+        "groups": 421,
+        "minimum_cuts": 890
+      }
+    },
+    "1": {
+      "T0_NAIVE": {
+        "forced_cut": 793,
+        "optional": 27739,
+        "forced_retain": 0,
+        "groups": 421,
+        "minimum_cuts": 857
+      },
+      "T1_NAIVE": {
+        "forced_cut": 858,
+        "optional": 27674,
+        "forced_retain": 0,
+        "groups": 421,
+        "minimum_cuts": 858
+      },
+      "T0_IANA": {
+        "forced_cut": 800,
+        "optional": 27732,
+        "forced_retain": 0,
+        "groups": 421,
+        "minimum_cuts": 889
+      },
+      "T1_IANA": {
+        "forced_cut": 865,
+        "optional": 27667,
+        "forced_retain": 0,
+        "groups": 421,
+        "minimum_cuts": 890
+      }
+    },
+    "2": {
+      "T0_NAIVE": {
+        "forced_cut": 793,
+        "optional": 27739,
+        "forced_retain": 0,
+        "groups": 421,
+        "minimum_cuts": 857
+      },
+      "T1_NAIVE": {
+        "forced_cut": 858,
+        "optional": 27674,
+        "forced_retain": 0,
+        "groups": 421,
+        "minimum_cuts": 858
+      },
+      "T0_IANA": {
+        "forced_cut": 800,
+        "optional": 27732,
+        "forced_retain": 0,
+        "groups": 421,
+        "minimum_cuts": 889
+      },
+      "T1_IANA": {
+        "forced_cut": 865,
+        "optional": 27667,
+        "forced_retain": 0,
+        "groups": 421,
+        "minimum_cuts": 890
+      }
+    }
+  },
+  "joint_class_patterns": {
+    "0": {
+      "CCCC": 793,
+      "OCOC": 64,
+      "OROR": 64,
+      "RCRC": 1,
+      "RRCC": 7,
+      "RROO": 50,
+      "RRRR": 27553
+    },
+    "1": {
+      "CCCC": 793,
+      "OCOC": 65,
+      "OOCC": 7,
+      "OOOO": 27667
+    },
+    "2": {
+      "CCCC": 793,
+      "OCOC": 65,
+      "OOCC": 7,
+      "OOOO": 27667
+    }
+  },
+  "joint_all_world_mandatory": {
+    "0": {
+      "forced_cut_in_all_four": 793,
+      "forced_retain_in_all_four": 27553,
+      "not_universally_fixed": 186,
+      "pair_possible_in_all_four": 27667,
+      "pair_impossible_in_all_four": 793,
+      "pair_feasibility_clock_dependent": 72
+    },
+    "1": {
+      "forced_cut_in_all_four": 793,
+      "forced_retain_in_all_four": 0,
+      "not_universally_fixed": 27739,
+      "pair_possible_in_all_four": 27667,
+      "pair_impossible_in_all_four": 793,
+      "pair_feasibility_clock_dependent": 72
+    },
+    "2": {
+      "forced_cut_in_all_four": 793,
+      "forced_retain_in_all_four": 0,
+      "not_universally_fixed": 27739,
+      "pair_possible_in_all_four": 27667,
+      "pair_impossible_in_all_four": 793,
+      "pair_feasibility_clock_dependent": 72
+    }
+  },
+  "groups_with_any_optional_cut": {
+    "0": {
+      "T0_NAIVE": 41,
+      "T1_NAIVE": 0,
+      "T0_IANA": 65,
+      "T1_IANA": 25
+    },
+    "1": {
+      "T0_NAIVE": 421,
+      "T1_NAIVE": 421,
+      "T0_IANA": 421,
+      "T1_IANA": 421
+    },
+    "2": {
+      "T0_NAIVE": 421,
+      "T1_NAIVE": 421,
+      "T0_IANA": 421,
+      "T1_IANA": 421
+    }
+  },
+  "previous_optimum_to_plus_one_class_transitions": {
+    "T0_NAIVE": {
+      "R=>O": 27611
+    },
+    "T1_NAIVE": {
+      "R=>O": 27674
+    },
+    "T0_IANA": {
+      "R=>O": 27554
+    },
+    "T1_IANA": {
+      "R=>O": 27617
+    }
+  },
+  "local_pair_feasibility_counts": {
+    "T0_NAIVE": {
+      "links": 28532,
+      "impossible": 793,
+      "possible": 27739,
+      "affected_groups": 191
+    },
+    "T1_NAIVE": {
+      "links": 28532,
+      "impossible": 858,
+      "possible": 27674,
+      "affected_groups": 205
+    },
+    "T0_IANA": {
+      "links": 28532,
+      "impossible": 800,
+      "possible": 27732,
+      "affected_groups": 191
+    },
+    "T1_IANA": {
+      "links": 28532,
+      "impossible": 865,
+      "possible": 27667,
+      "affected_groups": 205
+    }
+  },
+  "independent_mathematical_bound": "Any mandatory retention among exactly minimum-block partitions is removable by one added cut. Any individually feasible pair can be retained by some partition with at most one added cut by isolating its two records. Hence delta>=1 classification C iff pairwise impossible, otherwise O, and no R; delta=2 gives identical statuses.",
+  "independent_original_source_recheck": "Exact SHA-256 and size verified against Dryad file ID 3334125 before source-only DBF field inspection. Four clock-pair impossible totals 793/858/800/865 and joint CCCC793 OCOC65 OOCC7 OOOO27667 reproduced independently in local sandbox.",
+  "claim_ceiling": "These are necessary/possible gap eligibility conditions under the published 12.5-hour BBMM input rule, four specified time interpretations and fixed record order; not route existence, actual GPS time, independent biological validation or model performance.",
+  "source_author_timestamp_semantics_verified": false,
+  "source_author_CRS_verified": false,
+  "IANA_DST_is_conditional": true,
+  "dense_2h_holdout_opened": false,
+  "SHP_geometry_accessed": false,
+  "raw_ids_times_coordinates_or_link_indices_exported": false,
+  "ecological_prediction_scored": false,
+  "original_EOG_WF_scored_endpoints": 3,
+  "original_EOG_WF_scientific_stops": 31,
+  "original_EOG_WF_admin_exclusions": 3
+}
