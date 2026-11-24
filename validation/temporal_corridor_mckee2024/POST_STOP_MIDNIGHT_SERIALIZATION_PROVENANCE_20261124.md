@@ -56,3 +56,14 @@ The original Dryad README and physical PRJ label coordinates **NAD83(HARN) UTM z
 4. The source-QC STOP remains open in [issue #745](https://github.com/zuizui0223/eog/issues/745). No 2h dense reference was opened, no Brownian bridge or EOG landscape model was fit, and no new independent scored EOG-WF endpoint was added. Frozen EOG-WF remains exactly **3 scored /31 scientific STOP /3 administrative exclusions**.
 
 **Decision:** The most valuable next step is to verify original source **formatting/projection provenance**, not to continue deriving seemingly independent ecological conclusions from hypothetical timestamp ambiguities.
+
+
+## Historical code-dating correction (separate follow-up, 2026-11-24)
+
+A [dated historical commit audit](POST_STOP_HISTORICAL_MAPPER_LINEAGE_20261124.md) supersedes any suggestion above that **the current** app1 or app3 export code is itself prepublication proof of the specific Dryad file writer.
+
+**Confirmed:** The public Migration Mapper app3 sequence exporter **already called as.character(date) on March 5, 2024**, before the Dryad publication of July 18, 2024, so the specific POSIX-to-character mechanism was available in related software beforehand. But its March 2024 geometry construction was **longitude/latitude with masterCrs4326**, and its export field layout differs from the archived Dryad 11-column source, so that snapshot is *not* the identified original writer.
+
+**Important negative chronology:** The app1 data cleaning export's as.character addition was committed **August 6, 2024**, *after* the original Dryad publication; the app3 sequence export's shift to projected x/y geometry was committed **September 6, 2024**, also after original Dryad publication. The current post-July statements must not be attributed to the original July ZIP. An app1 x/y CRS-assignment correction on March 26 documents a real related-software bugfix, but does not prove the actual Dryad PRJ error was caused by it.
+
+The exact original source exporter, R version, date-only clock meaning, Mountain/DST convention and original CRS remain unknown. The R 4.3 mechanism remains **strongly compatible but NOT confirmed for this data**, and the original source-QC STOP remains binding.
