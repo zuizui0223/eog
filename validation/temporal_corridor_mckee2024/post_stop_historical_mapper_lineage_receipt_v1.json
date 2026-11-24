@@ -1,0 +1,122 @@
+{
+  "schema": "eog.mckee2024.historical_migration_mapper_export_lineage.v1",
+  "audited_on": "2026-11-24",
+  "evidence_type": "POSTHOC_READ_ONLY_COMPARISON_OF_IMMUTABLE_PUBLIC_COMMIT_SNAPSHOTS_AND_EXISTING_SHA_VERIFIED_SPARSE_SOURCE",
+  "purpose": "Determine which currently linked Migration Mapper exporter statements were already true before 2024-07-18 Dryad publication; explicitly separate source code mechanism from proof of the original source writer.",
+  "primary_source": {
+    "dryad_doi": "10.5061/dryad.15dv41p51",
+    "published_date": "2024-07-18",
+    "published_page": "https://datadryad.org/dataset/doi%3A10.5061/dryad.15dv41p51",
+    "file_id": 3334125,
+    "file_name": "GPS12hrs_Locs.zip",
+    "bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "source_timestamp_shapes": {
+      "date_only": 10835,
+      "full_datetime": 18118,
+      "fully_specified_exact_midnight": 0,
+      "fully_specified_00hour_nonmidnight": 379
+    },
+    "physical_dbf_fields": [
+      "State",
+      "Herd",
+      "SpcsCmm",
+      "SpcsScn",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Year",
+      "Timstmp",
+      "UTM_E",
+      "UTM_N"
+    ],
+    "dryad_readme_scope": "Migration Mapper explicitly used to manually identify migration-period start/end via NSD; then 2h sequences were subsampled to 12h. README links CalcBBMM.R for BBMM fitting, but does not state the precise exporter used to build the archived 12h shapefile."
+  },
+  "R_behavior": {
+    "documented_since": "2023-08",
+    "source_url": "https://stat.ethz.ch/pipermail/r-devel/2023-August/082814.html",
+    "R_4_3_1_as_character_POSIXt_exact_midnight_prints_date_only": true,
+    "R_4_2_3_prior_example_prints_complete_midnight": true,
+    "observed_source_format_consistent": true,
+    "actual_source_writer_R_version_confirmed": false,
+    "R_runtime_reexecuted_in_this_environment": false
+  },
+  "historical_commits": [
+    {
+      "commit": "affaea1ee55830638e20fe712908de188214e2ac",
+      "date_utc": "2024-03-05T15:24:19Z",
+      "title": "Merge branch version-3.1",
+      "file": "app3_sequenceWriting/scripts/app3_calcSequences.R",
+      "immutable_blob_sha": "ba94cfa2888571fdf91d43f112ae0b613f4fc281",
+      "direct_line_evidence": [
+        "56-65: date column converted with as.character before point export",
+        "61: point geometry made with lon/lat and configOptions$masterCrs4326",
+        "260-264: second sequence-export flow likewise calls as.character then lon/lat geometry",
+        "671-674: ESRI Shapefile point and line writing"
+      ],
+      "supported": "A generic Migration Mapper sequence-writing pipeline that could drop midnight text existed before Dryad publication under R4.3+ behavior, but published dataset export identity is unproven.",
+      "source_url": "https://github.com/jmerkle1/Migration-Mapper/blob/affaea1ee55830638e20fe712908de188214e2ac/app3_sequenceWriting/scripts/app3_calcSequences.R"
+    },
+    {
+      "commit": "87b00491eef9d753703515cb9f1de903d152a692",
+      "date_utc": "2024-03-25T21:39:09Z",
+      "title": "file export fix",
+      "file": "app1_dataCleaning/scripts/app1_ui.R",
+      "direct_change": "Exporter changed from prior spatial object to constructing sf Point from already numeric x/y; initial assigned configOptions$masterCrs4326.",
+      "source_url": "https://github.com/jmerkle1/Migration-Mapper/commit/87b00491eef9d753703515cb9f1de903d152a692"
+    },
+    {
+      "commit": "6d45fb5126264f72735c7c26d7b7e246a3490a49",
+      "date_utc": "2024-03-26T14:53:29Z",
+      "title": "export errors",
+      "file": "app1_dataCleaning/scripts/app1_ui.R",
+      "direct_change": "Corrected x/y-based Point constructor CRS from configOptions$masterCrs4326 to configOptions$masterCrs. A real CRS-assignment coding change in related software, not proof of the Dryad 3742 metadata error.",
+      "source_url": "https://github.com/jmerkle1/Migration-Mapper/commit/6d45fb5126264f72735c7c26d7b7e246a3490a49"
+    },
+    {
+      "commit": "dc32cf3618c079057d067783cf9c8bbf3592dcb5",
+      "date_utc": "2024-08-06T15:39:23Z",
+      "title": "data as character before exporting",
+      "file": "app1_dataCleaning/scripts/app1_ui.R",
+      "direct_change": "ADDED dataToExport$newMasterDate <- as.character(dataToExport$newMasterDate) before st_write.",
+      "relative_to_dryad_publication": "AFTER_2024_07_18",
+      "consequence": "Cannot be cited as a prepublication implementation of the exact data cleaning exporter code.",
+      "source_url": "https://github.com/jmerkle1/Migration-Mapper/commit/dc32cf3618c079057d067783cf9c8bbf3592dcb5"
+    },
+    {
+      "commit": "4786f018b8283f030b9092275d7399499365b8ce",
+      "date_utc": "2024-09-06T21:56:36Z",
+      "title": "Sequence files are now written in UTM meters",
+      "file": "app3_sequenceWriting/scripts/app3_calcSequences.R",
+      "direct_change": "Changed output source coordinates in sequence exporter from lon/lat plus masterCrs4326 to x/y plus masterCrs; retained earlier as.character(date) line.",
+      "relative_to_dryad_publication": "AFTER_2024_07_18",
+      "consequence": "Current sequence export x/y path is a later revision, not established as the source of July 2024 Dryad XY.",
+      "source_url": "https://github.com/jmerkle1/Migration-Mapper/commit/4786f018b8283f030b9092275d7399499365b8ce"
+    }
+  ],
+  "independent_negative_evidence": [
+    "March 2024 app3 exporter chose lon/lat EPSG4326 geometry and field names id/bioYearFull/date/id_yrbio_season/lon/lat; the original Dryad source has fields State,Herd,SpcsCmm,SpcsScn,AID,SeasnYr,Season,Year,Timstmp,UTM_E,UTM_N and projected coordinate geometry.",
+    "The current app1 as.character addition occurred 19 days after the July 18 Dryad publication, while the current app3 projected XY export modification occurred about 50 days after; these specific revisions cannot be directly assumed to have produced the deposited original 12h file.",
+    "The March app3 as.character date conversion existed before publication, but its coordinate and attribute schema do not match the actual archived source.",
+    "The Dryad README does not disclose the precise export R version, scripted data pipeline, local time offset/DST conversion, or native XY coordinate reference."
+  ],
+  "inference": {
+    "published_as_character_path_pre_dryad": true,
+    "R43_mechanism_consistent_with_source_pattern": true,
+    "publisher_source_exact_export_path_identified": false,
+    "original_R_version_identified": false,
+    "source_date_only_definitely_midnight": false,
+    "declared_EPSG3742_vs_Albers_discrepancy_resolved": false,
+    "source_provenance_issue": "https://github.com/zuizui0223/eog/issues/745"
+  },
+  "access_limits": {
+    "original_sparse_12h_SHA_reverified_local": true,
+    "dense_2h_GPS_unopened": true,
+    "raw_GPS_coordinates_or_IDs_published": false,
+    "source_GPS_original_file_committed": false,
+    "predictive_EOG_or_BBMM_score_computed": false,
+    "EOG_WF_frozen_scored": 3,
+    "EOG_WF_frozen_scientific_STOP": 31,
+    "EOG_WF_frozen_admin_exclusions": 3
+  }
+}
