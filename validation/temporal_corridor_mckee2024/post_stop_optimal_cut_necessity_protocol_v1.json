@@ -1,0 +1,102 @@
+{
+  "schema": "eog.mckee2024.source_only_optimal_cut_necessity.v1",
+  "status": "FROZEN_BEFORE_MINIMUM_PARTITION_ENSEMBLE_SOURCE_ANALYSIS",
+  "created_utc_date": "2026-11-24",
+  "question": "Are the previously reported 857 overlapping greedy T0/T1 clock-cut locations *forced* in all minimum-cut segmentations, or can equally optimal partitions move breaks? How does this change across DST/clock interpretation worlds?",
+  "source": {
+    "doi": "10.5061/dryad.15dv41p51",
+    "file_id": 3334125,
+    "filename": "GPS12hrs_Locs.zip",
+    "bytes": 1539661,
+    "sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+    "records": 28953,
+    "groups": 421,
+    "links": 28532,
+    "allowed_fields": [
+      "Herd",
+      "AID",
+      "SeasnYr",
+      "Season",
+      "Timstmp"
+    ],
+    "forbidden": [
+      "SHP point coordinates",
+      "other DBF columns",
+      "dense 2h ZIP",
+      "outcomes",
+      "raw ID/clock record exports"
+    ]
+  },
+  "frozen_sources": {
+    "latest_main": "5b1805b8b6cf91e3e27d172a80144cb486d20f7a",
+    "greedy_naive_T0_cuts": 857,
+    "greedy_naive_T1_cuts": 858,
+    "greedy_IANA_T0_cuts": 889,
+    "greedy_IANA_T1_cuts": 890,
+    "naive_T0_T1_greedy_shared": 857,
+    "naive_to_IANA_additional_cuts_each": 32,
+    "original_clock_and_CRS_STOP": true
+  },
+  "worlds": [
+    {
+      "id": "T0_NAIVE",
+      "time": "date-only any second 00:00:00..23:59:59; naive local clock",
+      "cut_expected": 857
+    },
+    {
+      "id": "T1_NAIVE",
+      "time": "date-only 00:00:00..01:00:00; naive local clock",
+      "cut_expected": 858
+    },
+    {
+      "id": "T0_IANA",
+      "time": "date-only full local day converted by America/Denver, true IANA folds as intervals",
+      "cut_expected": 889
+    },
+    {
+      "id": "T1_IANA",
+      "time": "date-only 00:00:00..01:00:00 under America/Denver, preserve disjoint UTC second-fold",
+      "cut_expected": 890
+    }
+  ],
+  "negative_control": "Fixed MST UTC-07 produces precisely identical segmentation and optimal-cut classes to NAIVE for the same T0/T1.",
+  "model": {
+    "gap_seconds": [
+      1,
+      45000
+    ],
+    "record_order": "prior T0 lower time, upper time, original DBF ordinal per Herd,AID,SeasnYr,Season",
+    "block_feasible": "one shared temporal assignment for all records of the contiguous block, exact union-of-interval second-resolution propagation",
+    "DAG": "one boundary node for each cut position 0..N. Directed edge i→j for i<j iff fixes i..j-1 form a feasible block. Every 0→N path is a valid contiguous partition.",
+    "optimum": "fewest number of segments (all singleton blocks permitted), minimum path length from boundary 0 to N.",
+    "optimal_edge_condition": "DAG block edge i→j lies on at least one minimum-segment path iff dist_from_start[i]+1+dist_to_end[j]==dist_from_start[N].",
+    "link_types": {
+      "forced_cut": "source link at boundary k is cut in every minimum-segment path (no on-optimal DAG block edge spans k)",
+      "optional": "there is at least one optimal path visiting boundary k (cut) AND at least one optimal DAG edge spanning boundary k (retain)",
+      "forced_retain": "source link at boundary k is retained in every minimum-segment path (boundary k does not lie on any minimum-segment path)"
+    },
+    "must_check": "Exactly one class for each of 28,532 source links under each world; any greedy selected cut MUST be forced_cut or optional; a forced_retain link cannot be in a valid greedy partition."
+  },
+  "metrics": [
+    "per world: N links, min cuts, forced_cut/optional/forced_retain counts, greedy cuts intersecting forced_cut vs optional, groups with nonunique optimal cut masks",
+    "across four worlds: links forced_cut in ALL four, links forced_retain in ALL four, links not universally fixed either way, links optional in at least one world",
+    "pairwise four-world forced-cut vs greedy selected mask overlap; no derived biological prediction scores",
+    "per-world optimal partitions count capped after 1,000,000 (report at least two, not huge exact count)",
+    "brute-force oracle of all 2^(n-1) contiguous partitions for at least 250 random 2-6 fix integer interval-union worlds, validating optimal count and all forced/optional status classes",
+    "holdout/author CRS and clock semantics unresolved flags"
+  ],
+  "stop": [
+    "Fail on SHA/count change, unexpected timezone or nonfinite timestamps, mismatch to previous 857/858/889/890 greedy controls",
+    "Never call a greedy common cut a biologically mandated disconnection",
+    "Never equate time-gap link reachability to ecological movement route or Brownian bridge output",
+    "Do not open 2h, use outcomes, or promote a fourth EOG-WF endpoint",
+    "No raw timestamps, individual identities, per-fix/link positions or coordinates written to the repository"
+  ],
+  "original_EOG_WF": {
+    "scored": 3,
+    "favorable": 2,
+    "adverse": 1,
+    "scientific_stops": 31,
+    "admin_exclusions": 3
+  }
+}

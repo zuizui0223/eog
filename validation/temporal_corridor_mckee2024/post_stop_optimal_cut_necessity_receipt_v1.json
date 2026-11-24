@@ -1,0 +1,106 @@
+{
+  "schema": "eog.mckee2024.source_only_optimal_cut_necessity_receipt.v1",
+  "status": "GREEDY_OVERLAP_NOT_EQUAL_TO_MANDATORY_OPTIMAL_CUTS__TIME_SOURCE_STOP",
+  "protocol_frozen_commit": "5319159417d944586913a3abd06b54331a150af5",
+  "source_sha256_verified": true,
+  "source_sha256": "556062b7426336a94fe93dd9e6b049dc6c960d3dc8135f7298f465126c6962c4",
+  "source_bytes": 1539661,
+  "record_count": 28953,
+  "group_count": 421,
+  "original_within_group_link_count": 28532,
+  "world_order": [
+    "T0_FULL_DAY_UNCERTAINTY:NAIVE_MOUNTAIN_LOCAL",
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:NAIVE_MOUNTAIN_LOCAL",
+    "T0_FULL_DAY_UNCERTAINTY:AMERICA_DENVER_IANA",
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:AMERICA_DENVER_IANA"
+  ],
+  "per_world": {
+    "T0_FULL_DAY_UNCERTAINTY:NAIVE_MOUNTAIN_LOCAL": {
+      "minimum_cuts": 857,
+      "n_links": 28532,
+      "forced_cut": 793,
+      "optional": 128,
+      "forced_retain": 27611,
+      "greedy_selected_forced_cuts": 793,
+      "greedy_selected_optional_cuts": 64
+    },
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:NAIVE_MOUNTAIN_LOCAL": {
+      "minimum_cuts": 858,
+      "n_links": 28532,
+      "forced_cut": 858,
+      "optional": 0,
+      "forced_retain": 27674,
+      "greedy_selected_forced_cuts": 858,
+      "greedy_selected_optional_cuts": 0
+    },
+    "T0_FULL_DAY_UNCERTAINTY:AMERICA_DENVER_IANA": {
+      "minimum_cuts": 889,
+      "n_links": 28532,
+      "forced_cut": 800,
+      "optional": 178,
+      "forced_retain": 27554,
+      "greedy_selected_forced_cuts": 800,
+      "greedy_selected_optional_cuts": 89
+    },
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:AMERICA_DENVER_IANA": {
+      "minimum_cuts": 890,
+      "n_links": 28532,
+      "forced_cut": 865,
+      "optional": 50,
+      "forced_retain": 27617,
+      "greedy_selected_forced_cuts": 865,
+      "greedy_selected_optional_cuts": 25
+    }
+  },
+  "groups_with_multiple_minimum_cut_partitions": {
+    "T0_FULL_DAY_UNCERTAINTY:NAIVE_MOUNTAIN_LOCAL": 41,
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:NAIVE_MOUNTAIN_LOCAL": 0,
+    "T0_FULL_DAY_UNCERTAINTY:AMERICA_DENVER_IANA": 65,
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:AMERICA_DENVER_IANA": 25
+  },
+  "groups_with_greedy_selected_optional_cut": {
+    "T0_FULL_DAY_UNCERTAINTY:NAIVE_MOUNTAIN_LOCAL": 41,
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:NAIVE_MOUNTAIN_LOCAL": 0,
+    "T0_FULL_DAY_UNCERTAINTY:AMERICA_DENVER_IANA": 65,
+    "T1_PUBLISHED_NEAR_MIDNIGHT_WINDOW:AMERICA_DENVER_IANA": 25
+  },
+  "joint_forced_optional_class_patterns": {
+    "CCCC": 793,
+    "OCOC": 64,
+    "OROR": 64,
+    "RCRC": 1,
+    "RRCC": 7,
+    "RROO": 50,
+    "RRRR": 27553
+  },
+  "joint_greedy_cut_mask_patterns": {
+    "1111": 857,
+    "0000": 27642,
+    "0011": 32,
+    "0101": 1
+  },
+  "joint": {
+    "selected_cut_by_all_4_greedy": 857,
+    "forced_cut_in_all_4_optimal_ensembles": 793,
+    "forced_retain_in_all_4_optimal_ensembles": 27553,
+    "not_universally_forced_either_way": 186,
+    "optional_in_at_least_one_world": 178,
+    "forced_cut_in_some_and_forced_retain_in_another_world": 8,
+    "groups_with_any_link_class_difference_across_worlds": 70,
+    "fixed_MST_negative_control_groups": 421
+  },
+  "IANA_timezone_db_version": "2025b",
+  "independent_oracle": "450/450 synthetic 2–6 observation integer interval-union worlds: exhaustive all time assignments and all partitions matched shortest-path DAG minimum-cut count and per-link C/O/R class",
+  "mathematical_claim_ceiling": "A forced cut is mandatory only for minimum-number-of-segments solutions within the frozen clock world, time gap rule and frozen source order; not biological connectivity or true fix times.",
+  "historical_greedy_857_reinterpretation": "857 jointly greedy-selected T0/T1 naive and IANA cuts are method-selected, not 857 universally mandatory cuts: only 793 are forced in all min-cut partition ensembles. Of T0 naive's 857 selected cuts 64 are optional and 64 alternative optional links exist.",
+  "source_timestamp_semantics_author_confirmed": false,
+  "source_CRS_author_confirmed": false,
+  "source_QC_STOP_retained": true,
+  "dense_2h_GPS_opened": false,
+  "source_point_geometry_read": false,
+  "raw_IDs_timestamps_coordinates_or_link_locations_exported": false,
+  "BBMM_or_EOG_predictive_score_computed": false,
+  "original_EOG_WF_scored_endpoints": 3,
+  "original_EOG_WF_scientific_stops": 31,
+  "original_EOG_WF_admin_exclusions": 3
+}
