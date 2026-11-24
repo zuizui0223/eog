@@ -42,3 +42,8 @@ Cell stability **depends on the specified grid origin and the incomplete offline
 - No dense 2-hour GPS was opened; no EOG model fit, ecological prediction, migration-history claim or fourth EOG-WF endpoint was produced. Original EOG-WF denominator remains 3 scored / 31 science STOP / 3 admin exclusions.
 
 Raw coordinates and individual IDs are not committed. Reproduce from the exact-SHA local 12-hour ZIP via [the opt-in script](replay_post_stop_5070_5071_grid_sensitivity.py) and inspect the [aggregate receipt](post_stop_5070_5071_datum_grid_sensitivity_receipt_v1.json).
+
+
+## Follow-up: official NADCON5 grid located, but not acquired
+
+A separately frozen [official NOAA grid preflight](POST_STOP_OFFICIAL_NADCON5_GRID_PREFLIGHT_20261124.md) identified the exact CONUS NAD83→HARN GTG metadata in OSGeo's PROJ-data files.geojson (3,522,682 bytes, SHA e12ac2e886edafe616e0994c610ad3daa01db17c00d0e9938145d956f249fc2f). The original 12h source ZIP SHA was reconfirmed and this report's *existing offline ballpark* geodesic median 1.155895m and 100–5,000m grid-change counts independently reproduced. But the official TIFF download FAILED in the current sandbox because cdn.proj.org could not be resolved. As a result, **the best NAD83/HARN datum operation was NOT run**. The 1.2m older fallback remains only the descriptive output of two independent candidate-to-WGS84 fallback transforms, NOT an upper bound on real datum uncertainty. The new producer and tests refuse to claim any grid-backed result without original official file bytes and SHA verification. The author CRS mismatch remains a scientific STOP.
