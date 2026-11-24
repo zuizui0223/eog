@@ -51,8 +51,8 @@ def test_two_totals_hid_only_one_extra_t1_break():
     assert sum(x.values()) == 28532
     assert r["T0_full_day_coherent_cuts"] == x["cut_both"] + x["cut_T0_only"] == 857
     assert r["T1_near_midnight_coherent_and_optimistic_cuts"] == (
-        x["cut_both"] + x["cut_T1_only"] == 858
-    )
+        x["cut_both"] + x["cut_T1_only"]
+    ) == 858
     assert r["cut_jaccard"] == pytest.approx(857/858)
     assert r["retained_link_jaccard"] == pytest.approx(27674/27675)
     assert r["groups_with_any_cut_disagreement"] == 1
@@ -96,9 +96,7 @@ def test_cut_set_out_of_range_fail_closed():
 def test_input_cut_status_monotonicity_and_scientific_stop():
     r = _json(RECEIPT)
     p = _json(PROTOCOL)
-    assert r["2h_dense_holdout_opened"] is False if (
-        "2h_dense_holdout_opened" in r
-    ) else r["dense_2h_GPS_accessed"] is False
+    assert r["dense_2h_GPS_accessed"] is False
     assert r["dense_2h_GPS_accessed"] is False
     assert r["actual_BBMM_or_movement_path_fitted"] is False
     assert r["author_exact_date_only_clock_verified"] is False
