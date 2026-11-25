@@ -1,0 +1,194 @@
+{
+  "schema": "eog.joint_clock_gap_speed_frontier.v1",
+  "status": "FROZEN_BEFORE_SYNTHETIC_ENUMERATION",
+  "base_sha": "39bf420cc83465165678c2f202b11ba8ea250e6d",
+  "scope": "methods-only synthetic known-truth; no McKee data, no dense GPS, no empirical scoring; frozen 3/31/3 unchanged",
+  "estimand": "Within each declared clock/geometry world, retain one shared integer timestamp assignment across all consecutive records; each edge requires 1 <= dt <= G and distance <= V*dt. Return grid-Pareto-minimal (G,V), separately possible (exists a whole world) and robust feasible (every whole world has some schedule). No cross-world splicing.",
+  "grid": {
+    "G": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "V": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "cases": [
+    {
+      "id": "tradeoff",
+      "worlds": [
+        {
+          "times": [
+            [
+              0
+            ],
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              4
+            ]
+          ],
+          "distances": [
+            1,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nonconvex",
+      "worlds": [
+        {
+          "times": [
+            [
+              0
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              4
+            ]
+          ],
+          "distances": [
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "id": "world_splice",
+      "worlds": [
+        {
+          "times": [
+            [
+              0
+            ],
+            [
+              3
+            ],
+            [
+              4
+            ]
+          ],
+          "distances": [
+            3,
+            3
+          ]
+        },
+        {
+          "times": [
+            [
+              0
+            ],
+            [
+              1
+            ],
+            [
+              4
+            ]
+          ],
+          "distances": [
+            3,
+            3
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quantifier",
+      "worlds": [
+        {
+          "times": [
+            [
+              0
+            ],
+            [
+              2
+            ],
+            [
+              4
+            ]
+          ],
+          "distances": [
+            2,
+            2
+          ]
+        },
+        {
+          "times": [
+            [
+              0
+            ],
+            [
+              1
+            ],
+            [
+              4
+            ]
+          ],
+          "distances": [
+            2,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "id": "order_impossible",
+      "worlds": [
+        {
+          "times": [
+            [
+              3
+            ],
+            [
+              1
+            ],
+            [
+              2
+            ]
+          ],
+          "distances": [
+            1,
+            1
+          ]
+        }
+      ]
+    }
+  ],
+  "comparators": [
+    "independent local edge feasibility within each world",
+    "edge-wise union across worlds",
+    "convexifying timestamp sets",
+    "coordinatewise minima without joint feasibility"
+  ],
+  "stress": {
+    "seed": 20261125,
+    "generator": "Python random.Random; 500 single worlds; n uniform 2..5; each window sorted sample of 1..4 distinct integers from 0..8; each edge integer distance 0..9; all 36 grid pairs",
+    "oracle": "Cartesian enumeration of complete timestamp assignments, exact integer inequalities; compare to forward reachable timestamp propagation",
+    "pass": "zero disagreement; zero monotonicity violations for increasing G/V; no false whole-world feasibility from exact engine"
+  },
+  "claims": [
+    "H1 tradeoff has >=2 non-dominated pairs and coordinatewise minimum infeasible",
+    "H2 convex hull creates a false feasible pair",
+    "H3 across-world edge splicing creates false possible feasibility",
+    "H4 robust frontier may differ from possible frontier",
+    "H5 ordered impossible case stays infeasible across grid"
+  ],
+  "stop": "No physical speed inference, no time interpretation selection, no new empirical data or MEE endpoint; thresholds arbitrary synthetic units; finite grid not continuous certificate."
+}
