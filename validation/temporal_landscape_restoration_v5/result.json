@@ -1,0 +1,118 @@
+{
+  "canonical": {
+    "serial": {
+      "possible_repair": [
+        5
+      ],
+      "robust_repair": [
+        5
+      ],
+      "possible_cut": [
+        1,
+        4
+      ],
+      "robust_cut": [
+        1,
+        4
+      ]
+    },
+    "parallel": {
+      "possible_repair": [
+        1,
+        2
+      ],
+      "robust_repair": [
+        1,
+        2
+      ],
+      "possible_cut": [
+        3
+      ],
+      "robust_cut": [
+        3
+      ]
+    },
+    "world_disagreement": {
+      "possible_repair": [
+        1,
+        2
+      ],
+      "robust_repair": [
+        3
+      ],
+      "possible_cut": [
+        3
+      ],
+      "robust_cut": [
+        1,
+        2
+      ]
+    },
+    "uncuttable": {
+      "possible_repair": [
+        0
+      ],
+      "robust_repair": [
+        0
+      ],
+      "possible_cut": [],
+      "robust_cut": []
+    },
+    "infeasible": {
+      "possible_repair": [],
+      "robust_repair": [],
+      "possible_cut": [
+        0
+      ],
+      "robust_cut": [
+        0
+      ]
+    }
+  },
+  "stress": {
+    "systems": 240,
+    "worlds": 720,
+    "damage_masks": 16,
+    "aggregate_identity_checks": 15360,
+    "aggregate_oracle_checks": 15360,
+    "both_repair_needed": 16,
+    "boundary_checks": 76800,
+    "duality_checks": 76800,
+    "each_world_singleton_but_no_common_singleton": 10,
+    "local_all_damage_already": 4493,
+    "local_all_damage_infeasible": 14896,
+    "local_all_damage_repair_needed": 3651,
+    "local_reach_checks": 23040,
+    "local_repair_oracle_checks": 23040,
+    "monotonicity_checks": 194400,
+    "possible_all_damage_already": 3529,
+    "possible_all_damage_infeasible": 2080,
+    "possible_all_damage_repair_needed": 2071,
+    "possible_cut_1_repair_1": 159,
+    "possible_cut_1_repair_2": 32,
+    "possible_cut_1_repair_3": 2,
+    "possible_cut_2_repair_1": 79,
+    "possible_cut_2_repair_2": 1,
+    "possible_cut_3_repair_1": 15,
+    "possible_cut_4_repair_1": 2,
+    "possible_eligible": 290,
+    "possible_full_damage_already": 60,
+    "possible_full_damage_infeasible": 130,
+    "possible_repair_equal": 160,
+    "possible_repair_greater": 34,
+    "possible_repair_less": 96,
+    "robust_all_damage_already": 78,
+    "robust_all_damage_infeasible": 7360,
+    "robust_all_damage_repair_needed": 242,
+    "robust_cut_1_repair_1": 2,
+    "robust_cut_1_repair_2": 10,
+    "robust_cut_1_repair_3": 8,
+    "robust_eligible": 20,
+    "robust_full_damage_infeasible": 460,
+    "robust_larger_than_possible": 15,
+    "robust_repair_equal": 2,
+    "robust_repair_greater": 18,
+    "mismatches": 0
+  },
+  "scope": "synthetic finite graph; EOG-WF 3/31/3 unchanged"
+}
