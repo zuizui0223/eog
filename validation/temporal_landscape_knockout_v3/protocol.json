@@ -66,12 +66,13 @@
     "independent state knockouts as proxy for persistent site knockouts"
   ],
   "canonical": {
-    "time_flexible": "same world contains two disjoint internal paths: 00->11->32->43 and 00->21->30->43; every path visits site1, neither (1,1) nor (2,1) indispensable",
-    "across_worlds": "one path per world from above; robust target reachable, no shared complete path; persistent site1 removal removes target from every world",
+    "time_flexible": "same world contains two disjoint internal paths: 00->11->32->43 and 00->21->33->43; every path visits site1, neither (1,1) nor (2,1) indispensable",
+    "across_worlds": "one path per world from corrected time_flexible witness; robust target reachable, no shared complete path; persistent site1 removal removes target from every world",
     "splice": "world1 has 00->21 only; world2 21->43 only; neither reaches 43; union edges incorrectly reaches it",
     "no_support": "neither world supports target; conditional necessity must be false"
   },
   "oracle": "DP propagation vs independent DFS enumerating all path prefixes for each world and intervention; independently derive aggregate masks and target necessity from baseline enumerated paths. Test all 15 interventions (none+12 state+2 site) x 320 worlds = 4800 DP/DFS comparisons; 160 x 15 x 2 projection comparisons = 4800; report all denominators and failures.",
   "success": "all four witnesses; zero oracle mismatches, zero deletion-monotonicity failures; no required positive stress frequency; preserve null/adverse counts.",
-  "stop": "finite synthetic graph, no continuous space certificate; do not infer biological movement or conservation effect; no production API or endpoint change."
+  "stop": "finite synthetic graph, no continuous space certificate; do not infer biological movement or conservation effect; no production API or endpoint change.",
+  "pre_score_correction": "Correct second witness 30 to 33 because 30->43 violates the frozen speed bound. No random or canonical evaluation yet. All thresholds, generator and estimands unchanged."
 }
