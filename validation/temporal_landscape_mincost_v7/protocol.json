@@ -1,0 +1,47 @@
+{
+  "schema": "eog.temporal_landscape_mincost.v7",
+  "status": "FROZEN_BEFORE_SCORING",
+  "base_sha": "6e98ac74520aa1001d921c91cae01439fd1b20f4",
+  "scope": "Decision-only minimum cost on finite synthetic fixed temporal graphs; no empirical score/source response access; frozen EOG-WF 3/31/3 unchanged.",
+  "estimand": "Positive integer additive cost paid once per restored persistent site, same action set in all worlds; minimize cost for possible (at least one complete world) or robust (every complete world) reachability. Return a verified feasible action and integer lower/upper bounds, optimal only if equal; infeasible only if proven from full available sites; no full frontier claim.",
+  "engine": "Exact branch-and-bound over included/excluded masks. For each unreachable world, sequentially enable all frontier-site labels from reachable vertices optimistically to generate disjoint necessary hitting constraints. Pool constraints for robust, take minimum of world-specific lower bounds for possible; use deterministic greedy disjoint packing of cut constraints; branch binary on an undecided site. Best-first global pending lower bounds, verified feasible incumbent, capped expansions; no numerical solver tolerances. All actions have strictly positive integer costs. Empty world universe rejected; no world splicing.",
+  "small": {
+    "seed": 20261129,
+    "systems": 100,
+    "worlds": 3,
+    "sites": 8,
+    "nodes": "5 times x 10 sites",
+    "source": [
+      0,
+      0
+    ],
+    "target": [
+      4,
+      9
+    ],
+    "generator": "Python random.Random. Per system draw 8 site costs randint(1,9); for each world loop ordered lexicographic node pairs: retain if 1<=dt<=2, abs(site diff)<=4*dt and rng.random()<0.30. Sites1..8 initially disabled, explicit wait edges only; fixed source and target. Costs common across worlds.",
+    "oracle": "enumerate 256 enabled masks per world by independent reverse search; aggregate possible/robust truth, exact cost minimum. Check both objectives, every reported witness and bounds, cap=20000 for normal run; cap=0 for same two objectives check interval contains oracle and no false exact/infeasible claim."
+  },
+  "structured": {
+    "gateways_sites": [
+      24,
+      48,
+      96
+    ],
+    "worlds": 3,
+    "costs": "cost_i = 1+(7*i mod 11); world g uses S->g->one of shared alternatives 3..n-1->T; expected possible=min gate cost+min alt cost; robust=sum 3 gate costs+min alt cost"
+  },
+  "adversarial": {
+    "binary_layers": [
+      12,
+      24,
+      48
+    ],
+    "costs": "cost_i = 1+(7*i mod 11); two sites per layer, complete forward edges between adjacent layers; exact minimum sum of cheaper site per layer; 2^k distinct inclusion-minimal repairs, no full enumeration; one world"
+  },
+  "bounded_witness": {
+    "description": "Three worlds require respectively any one of pairs {0,1}, {1,2}, {0,2}; cost1 each; robust optimum2; cap=0 must return bounded interval containing 2, cap20000 must certify 2. All-world infeasible witness one empty-edge world; already possible witness source=target or direct edge."
+  },
+  "pass": "All full small oracles and bounded intervals agree; all structured and binary analytical costs certified; cap witness bounds honest; report expansions and statuses, not elapsed-speed claim. No changes to protocol after scoring.",
+  "stop": "Synthetic fixed-action costs only; no real conservation efficacy or universal tractability. No production integration, no merge, no EOG-WF reopening. Follow with empirical source qualification rather than another scale panel."
+}
