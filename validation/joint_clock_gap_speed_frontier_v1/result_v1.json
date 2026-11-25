@@ -1,0 +1,254 @@
+{
+  "cases": {
+    "tradeoff": {
+      "possible_frontier": [
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "robust_frontier": [
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "pairwise_false": [
+        [
+          1,
+          6
+        ]
+      ],
+      "world_splice_false": [],
+      "convex_hull_false": [],
+      "coordinate_minimum_feasible": false
+    },
+    "nonconvex": {
+      "possible_frontier": [
+        [
+          3,
+          1
+        ]
+      ],
+      "robust_frontier": [
+        [
+          3,
+          1
+        ]
+      ],
+      "pairwise_false": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "world_splice_false": [],
+      "convex_hull_false": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ]
+      ],
+      "coordinate_minimum_feasible": true
+    },
+    "world_splice": {
+      "possible_frontier": [
+        [
+          3,
+          3
+        ]
+      ],
+      "robust_frontier": [
+        [
+          3,
+          3
+        ]
+      ],
+      "pairwise_false": [],
+      "world_splice_false": [
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          2
+        ]
+      ],
+      "convex_hull_false": [],
+      "coordinate_minimum_feasible": true
+    },
+    "quantifier": {
+      "possible_frontier": [
+        [
+          2,
+          1
+        ]
+      ],
+      "robust_frontier": [
+        [
+          3,
+          2
+        ]
+      ],
+      "pairwise_false": [],
+      "world_splice_false": [],
+      "convex_hull_false": [],
+      "coordinate_minimum_feasible": true
+    },
+    "order_impossible": {
+      "possible_frontier": [],
+      "robust_frontier": [],
+      "pairwise_false": [],
+      "world_splice_false": [],
+      "convex_hull_false": [],
+      "coordinate_minimum_feasible": null
+    }
+  },
+  "hypotheses": {
+    "H1": true,
+    "H2": true,
+    "H3": true,
+    "H4": true,
+    "H5": true
+  },
+  "stress": {
+    "worlds": 500,
+    "oracle_comparisons": 18000,
+    "oracle_disagreements": 0,
+    "monotonicity_violations": 0,
+    "pairwise_false_grid_pairs": 2328,
+    "worlds_with_pairwise_false": 176,
+    "hull_false_grid_pairs": 1485,
+    "worlds_with_hull_false": 155
+  },
+  "scope": "synthetic finite grid only; no empirical data; EOG-WF 3/31/3 unchanged"
+}
