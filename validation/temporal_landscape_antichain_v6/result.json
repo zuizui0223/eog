@@ -1,0 +1,65 @@
+{
+  "small": {
+    "systems": 80,
+    "worlds": 240,
+    "oracle_world_masks": 61440,
+    "frontier_checks": 800,
+    "peak_labels": 12,
+    "mismatches": 0
+  },
+  "large": [
+    {
+      "sites": 24,
+      "all_subset_count": "16777216",
+      "possible_repairs": 63,
+      "robust_repairs": 21,
+      "possible_cuts": 2,
+      "robust_cuts": 4,
+      "peak_labels": 63,
+      "complete": true
+    },
+    {
+      "sites": 48,
+      "all_subset_count": "281474976710656",
+      "possible_repairs": 135,
+      "robust_repairs": 45,
+      "possible_cuts": 2,
+      "robust_cuts": 4,
+      "peak_labels": 135,
+      "complete": true
+    },
+    {
+      "sites": 96,
+      "all_subset_count": "79228162514264337593543950336",
+      "possible_repairs": 279,
+      "robust_repairs": 93,
+      "possible_cuts": 2,
+      "robust_cuts": 4,
+      "peak_labels": 279,
+      "complete": true
+    }
+  ],
+  "adversarial": [
+    {
+      "layers": 8,
+      "complete": true,
+      "repairs": 256,
+      "cuts": 8,
+      "peak_labels": 256
+    },
+    {
+      "layers": 10,
+      "complete": true,
+      "repairs": 1024,
+      "cuts": 10,
+      "peak_labels": 1024
+    },
+    {
+      "layers": 12,
+      "complete": false,
+      "status": "label_cap_exceeded_no_certificate",
+      "peak_labels": 2048
+    }
+  ],
+  "scope": "finite synthetic graphs only; EOG-WF 3/31/3 unchanged"
+}
