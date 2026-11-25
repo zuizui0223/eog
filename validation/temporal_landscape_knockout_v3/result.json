@@ -1,0 +1,33 @@
+{
+  "canonical": {
+    "time_flexible": true,
+    "across_worlds": true,
+    "splice": true,
+    "no_support": true
+  },
+  "stress": {
+    "systems": 160,
+    "worlds": 320,
+    "interventions": 15,
+    "world_intervention_checks": 4800,
+    "projection_checks": 4800,
+    "world_target_site_support": 474,
+    "world_target_site_critical": 161,
+    "world_target_site_time_flexible": 9,
+    "system_target_site_support": 374,
+    "conditional_all_world_site_critical": 104,
+    "robust_initial_target_site_support": 100,
+    "robust_initial_all_world_site_critical": 9,
+    "robust_initial_all_world_site_critical_no_common_state": 4,
+    "possible_target_losses": 104,
+    "robust_target_losses": 57,
+    "robust_lost_possible_retained": 48,
+    "union_false_target_pairs": 73,
+    "intersection_missed_robust_target_pairs": 43,
+    "systems_with_union_false": 65,
+    "systems_with_intersection_miss": 36,
+    "deletion_monotonicity_violations": 0,
+    "oracle_disagreements": 0
+  },
+  "scope": "synthetic finite graph; no empirical scoring; EOG-WF 3/31/3 unchanged"
+}
