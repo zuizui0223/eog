@@ -1,0 +1,64 @@
+{
+  "canonical": {
+    "redundant_paths": [
+      3,
+      6,
+      9,
+      12
+    ],
+    "world_difference": {
+      "possible_loss": [
+        3,
+        6,
+        9,
+        12
+      ],
+      "robust_loss": [
+        1,
+        2,
+        4,
+        8
+      ]
+    },
+    "uncuttable": {
+      "possible_loss": [],
+      "robust_loss": [
+        1
+      ]
+    },
+    "unsupported": true
+  },
+  "stress": {
+    "systems": 180,
+    "worlds": 540,
+    "site_subsets": 16,
+    "cross_world_only_higher_order": 8,
+    "different_loss_frontiers": 15,
+    "local_frontier_checks": 1080,
+    "possible_frontier_checks": 720,
+    "possible_loss_any_higher_order": 73,
+    "possible_loss_multiple_minimal_cuts": 61,
+    "possible_loss_only_higher_order": 72,
+    "possible_loss_uncuttable": 32,
+    "possible_min_size_1": 152,
+    "possible_min_size_2": 62,
+    "possible_min_size_3": 10,
+    "reachability_oracle_checks": 17280,
+    "robust_frontier_checks": 30,
+    "robust_loss_any_higher_order": 2,
+    "robust_loss_but_not_possible_loss": 3,
+    "robust_loss_only_higher_order": 1,
+    "robust_loss_uncuttable": 0,
+    "subset_monotonicity_checks": 43740,
+    "system_target_possible": 256,
+    "system_target_robust": 15,
+    "system_target_total": 360,
+    "world_target_any_higher_order": 38,
+    "world_target_only_higher_order": 37,
+    "world_target_supported": 363,
+    "world_target_uncuttable": 35,
+    "oracle_disagreements": 0,
+    "monotonicity_violations": 0
+  },
+  "scope": "synthetic finite graph; EOG-WF 3/31/3 unchanged"
+}
