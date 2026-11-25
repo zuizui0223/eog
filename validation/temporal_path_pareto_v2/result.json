@@ -1,0 +1,56 @@
+{
+  "canonical": {
+    "tradeoff": [
+      [
+        2,
+        "3",
+        1,
+        1
+      ],
+      [
+        3,
+        "2",
+        2,
+        0
+      ]
+    ],
+    "checkpoint_alias": true,
+    "world_quantifier_possible": [
+      [
+        2,
+        "3",
+        1,
+        1
+      ],
+      [
+        3,
+        "2",
+        2,
+        0
+      ]
+    ],
+    "world_quantifier_robust": [
+      [
+        3,
+        "3",
+        2,
+        1
+      ]
+    ],
+    "hard_block": true
+  },
+  "stress": {
+    "systems": 240,
+    "worlds": 480,
+    "world_oracle_comparisons": 480,
+    "aggregate_oracle_comparisons": 480,
+    "unreachable_worlds": 321,
+    "possible_but_not_robust_systems": 109,
+    "independent_checkpoint_false_worlds": 96,
+    "robust_differs_from_possible_systems": 133,
+    "multiobjective_worlds": 31,
+    "both_feasible_robust_differs_systems": 24
+  },
+  "oracle_disagreements": 0,
+  "scope": "finite graph/time states; synthetic only; EOG-WF 3/31/3 unchanged"
+}
