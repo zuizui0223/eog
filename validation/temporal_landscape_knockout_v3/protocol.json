@@ -1,0 +1,77 @@
+{
+  "schema": "eog.temporal_landscape_knockout.v3",
+  "status": "FROZEN_BEFORE_SYNTHETIC_SCORING",
+  "base_sha": "f4907bcaf1c46dea561f4e572db87f251a44326e",
+  "scope": "Methods-only synthetic; no source data, no ecological score, no EOG-WF endpoint change (3/31/3).",
+  "registry": {
+    "times": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "sites": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "source": [
+      0,
+      0
+    ],
+    "final_targets": [
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        3
+      ]
+    ],
+    "site_removals": [
+      1,
+      2
+    ],
+    "state_removals": "all 12 states at times 1,2,3"
+  },
+  "constraints": {
+    "max_gap": 2,
+    "max_speed": 2,
+    "max_environment_transition": 2,
+    "max_barrier_requirement": 1,
+    "hard_edges": "never allowed",
+    "waiting": "explicit same-site forward edge only",
+    "source": "fixed; interventions never delete source or evaluated targets"
+  },
+  "graph_generator": {
+    "seed": 20261126,
+    "systems": 160,
+    "worlds_per_system": 2,
+    "algorithm": "Python random.Random; per system/world draw integer env 0..3 at all 20 states in time then site order; iterate all ordered pairs (time/site lexicographic); if 1<=dt<=2 and rng.random()<0.40, draw barrier randint(0,2) then hard rng.random()<0.10; keep edge iff not hard, abs(site difference)<=2*dt, abs(env difference)<=2, barrier<=1; distance=abs(site difference); same-site edge explicit."
+  },
+  "estimands": {
+    "reach": "exact-time reachable states per world; no demographic occupancy/persistence inference",
+    "possible": "union of entire world-specific reached sets",
+    "robust": "intersection of entire world-specific reached sets",
+    "loss": "baseline minus post-removal reached sets; possible loss and robust loss calculated AFTER world-level propagation",
+    "site_critical": "target initially reachable but disappears after all time copies of site removed; no individually critical intermediate state of same site = time-flexible necessity (intermediate state removal comparison includes all site copies at times 1..3; target/source distinct)",
+    "conditional_all_world_site_critical": "nonempty set of baseline supporting worlds; all supporting worlds lose target under site removal, even if others were initially unreachable; distinct from all-world initial reachability"
+  },
+  "comparators": [
+    "union of world edge sets",
+    "intersection of world edge sets",
+    "independent state knockouts as proxy for persistent site knockouts"
+  ],
+  "canonical": {
+    "time_flexible": "same world contains two disjoint internal paths: 00->11->32->43 and 00->21->30->43; every path visits site1, neither (1,1) nor (2,1) indispensable",
+    "across_worlds": "one path per world from above; robust target reachable, no shared complete path; persistent site1 removal removes target from every world",
+    "splice": "world1 has 00->21 only; world2 21->43 only; neither reaches 43; union edges incorrectly reaches it",
+    "no_support": "neither world supports target; conditional necessity must be false"
+  },
+  "oracle": "DP propagation vs independent DFS enumerating all path prefixes for each world and intervention; independently derive aggregate masks and target necessity from baseline enumerated paths. Test all 15 interventions (none+12 state+2 site) x 320 worlds = 4800 DP/DFS comparisons; 160 x 15 x 2 projection comparisons = 4800; report all denominators and failures.",
+  "success": "all four witnesses; zero oracle mismatches, zero deletion-monotonicity failures; no required positive stress frequency; preserve null/adverse counts.",
+  "stop": "finite synthetic graph, no continuous space certificate; do not infer biological movement or conservation effect; no production API or endpoint change."
+}
