@@ -1,0 +1,66 @@
+{
+  "schema": "eog.temporal_landscape_antichain.v6",
+  "status": "FROZEN_BEFORE_SCORING",
+  "base_sha": "3abcb1914ae9d2612a1340ff5ec50cc2c65e1669",
+  "scope": "methods-only consolidation and scale audit; no empirical source access; EOG-WF 3/31/3 unchanged",
+  "method": "time-DAG per-node antichain of required restoration-site masks; prune supersets; world possible = minimal union, robust = minimal pairwise OR product; cut family = incremental minimal transversal of repair family; no edge-world mixing",
+  "resource_limit": {
+    "max_labels": 2048,
+    "meaning": "cap on live minimal labels at any state/aggregation/transversal insertion; exceed => fail closed, no frontier or certificate; not a runtime or memory guarantee"
+  },
+  "small": {
+    "seed": 20261128,
+    "systems": 80,
+    "worlds_per_system": 3,
+    "candidate_sites": 8,
+    "times": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "locations": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "source": [
+      0,
+      0
+    ],
+    "target": [
+      4,
+      9
+    ],
+    "generator": "Python random.Random; draw edges by lexical ordered node pairs with 1<=dt<=2, abs(site diff)<=4*dt, rng.random()<0.3; sites1..8 restorable; source/target protected; original graph edges fixed; explicit waits only",
+    "oracle": "for each world and all 256 enabled-site masks use direct topological reachability, independently derive exact inclusion-minimal true restoration masks and false deletion masks by immediate predecessor criterion; verify local and aggregate possible/robust repair/cut families; zero mismatch"
+  },
+  "large": {
+    "candidate_counts": [
+      24,
+      48,
+      96
+    ],
+    "worlds": 3,
+    "construction": "three world-specific mandatory gateways 0,1,2; shared alternatives 3..n-1. Each world has paths S(t0)->its gate(t1)->one alternative(t2)->T(t3). All sites disabled initially. Compare analytical local, possible, robust repairs and cuts; possible repairs gate+alternative, robust all 3 gates+one alternative. Possible cuts all three gates OR all alternatives; robust cuts any singleton gate OR all alternatives.",
+    "comparison": "number of masks 2^n versus returned frontier counts and peak antichain size, not runtime speedup against unrun full enumeration"
+  },
+  "adversarial": {
+    "binary_layers": [
+      8,
+      10,
+      12
+    ],
+    "construction": "one world, two independent restorable choices per layer, complete forward edges between adjacent layers, source/target protected. Expected repair family 2^k, cut family k paired cuts. For k=8,10 verify complete exact families; k=12 must hit 2048 live-label cap and return no partial frontier. Report cap as algorithmic limitation."
+  },
+  "success": "all small oracle comparisons, analytical large cases, and fail-closed adversarial behavior pass; report all failures and no claim of generic polynomial scalability",
+  "stop": "No production API change, no new predictive endpoint or dataset fishing; no ecological effect claims. Consolidate v1-v5; retain draft stack."
+}
