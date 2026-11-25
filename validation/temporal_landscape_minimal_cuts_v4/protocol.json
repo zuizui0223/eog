@@ -1,0 +1,64 @@
+{
+  "schema": "eog.temporal_landscape_minimal_cuts.v4",
+  "status": "FROZEN_BEFORE_SCORING",
+  "base_sha": "0cfe24aa963b5cb645a6d78ebdfa57947970f003",
+  "scope": "new synthetic methods-only benchmark; no empirical data or endpoint; EOG-WF 3/31/3 unchanged",
+  "registry": {
+    "times": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "sites": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "source": [
+      0,
+      0
+    ],
+    "targets": [
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        5
+      ]
+    ],
+    "removable_sites": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "generator": {
+    "seed": 20261126,
+    "systems": 180,
+    "worlds": 3,
+    "algorithm": "Python random.Random; for each system and world draw environment randint(0,3) for 30 states in lexicographic time/site order; iterate ordered vertex pairs in same order. If 1<=dt<=2 and rng.random()<0.40, draw barrier randint(0,2) then hard rng.random()<0.10; retain if not hard, abs(site difference)<=2*dt, abs(env difference)<=2 and barrier<=1. Waiting requires explicit edge."
+  },
+  "estimands": {
+    "local": "inclusion-minimal persistent-site sets that remove a target initially reached in this world; all time copies removed; non-supporting worlds are excluded",
+    "possible_loss": "inclusion-minimal site sets making a previously possible target unreachable in all originally supporting worlds",
+    "robust_loss": "only for initially all-world reachable target, inclusion-minimal site sets making it unreachable in at least one world",
+    "uncuttable": "if a path uses no removable site, no cut can eliminate that world under the intervention library; no vacuous cut for initially unsupported target",
+    "aggregate": "compare direct subset propagation with independent path-signature hitting sets; any-world loss is Pareto-minimal union of local cuts; all-support-world loss is Pareto-minimal unions of one local cut from every supporting world; empty local cut family makes all-world loss unachievable"
+  },
+  "canonical": {
+    "redundant_paths": "one world: paths 00->11->23->45 and 00->12->34->45, with disjoint removable-site signatures {1,3},{2,4}; four minimal pairs, no singleton",
+    "world_difference": "two worlds: 00->11->23->45 vs 00->12->34->45; third world duplicates first; any-world minimal singletons {1},{2},{3},{4}; all-world four cross pairs",
+    "uncuttable": "target 40, explicit same-site path 00->20->40 in one world, another via 11; all-world impossible to cut, any-world still cuttable",
+    "unsupported": "no world reaches target; no cut label"
+  },
+  "oracle": "enumerate all source-to-target paths, collect removable-site signatures, independently enumerate all hitting sets and minimalize; compare per-world reachable mask for all 16 subsets, possible/robust loss frontiers, and both algebraic aggregate identities. Zero mismatches or subset monotonicity violations. Report denominators, multiplicity, uncuttable and higher-order counts; no expected positive prevalence.",
+  "stop": "finite graph exact; no continuous or real conservation claims, no production API, no new empirical score, no post-score changes to generator or canonical cases."
+}
