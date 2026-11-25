@@ -1,0 +1,81 @@
+{
+  "small": {
+    "systems": 100,
+    "worlds": 300,
+    "oracle_world_masks": 76800,
+    "full_checks": 200,
+    "zero_cap_checks": 200,
+    "infeasible": 38,
+    "zero_cap_bounded": 107,
+    "zero_cap_exact": 55,
+    "zero_cap_infeasible": 38,
+    "max_expanded": 33,
+    "total_expanded": 675,
+    "mismatches": 0
+  },
+  "gateway": [
+    {
+      "sites": 24,
+      "possible_cost": 2,
+      "robust_cost": 14,
+      "possible_expanded": 0,
+      "robust_expanded": 0
+    },
+    {
+      "sites": 48,
+      "possible_cost": 2,
+      "robust_cost": 14,
+      "possible_expanded": 0,
+      "robust_expanded": 0
+    },
+    {
+      "sites": 96,
+      "possible_cost": 2,
+      "robust_cost": 14,
+      "possible_expanded": 0,
+      "robust_expanded": 0
+    }
+  ],
+  "binary": [
+    {
+      "layers": 12,
+      "sites": 24,
+      "full_frontier_size": "4096",
+      "minimum_cost": 39,
+      "expanded": 0
+    },
+    {
+      "layers": 24,
+      "sites": 48,
+      "full_frontier_size": "16777216",
+      "minimum_cost": 81,
+      "expanded": 0
+    },
+    {
+      "layers": 48,
+      "sites": 96,
+      "full_frontier_size": "281474976710656",
+      "minimum_cost": 166,
+      "expanded": 0
+    }
+  ],
+  "witness": {
+    "bounded": {
+      "status": "bounded",
+      "lower": 1,
+      "upper": 2,
+      "mask": 6,
+      "expanded": 0
+    },
+    "exact": {
+      "status": "optimal",
+      "lower": 2,
+      "upper": 2,
+      "mask": 6,
+      "expanded": 1
+    },
+    "infeasible_checked": true,
+    "already_reachable_checked": true
+  },
+  "scope": "synthetic integer-cost decisions only; EOG-WF 3/31/3 unchanged"
+}
