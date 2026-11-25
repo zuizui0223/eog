@@ -1,0 +1,59 @@
+{
+  "schema": "eog.temporal_path_pareto.v2",
+  "status": "FROZEN_BEFORE_BENCHMARK_SCORING",
+  "base_sha": "f3e59d1c7d5289e0395f62d067a7b4f4e4e43f94",
+  "scope": "synthetic method extension, not real movement, no McKee data or 2h holdout; 3/31/3 unchanged",
+  "state": "node id with fixed integer time, edges strictly advance time; nonnegative integer distance/environment/barrier, hard-blocked edges excluded; no implicit waiting or graph interpolation",
+  "estimand": "single source-to-target directed path visiting ordered checkpoint vertex IDs; different paths permitted between worlds, never splice worlds; population-level independent reachability is a different estimand",
+  "coordinates": [
+    "maximum edge duration G",
+    "maximum exact rational edge distance/duration V",
+    "maximum edge environmental transition E",
+    "maximum edge barrier requirement B"
+  ],
+  "frontiers": "within world: all Pareto-minimal path maxima; possible: ParetoMin(union of world frontiers); robust feasible: ParetoMin(componentwise max over one path vector per world); empty world => empty robust; exact continuous nonnegative relaxation domain conditional on finite graph/time states, no continuous landscape certificate",
+  "stress": {
+    "seed": 20261125,
+    "systems": 240,
+    "worlds_per_system": 2,
+    "nodes": 7,
+    "times": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "source": 0,
+    "target": 6,
+    "checkpoints": [
+      3
+    ],
+    "edge_probability": 0.45,
+    "hard_probability": 0.15,
+    "distance_range": [
+      0,
+      12
+    ],
+    "environment_range": [
+      0,
+      4
+    ],
+    "barrier_range": [
+      0,
+      2
+    ],
+    "generator": "per system per world iterate i<j in lexical order; random.Random seed; if rng.random()<.45 draw distance, env, barrier via randint then hard via rng.random()<.15; integer node ids = times",
+    "oracle": "independent DFS enumerate complete source-target paths, filter checkpoint membership in order and hard blocks; exact fractions; brute pairwise maxima for robust frontier",
+    "success": "zero DP/DFS disagreements across all worlds and both aggregate frontiers; report counts for unreachable, possible-but-not-robust, independent checkpoint reachability false, robust frontier differs, multiobjective tradeoffs; no expected effect-size thresholds"
+  },
+  "cases": [
+    "tradeoff: edges (0,1,1,2,0),(1,4,6,0,0),(0,2,1,0,1),(2,4,6,1,0); source 0 target 4; exact frontier (3,2,2,0) and (2,3,1,1)",
+    "checkpoint_alias: source0,target4,checkpoint2; edges 0->2 and 0->4 only; both individually reachable but no path visits 2 then 4",
+    "world_quantifier: source0,target4; world A edges 0->1->4, world B edges 0->2->4; use tradeoff route values separately; robust frontier (3,3,2,1) has distinct paths; empty world makes robust empty",
+    "hard_block: direct 0->4 hard blocked; no feasible relaxation"
+  ],
+  "stop": "no production API, no new empirical score; retain hard STOP and draft review; no post-score change to frozen cases"
+}
