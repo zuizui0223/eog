@@ -1,9 +1,6 @@
 name: EOG Elwha metadata-only source manifest
+# Archived 403 gate; never repeat automatically on unrelated PR updates.
 on:
-  pull_request:
-    paths:
-      - "validation/river_barrier_restoration_source_gate_v1/**"
-      - ".github/workflows/eog-elwha-metadata-only.yml"
   workflow_dispatch:
 permissions:
   contents: read
