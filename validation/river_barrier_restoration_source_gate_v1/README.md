@@ -1,0 +1,26 @@
+# Elwha river restoration: independent empirical source qualification (Gate0)
+
+This is a separate post-closure methods lane, not the fourth EOG-WF endpoint. Parent PR #765 (e4fe5b31605ec6846e0e8a8c4145b1c7e9d17505) passed both workflows. Main remains unchanged. The two public search queries and stopping rules were committed before discovery at 6f776ca847c450f59ee5878ecf17b39b918c68bb. The merged search-result order and first five distinct families are preserved in gate0_receipt.json. Elwha is the first plausible *reserved* family, not a fully qualified or scored source.
+
+## Exact source identity
+
+- Duda et al. (2021), [article DOI 10.3389/fevo.2021.765488](https://doi.org/10.3389/fevo.2021.765488).
+- Torgersen et al. (2021), [USGS original dataset DOI 10.5066/P9MFJXK1](https://doi.org/10.5066/P9MFJXK1), ScienceBase item 615c9c83d34e7b019242b88f. Article cites the data release explicitly.
+- 2007/2008 pre-removal and 2018/2019 post-removal snorkel surveys; 22 common longitudinal reaches, roughly 65 km mainstem. The 2007 resolution is reach-level; subsequent years use finer channel units. Unsurveyed reservoirs, canyons, and additional year-specific gaps must not be encoded as zero fish.
+- The lower and upper dams were at approximately rkm 7.9 and 21.4; removal completion May 2012 and August 2014; October 2014 rockfall below upper dam and demolition October 2015/September 2016. These are physical intervention dates, not independently calibrated fish-passability dates. The paper documents hatcheries and adult relocation, which can generate new external source nodes, and geomorphic/visibility changes that affect survey comparability.
+
+The search/metadata phase exposed published aggregate findings and some first-sighting chronology in article text, so do not describe this historical case as blinded outcome discovery. No individual fish response files, post-removal rows, supplemental first-sighting tables, or biological model fits were opened. Reproduce the original structural signal as a retrospective external method demonstration if eventually qualified, not a new discovery of the already-published effect or a prospective predictive endpoint.
+
+## Source manifest blocker
+
+The DOI resolved to the ScienceBase item but catalog HTML/JSON and DataCite metadata retrieval through the web tool failed; an exact local catalog-only GET returned a DNS error. Therefore original filenames, byte sizes, checksum and archive versions remain unverified. No raw archive is requested. A separate CI metadata-only request contract was committed at 36756105bd97d9145491bc1784c19874d4fb72c2. manifest_gate.py requests one fixed JSON metadata endpoint, refuses redirects and unexpected content types, limits the response to 2 MiB, extracts only identity and manifest metadata, never follows any file URL, and archives a sanitized receipt even on HOLD. A green workflow alone is not a source qualification; inspect its explicit receipt status. All biological response access remains forbidden.
+
+## Required gates before any scoring
+
+1. Exact provider metadata/manifest and immutable content identity. No replacement source in this lane simply because of an unfavorable result or inaccessible archive.
+2. Freeze common reach geometry, dates, effort and taxon/life-stage definitions from source-independent metadata; independently verify longitudinal and tributary connectivity and intervention history. Coarse-to-fine comparisons use a common supported grain; masks denote unsurveyed, not absence.
+3. Freeze source policy, including documented hatchery/release/relocation events and plausible external-source worlds. Fix transition constraints from evidence independent of heldout fish records. Separate structural availability from seasonal, flow-dependent and species-specific passage; if calibration is insufficient, retain unresolved states rather than infer the correct movement rate from post-removal detections.
+4. If 2007/2008 and 2018/2019 files can be physically separated or a trustworthy custodian/filter can enforce pre/post isolation, open only approved pre data; freeze forecasts, action library, comparators and target registry before accessing post rows. If raw files mix both periods without a defensible separation contract, stop and redesign transparently. No post-outcome retuning.
+5. Score only a separately authorized retrospective structural test. Primary necessary-condition check: post positive observations must be in declared possible reachability by the observation time, with known sampling/source caveats. Compare frozen distance/barrier-only baselines and report exclusions, envelope coverage and ambiguity; all-world reachable is not guaranteed presence. A broad possible envelope can avoid false exclusion trivially, so coverage/size must be reported together. Do not score nondetections as true absence without a justified observation model. A formal causal effect of dam removal requires a different design.
+
+No actual restoration costs or efficacy estimated. Elwha is not yet a fully suitable test of weighted restoration optimization, since actual alternative actions and verified costs are not established. McKee clock/CRS STOP, sealed 2h holdout, frozen EOG-WF 3 scored / 31 scientific STOP / 3 administrative exclusions are unchanged.
