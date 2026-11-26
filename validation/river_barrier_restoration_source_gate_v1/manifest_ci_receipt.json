@@ -1,0 +1,26 @@
+{
+  "schema": "eog.elwha_manifest_gate.ci_receipt.v1",
+  "status": "HOLD_HTTP_403_VERIFIED_ARTIFACT",
+  "head_sha": "ccdf519997f63c0bf2178d9d82ed6d70ec5a7f00",
+  "run_id": 45758549332,
+  "job_id": 139702855375,
+  "artifact": {
+    "id": 15087829663,
+    "zip_bytes": 379,
+    "sha256": "cd81830505995105873d74e26f30b4a8e66797859556eb4c6008a7e91bc89d0a",
+    "verified_against_downloaded_zip": true,
+    "member": "elwha_metadata_receipt.json"
+  },
+  "receipt": {
+    "dataset_doi": "10.5066/P9MFJXK1",
+    "item_id": "615c9c83d34e7b019242b88f",
+    "request_attempts": 1,
+    "response_payloads_opened": 0,
+    "response_rows_parsed": 0,
+    "scores": 0,
+    "status": "HOLD_METADATA_REQUEST_OR_SCHEMA_FAILED",
+    "error_type": "HTTPError",
+    "http_error_code": 403
+  },
+  "decision": "Do not reinterpret green CI as access success. ScienceBase metadata request STOP remains. No raw file access."
+}
