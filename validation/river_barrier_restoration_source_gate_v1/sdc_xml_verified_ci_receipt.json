@@ -1,0 +1,65 @@
+{
+  "schema": "eog.elwha_sdc_xml_verified_ci_receipt.v1",
+  "status": "HTTP_200_SCHEMA_VERIFIED_RESPONSE_STOP",
+  "head_sha": "33cd7d25b04cd47cd8b2b677d871c76d4b349153",
+  "run_id": 45759010655,
+  "job_id": 139704319561,
+  "artifact": {
+    "id": 15089365547,
+    "zip_bytes": 831,
+    "sha256": "2e7722e13ccaeb858596246131e42f1bf732dc9fcb276d05d066a1464c76b0a3",
+    "verified_against_downloaded_zip": true,
+    "member": "elwha_sdc_xml_receipt.json"
+  },
+  "receipt": {
+    "metadata_url": "https://data.usgs.gov/datacatalog/metadata/USGS.615c9c83d34e7b019242b88f.xml",
+    "request_attempts": 1,
+    "response_payloads_opened": 0,
+    "response_rows_parsed": 0,
+    "scores": 0,
+    "file_manifest_verified": false,
+    "response_access_authorized": false,
+    "http_status": 200,
+    "title": "Riverscape snorkeling surveys of salmonid distribution and abundance before (2007, 2008) and after (2018, 2019) dam removal on the Elwha River, Washington",
+    "identity_title_matches": true,
+    "doi_in_citation_links": true,
+    "entity_schema_labels": [
+      {
+        "entity_label": "Elwha_Riverscape_reach_data.csv",
+        "attribute_labels": [
+          "Reach_ID",
+          "Reach_Code",
+          "Reach_Name",
+          "Year",
+          "Reach_Length_km",
+          "Upstream_Reach_Boundary_rkm",
+          "Downstream_Reach_Boundary_rkm",
+          "Section",
+          "Count_Saco",
+          "Count_Onxx",
+          "Count_Onts",
+          "Count_Onmy",
+          "Fish_km_Saco",
+          "Fish_km_Onxx",
+          "Fish_km_Onts",
+          "Fish_km_Onmy",
+          "JONTS",
+          "JONKI",
+          "JONXX"
+        ]
+      },
+      {
+        "entity_label": "Elwha_Riverscape_reach_breaks.csv",
+        "attribute_labels": [
+          "reach_break",
+          "UTM_easting",
+          "UTM_northing"
+        ]
+      }
+    ],
+    "xml_bytes": 34734,
+    "xml_sha256": "a51668a4fca0a0a13e082ad3b057a50c206ff3dbfb92d2abc1b8bfb9831a99ee",
+    "status": "ORIGINAL_XML_SCHEMA_READ_RESPONSE_STILL_SEALED"
+  },
+  "decision": "Official XML identifies two declared entities, one with mixed year/geometry/response columns and one with geometry-only labels. Entity labels are not confirmed downloadable filenames or file digests. No physical pre/post split proven. Keep all fish response sealed; qualify response-free geometry and independent trusted pre/post splitting before any score."
+}
