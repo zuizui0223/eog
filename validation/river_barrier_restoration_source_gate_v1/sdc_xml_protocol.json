@@ -1,0 +1,17 @@
+{
+  "schema": "eog.elwha_sdc_metadata_gate.v1",
+  "status": "FROZEN_BEFORE_ORIGINAL_XML_REQUEST",
+  "basis": "Official harvested metadata copy, not alternative dataset or circumvention of restricted source. Public SDC record confirms DOI, source identity and public release; Data.gov links original FGDC XML. ScienceBase 403 retained.",
+  "dataset_doi": "10.5066/P9MFJXK1",
+  "item_id": "615c9c83d34e7b019242b88f",
+  "catalog_record": "https://data.usgs.gov/datacatalog/data/USGS%3A615c9c83d34e7b019242b88f",
+  "discovery_metadata": "https://catalog.data.gov/dataset/riverscape-snorkeling-surveys-of-salmonid-distribution-and-abundance-before-2007-2008-and-",
+  "url": "https://data.usgs.gov/datacatalog/metadata/USGS.615c9c83d34e7b019242b88f.xml",
+  "max_requests_per_execution": 1,
+  "redirects": false,
+  "timeout_seconds": 20,
+  "byte_limit": 2097152,
+  "allowed": "original XML metadata only, identity, citations, temporal and spatial registry definitions, field names and definitions, entity filenames if declared; do not follow file links or fetch payloads; aggregate published context already exposed; no individual fish rows.",
+  "qualification": "Even valid original metadata is not a file manifest or proof of bytes; keep response sealed unless exact file identity and split independently confirmed. If XML inaccessible, retain blocker. No other candidate searches, no retries of ScienceBase denied endpoint.",
+  "scope": "No biological score, no new EOG-WF endpoint, frozen 3/31/3."
+}
