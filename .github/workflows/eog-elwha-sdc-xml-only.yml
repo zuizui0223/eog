@@ -1,0 +1,40 @@
+name: EOG Elwha official FGDC XML metadata
+on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - ".github/workflows/eog-elwha-sdc-xml-only.yml"
+      - "validation/river_barrier_restoration_source_gate_v1/sdc_xml_gate.py"
+      - "validation/river_barrier_restoration_source_gate_v1/sdc_xml_protocol.json"
+permissions:
+  contents: read
+jobs:
+  original-metadata-only:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline metadata fixtures
+        run: python validation/river_barrier_restoration_source_gate_v1/sdc_xml_gate.py --self-test
+      - name: One frozen official XML request only on enable commit
+        shell: bash
+        run: |
+          if [ "$(git log -1 --format=%s)" != "Enable one-shot official Elwha XML metadata gate" ]; then
+            echo "SKIP_NOT_FROZEN_ENABLE_COMMIT"
+            exit 0
+          fi
+          python validation/river_barrier_restoration_source_gate_v1/sdc_xml_gate.py --output elwha_sdc_xml_receipt.json
+      - name: Archive sanitized metadata receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elwha-sdc-xml-only-receipt
+          path: elwha_sdc_xml_receipt.json
+          if-no-files-found: ignore
+          retention-days: 30
