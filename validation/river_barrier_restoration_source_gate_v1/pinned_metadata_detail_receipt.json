@@ -1,0 +1,160 @@
+{
+  "metadata_url": "https://data.usgs.gov/datacatalog/metadata/USGS.615c9c83d34e7b019242b88f.xml",
+  "request_attempts": 1,
+  "response_payloads_opened": 0,
+  "response_rows_parsed": 0,
+  "scores": 0,
+  "file_manifest_verified": false,
+  "response_access_authorized": false,
+  "http_status": 200,
+  "status": "PINNED_METADATA_DETAILS_ONLY_RESPONSE_SEALED",
+  "xml_sha256": "a51668a4fca0a0a13e082ad3b057a50c206ff3dbfb92d2abc1b8bfb9831a99ee",
+  "xml_bytes": 34734,
+  "crs": {
+    "utmzone": [],
+    "horizdn": [],
+    "ellips": [],
+    "plandu": [],
+    "geogunit": [],
+    "mapprojn": [],
+    "sfctrmer": [],
+    "longcm": [],
+    "latprjo": [],
+    "feast": [],
+    "fnorth": [],
+    "absres": [],
+    "ordres": []
+  },
+  "bounding_coordinates": {
+    "westbc": "-123.62228393554689",
+    "eastbc": "-123.43963623046876",
+    "northbc": "48.145930585161196",
+    "southbc": "47.72916337846899"
+  },
+  "distribution_formats": [
+    ".csv"
+  ],
+  "entities": {
+    "Elwha_Riverscape_reach_data.csv": {
+      "entity_definition": "Comma Separated Value (CSV) file containing riverscape snorkeling data on fish distribution and abundance.",
+      "fields": [
+        {
+          "label": "Reach_ID",
+          "definition": "Numeric identifier of Elwha River sampling reaches common among the four survey years, ordered longitudinally from upstream to downstream",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Reach_Code",
+          "definition": "A four-letter code corresponding to each sampling reach",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Reach_Name",
+          "definition": "Name of each reach based on geographic landmarks and features",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Year",
+          "definition": "Year of survey",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Reach_Length_km",
+          "definition": "The snorkeled length of each survey reach in kilometers",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Upstream_Reach_Boundary_rkm",
+          "definition": "The river kilometer demarcating the upstream reach boundary",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Downstream_Reach_Boundary_rkm",
+          "definition": "The river kilometer demarcating the downstream reach boundary",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Section",
+          "definition": "The section of the Elwha River as defined by the location of the two former dams located on the river",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Count_Saco",
+          "definition": "The number of adult Bull Trout counted in the reach during each snorkel survey",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Count_Onxx",
+          "definition": "The number of adult trout (either Rainbow Trout or Coastal Cutthroat Trout) counted during each snorkel survey",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Count_Onts",
+          "definition": "The number of adult Chinook Salmon counted during each snorkel survey",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Count_Onmy",
+          "definition": "The number of adult Steelhead trout counted during each snorkel survey",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Fish_km_Saco",
+          "definition": "The value of Count_Saco divided by Reach_Length_km",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Fish_km_Onxx",
+          "definition": "The value of Count_Onxx divided by Reach_Length_km",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Fish_km_Onts",
+          "definition": "The value of Count_Onts divided by Reach_Length_km",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "Fish_km_Onmy",
+          "definition": "The value of Count_Onmy dvidided by Reach_Length_km",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "JONTS",
+          "definition": "The percentage of each reach occupied by juvenile Chinook Salmon, calculated by dividing the total length of channel units in which juveniles were observed by the total length of all channel units. NA values given for years where no juvenile presence data were collected.",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "JONKI",
+          "definition": "The percentage of each reach occupied by juvenile Coho Salmon, calculated by dividing the total length of channel units in which juveniles were observed by the total length of all channel units. NA values given for years where no juvenile presence data were collected.",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "JONXX",
+          "definition": "The percentage of each reach occupied by juvenile trout  (Rainbow Trout, Steelhead, or Coastal Cutthroat Trout), calculated by dividing the total length of channel units in which juveniles were observed by the total length of all channel units. NA values given for years where no juvenile presence data were collected.",
+          "definition_source": "Producer defined"
+        }
+      ]
+    },
+    "Elwha_Riverscape_reach_breaks.csv": {
+      "entity_definition": "Comma Separated Value (CSV) file containing data on reach geographic coordinates.",
+      "fields": [
+        {
+          "label": "reach_break",
+          "definition": "A label describing the start or end point of each reach. Reach names are derived from the field \"reach_code\" in the field data table.",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "UTM_easting",
+          "definition": "The geographic coordinate (UTM easting) of the start or end point of each reach. Coordinates are in Universal Transverse Mercator (UTM) Zone 10N, North American Datum (NAD) 1983.",
+          "definition_source": "Producer defined"
+        },
+        {
+          "label": "UTM_northing",
+          "definition": "The geographic coordinate (UTM northing) of the start or end point of each reach. Coordinates are in Universal Transverse Mercator (UTM) Zone 10N, North American Datum (NAD) 1983.",
+          "definition_source": "Producer defined"
+        }
+      ]
+    }
+  },
+  "physical_pre_post_split_verified": false
+}
