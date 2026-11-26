@@ -1,0 +1,40 @@
+name: EOG Elwha pinned metadata details
+on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - ".github/workflows/eog-elwha-pinned-metadata-detail.yml"
+      - "validation/river_barrier_restoration_source_gate_v1/pinned_metadata_detail.py"
+      - "validation/river_barrier_restoration_source_gate_v1/pinned_metadata_detail_protocol.json"
+permissions:
+  contents: read
+jobs:
+  pinned-metadata-only:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline detail extraction fixtures
+        run: python validation/river_barrier_restoration_source_gate_v1/pinned_metadata_detail.py --self-test
+      - name: One pinned XML request on enable commit only
+        shell: bash
+        run: |
+          if [ "$(git log -1 --format=%s)" != "Enable one-shot pinned Elwha metadata detail gate" ]; then
+            echo "SKIP_NOT_FROZEN_ENABLE_COMMIT"
+            exit 0
+          fi
+          python validation/river_barrier_restoration_source_gate_v1/pinned_metadata_detail.py --output elwha_pinned_metadata_detail.json
+      - name: Archive sanitized metadata details
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elwha-pinned-metadata-detail
+          path: elwha_pinned_metadata_detail.json
+          if-no-files-found: ignore
+          retention-days: 30
