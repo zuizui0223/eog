@@ -1,0 +1,109 @@
+{
+  "schema": "eog.river_restoration_source_gate.receipt.v1",
+  "status": "CANDIDATE_RESERVED_METADATA_INCOMPLETE_NO_RESPONSE_ACCESS",
+  "protocol_commit": "6f776ca847c450f59ee5878ecf17b39b918c68bb",
+  "discovery_order_note": "Search service returned a merged result list, not separately ranked lists per query. Screen first five distinct study/system families in observed merged order; this is a conservative subset of frozen maximum. No extra discovery queries. Existing linked article/repository metadata follow-up only. Aggregate published outcomes exposed, not blind study selection or unexposed outcomes at article level.",
+  "screened": [
+    {
+      "order": 1,
+      "family": "Maury River / Jordan's Point",
+      "source": "https://doi.org/10.22541/au.174063448.81313934/v1",
+      "status": "not qualified at discovery",
+      "reason": "Pre/post individual telemetry/translocation preprint; no public site-by-taxon recolonization response archive identity or standardized survey registry confirmed from search metadata."
+    },
+    {
+      "order": 2,
+      "family": "Elwha River",
+      "sources": [
+        "https://doi.org/10.5066/P96R5Q0M",
+        "https://doi.org/10.3389/fevo.2021.765488",
+        "https://doi.org/10.5066/P9MFJXK1"
+      ],
+      "status": "reserved first plausible family, not qualified for response access",
+      "reason": "eDNA release is post-removal only; linked riverscape snorkel study has 2007/2008 and 2018/2019 plus cited original USGS release. Need exact archive file metadata, source registry, independent directional networks and source-release/observation contract."
+    },
+    {
+      "order": 3,
+      "family": "Sedgeunkedunk Stream, Maine",
+      "source": "https://doi.org/10.1080/00028487.2015.1007164",
+      "status": "not qualified at discovery",
+      "reason": "BACI design and twice-yearly electrofishing reported; no stable raw data release verified in search result."
+    },
+    {
+      "order": 4,
+      "family": "Massachusetts small dams",
+      "source": "https://doi.org/10.3996/css92498424",
+      "status": "not qualified at discovery",
+      "reason": "Multiple sites and before/after sampling reported, but raw dataset identity and reach registry not verified."
+    },
+    {
+      "order": 5,
+      "family": "Secor Road dam",
+      "source": "https://www.utoledo.edu/commissions/river/pdfs/secor%20dam%20removal%20report%20November%202009.pdf",
+      "status": "not qualified at discovery",
+      "reason": "Progress report only; verified raw archive identity absent."
+    }
+  ],
+  "additional_results_not_screened": [
+    "Cuyahoga River",
+    "Little River NC",
+    "Paulins Kill NJ"
+  ],
+  "candidate": {
+    "article_doi": "10.3389/fevo.2021.765488",
+    "dataset_doi": "10.5066/P9MFJXK1",
+    "sciencebase_id": "615c9c83d34e7b019242b88f",
+    "data_title": "Riverscape snorkeling surveys of salmonid distribution and abundance before (2007, 2008) and after (2018, 2019) dam removal on the Elwha River, Washington",
+    "years": [
+      2007,
+      2008,
+      2018,
+      2019
+    ],
+    "common_reaches": 22,
+    "mainstem_extent_km": 65,
+    "chronology": [
+      {
+        "event": "lower dam complete",
+        "month": "2012-05",
+        "rkm": 7.9
+      },
+      {
+        "event": "upper dam complete",
+        "month": "2014-08",
+        "rkm": 21.4
+      },
+      {
+        "event": "rockfall below former upper dam",
+        "month": "2014-10"
+      },
+      {
+        "event": "rockfall demolition",
+        "month": "2015-10"
+      },
+      {
+        "event": "rockfall demolition",
+        "month": "2016-09"
+      }
+    ],
+    "blockers": [
+      "ScienceBase catalog file manifest unavailable via web; DOI resolves to item ID, not file-level checksums or bytes.",
+      "Survey unit changed from reach (2007) to channel unit later; common reach aggregation and effort denominator need inspection; former reservoirs, canyons and additional sections unsurveyed.",
+      "Hatchery operations and intentional adult relocations explicitly described; upstream source changes cannot be silently modeled as natural dispersal.",
+      "Dates of physical removal are not calibrated passability dates; rockfall and sediment/flow uncertainties must be encoded independently of fish outcomes.",
+      "Mainstem graph/hydrography and alternative source registry not frozen; no field transition calibration yet.",
+      "Published aggregate outcome and some first-sighting text exposed during literature methods retrieval; no raw heldout rows, no claim of fully blinded external validation."
+    ]
+  },
+  "access": {
+    "doi_resolution": "redirected to known ScienceBase item; web tool could not retrieve",
+    "sciencebase_web": "catalog HTML and JSON unavailable",
+    "datacite_web": "API metadata inaccessible",
+    "local_metadata_get": "DNS temporary failure",
+    "response_payloads_opened": 0,
+    "response_rows_parsed": 0,
+    "ecological_model_fits": 0,
+    "new_scores": 0
+  },
+  "decision": "Reserve Elwha only, STOP before raw fish response access. Next gate exact metadata/manifest only, then independent intervention/source/effort semantics and pre-response split or STOP. Do not switch to another family because of outcomes. No EOG-WF reopening; 3/31/3 unchanged."
+}
