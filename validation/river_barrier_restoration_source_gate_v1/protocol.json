@@ -1,0 +1,27 @@
+{
+  "schema": "eog.river_restoration_source_gate.v1",
+  "status": "FROZEN_BEFORE_PUBLIC_SOURCE_DISCOVERY",
+  "base_sha": "e4fe5b31605ec6846e0e8a8c4145b1c7e9d17505",
+  "scope": "new methods-only intervention validation lane; not fourth EOG-WF endpoint; no outcome access or scoring in this gate; prior McKee STOP and frozen 3/31/3 unchanged",
+  "question": "Can a fixed before-intervention source set and independent directed river network/barrier intervention schedule constrain later fish recolonization without treating non-detections as absence or tuning to post-intervention records?",
+  "search": {
+    "queries": [
+      "dam removal fish recolonization before after site survey data repository river barrier removal fish presence USGS Dryad",
+      "river dam removal fish community upstream downstream before after monitoring dataset data release sampling sites dates fish passage"
+    ],
+    "budget": "one search batch of two queries; screen up to first five distinct primary study/data families in returned order per query, deduplicate, preserve observed order and rejected families; no iterative outcome-based candidate hunting",
+    "metadata_only": true,
+    "qualification": "public study abstracts may expose aggregate findings, log exposure; no claim of blinded literature results; do not open individual post-intervention response rows"
+  },
+  "required": [
+    "stable public dataset identity and documented provenance; checksums or versioned content before data analysis",
+    "survey site/reach registry, dates and taxon-specific detection or standardized effort before and after intervention; pre/post separable",
+    "documented barrier locations and removal dates independent of post-intervention fish observations",
+    "directed river connectivity and source registry available or prospectively reconstructible without post-intervention outcomes",
+    "independent pre-response transition parameter basis or conservative declared world set; no fitting on heldout post-removal observations",
+    "explicit source/response firewall and no unsupported absence inference"
+  ],
+  "ranking": "first dataset family in discovery order with documented metadata for all first four requirements and feasible independent world declaration; if none fully qualifies, retain first plausible candidate with outstanding gates; no response release",
+  "output": "source roster with eligibility and blockers; candidate gate contract; no effect size, EOG score, field claim, or data download during metadata phase",
+  "stop": "if source access or pre/post/directed geography semantics unresolved, STOP before scoring. No candidate replacement after response exposure. Any cost units hypothetical unless documented; intervention is conditional connectivity change, not regeneration or causal efficacy."
+}
