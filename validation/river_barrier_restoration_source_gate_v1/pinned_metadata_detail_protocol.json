@@ -1,0 +1,16 @@
+{
+  "schema": "eog.elwha_pinned_metadata_detail.v1",
+  "status": "FROZEN_BEFORE_DETAIL_REQUEST",
+  "source_receipt_commit": "6c5ea88a5278a738f1c7e1fd19377af02e39e851",
+  "url": "https://data.usgs.gov/datacatalog/metadata/USGS.615c9c83d34e7b019242b88f.xml",
+  "expected_bytes": 34734,
+  "expected_sha256": "a51668a4fca0a0a13e082ad3b057a50c206ff3dbfb92d2abc1b8bfb9831a99ee",
+  "max_requests": 1,
+  "redirects": false,
+  "timeout_seconds": 20,
+  "byte_limit": 2097152,
+  "output": "Only CRS projection/datum units, spatial bounding coordinates, definitions and definition sources of the exact declared schema fields, metadata-only distribution format/entity names and file availability (no file URLs followed), original XML checksum. No enumerated domains or biological value ranges exported. No raw XML persisted.",
+  "source_policy": "No retry of denied ScienceBase endpoint, no fish/geometry CSV download. Official metadata copy is publicly listed; if exact bytes change, HOLD and do not accept revised fields without separate review.",
+  "authorization": "Metadata only. A valid schema does not establish physical pre/post split, file bytes, actual reach graph or authorize response access.",
+  "stop": "No EOG score; prior EOG-WF 3/31/3 unchanged."
+}
