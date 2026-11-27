@@ -1,0 +1,35 @@
+{
+  "schema": "eog.elwha_independent_nhdplus_ci_receipt.v1",
+  "status": "HOLD_TIMEOUT_VERIFIED_ARTIFACT",
+  "protocol_commit": "a1d9318c6b4b63e5104eb510dd44c5154398a59d",
+  "head_sha": "b17e0a715c3f7975554c178ba774859f22214a51",
+  "run_id": 45940060646,
+  "job_id": 140312073914,
+  "artifact": {
+    "id": 15172068979,
+    "zip_bytes": 575,
+    "sha256": "9c9b246320201a91d070aaa6419c5bdec66f3b9f8a0296efa52ffa209028615a",
+    "verified_against_downloaded_zip": true,
+    "member": "elwha_nhdplus_topology.json"
+  },
+  "receipt": {
+    "source": "https://hydro.nationalmap.gov/arcgis/rest/services/NHDPlus_HR/MapServer/3",
+    "query": {
+      "where": "gnis_name = 'Elwha River'",
+      "outFields": "nhdplusid,gnis_id,gnis_name,fromnode,tonode,lengthkm,flowdir,hydroseq,dnhydroseq,reachcode",
+      "returnGeometry": "false",
+      "orderByFields": "nhdplusid ASC",
+      "resultRecordCount": 2000,
+      "f": "json"
+    },
+    "request_attempts": 1,
+    "fish_response_payloads_opened": 0,
+    "fish_response_rows_parsed": 0,
+    "ecological_scores": 0,
+    "survey_crosswalk_verified": false,
+    "status": "HOLD_HYDROGRAPHY_REQUEST_OR_SCHEMA_FAILED",
+    "error_type": "TimeoutError",
+    "http_error_code": null
+  },
+  "decision": "Offline fixtures passed; downloaded ZIP exact digest checked locally. Independent network not acquired; no measured topology, no graph counts, no automatic retry."
+}
