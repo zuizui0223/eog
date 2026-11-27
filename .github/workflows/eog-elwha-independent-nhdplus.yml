@@ -1,0 +1,40 @@
+name: EOG Elwha independent NHDPlus hydrography
+on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - ".github/workflows/eog-elwha-independent-nhdplus.yml"
+      - "validation/river_barrier_restoration_source_gate_v1/nhdplus_mainstem.py"
+      - "validation/river_barrier_restoration_source_gate_v1/nhdplus_mainstem_protocol.json"
+permissions:
+  contents: read
+jobs:
+  named-network-only:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline graph and identity fixtures
+        run: python validation/river_barrier_restoration_source_gate_v1/nhdplus_mainstem.py --self-test
+      - name: One public hydrography query on enable commit only
+        shell: bash
+        run: |
+          if [ "$(git log -1 --format=%s)" != "Enable one-shot independent Elwha NHDPlus graph query" ]; then
+            echo "SKIP_NOT_FROZEN_ENABLE_COMMIT"
+            exit 0
+          fi
+          python validation/river_barrier_restoration_source_gate_v1/nhdplus_mainstem.py --output elwha_nhdplus_topology.json
+      - name: Archive sanitized graph receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elwha-nhdplus-topology-only
+          path: elwha_nhdplus_topology.json
+          if-no-files-found: ignore
+          retention-days: 30
