@@ -1,0 +1,27 @@
+{
+  "schema": "eog.elwha_historical_braids_ci_receipt.v1",
+  "status": "HOLD_PUBLIC_GEOMETRY_ARCHIVE_HTTP_403",
+  "protocol_commit": "d3462461c39a78be84564731e610ee09e7243bfe",
+  "head_sha": "995c1c9fb3acf523ef7fdda48ca7c01979d5d6f8",
+  "run_id": 45947061929,
+  "job_id": 140334071765,
+  "artifact": {
+    "id": 15175187105,
+    "zip_bytes": 446,
+    "sha256": "22e8347756a92951e009f3a9573e178d6fe8d210c19d44fcc2b0b0a1810f8c53",
+    "verified_against_downloaded_zip": true,
+    "member": "elwha_braids_receipt.json"
+  },
+  "receipt": {
+    "source_url": "https://www.sciencebase.gov/catalog/file/get/67102a7ad34edd269209626c?name=Elwha_River_braids_2006_to_2022.zip",
+    "request_attempts": 1,
+    "fish_response_files_opened": 0,
+    "fish_response_rows_parsed": 0,
+    "ecological_scores": 0,
+    "status": "HOLD_BRAIDS_ARCHIVE_OR_SCHEMA_FAILED",
+    "error_type": "HTTPError",
+    "http_error_code": 403,
+    "diagnostic": "HTTP Error 403: Forbidden"
+  },
+  "decision": "Offline safety fixture and request steps succeeded; no geometry was acquired. Local DNS and one CI HTTP403 retained. Stop automatic requests, no additional provider retries. Metadata coverage is expectation, not archive-verified. Original Elwha fish data HOLD and frozen EOG-WF 3/31/3 unchanged."
+}
