@@ -1,0 +1,22 @@
+{
+  "schema": "eog.elwha_manifest_gate.v1",
+  "status": "FROZEN_BEFORE_CI_METADATA_REQUEST",
+  "dataset_doi": "10.5066/P9MFJXK1",
+  "item_id": "615c9c83d34e7b019242b88f",
+  "url": "https://www.sciencebase.gov/catalog/item/615c9c83d34e7b019242b88f?format=json",
+  "max_requests_per_run": 1,
+  "redirects": false,
+  "byte_limit": 2097152,
+  "timeout_seconds": 20,
+  "output_fields": [
+    "id",
+    "title",
+    "DOI confirmation",
+    "file names",
+    "file sizes",
+    "declared checksums",
+    "status"
+  ],
+  "forbidden": "No file-download URL followed or exported, no file body or fish rows accessed; raw catalog JSON not persisted; no alternative candidates; no biological outcome score.",
+  "decision": "Even a valid manifest is metadata qualification only, not authorization to access response. Missing file digests or identity mismatch remain HOLD. Current local DNS failure retained. This is a separate verification lane, not a fourth EOG-WF endpoint."
+}

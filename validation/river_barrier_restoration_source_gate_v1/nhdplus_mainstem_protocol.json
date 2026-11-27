@@ -1,0 +1,30 @@
+{
+  "schema": "eog.elwha_independent_nhdplus_mainstem.v1",
+  "status": "FROZEN_BEFORE_HYDROGRAPHY_QUERY",
+  "base": "81838be90eaa7cf07c553713aa892434d40a773d",
+  "scope": "Independent public USGS hydrography, no fish records; not a reconstruction of the original 22 survey reaches, no post-response access, no EOG-WF endpoint",
+  "source": "https://hydro.nationalmap.gov/arcgis/rest/services/NHDPlus_HR/MapServer/3",
+  "query": {
+    "where": "gnis_name = 'Elwha River'",
+    "outFields": "nhdplusid,gnis_id,gnis_name,fromnode,tonode,lengthkm,flowdir,hydroseq,dnhydroseq,reachcode",
+    "returnGeometry": "false",
+    "orderByFields": "nhdplusid ASC",
+    "resultRecordCount": 2000,
+    "f": "json"
+  },
+  "request": {
+    "max_ci_attempts": 1,
+    "redirects": false,
+    "timeout_seconds": 30,
+    "max_bytes": 4194304
+  },
+  "checks": [
+    "provider query succeeds and no exceededTransferLimit; nonempty response; field names validated case-insensitively",
+    "unique positive integer exact node and reach IDs, positive finite lengths, one common GNIS ID and name, with-digitized flowdir=1; no self loops",
+    "build hydrologically directed reach-edge graph by exact fromnode/tonode IDs; independently test DNHydroSeq where named downstream reach present; no nearest-neighbor snapping, no assumption of single chain",
+    "named-river extraction only: gaps may reflect unnamed segments or network boundaries; no claim of full basin or confirmed surveyed-reach crosswalk; no use of present-day flowlines as historical truth",
+    "report edges, nodes, weak components, branching, terminal nodes, cycles and summed provider length; no fish responses, species passability or hypothetical costs"
+  ],
+  "output": "canonical sanitized network JSON + report with raw response SHA-256 and metadata, no raw JSON required; fail closed on invalid schema/truncation, retain diagnostics; no geometry needed for topological first pass",
+  "stop": "No retries of prior denied ScienceBase endpoint. If provider fails, record HOLD. No graph claims without result. No merge."
+}

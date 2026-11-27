@@ -1,0 +1,27 @@
+name: EOG Elwha metadata-only source manifest
+# Archived 403 gate; never repeat automatically on unrelated PR updates.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exact-catalog-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline metadata-only fixtures
+        run: python validation/river_barrier_restoration_source_gate_v1/manifest_gate.py --self-test
+      - name: One frozen catalog JSON request (no fish payload)
+        run: python validation/river_barrier_restoration_source_gate_v1/manifest_gate.py --output elwha_metadata_receipt.json
+      - name: Archive sanitized catalog receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elwha-metadata-only-receipt
+          path: elwha_metadata_receipt.json
+          if-no-files-found: ignore
+          retention-days: 30

@@ -1,0 +1,134 @@
+{
+  "schema": "eog.elwha.public_methods_only_audit.v1",
+  "status": "HOLD_RAW_RESPONSE; PUBLISHED_SURVEY_EFFORT_QUALIFIED",
+  "sources": {
+    "catalog": "https://data.usgs.gov/datacatalog/data/USGS:615c9c83d34e7b019242b88f",
+    "data_gov": "https://catalog.data.gov/dataset/riverscape-snorkeling-surveys-of-salmonid-distribution-and-abundance-before-2007-2008-and-",
+    "article": "https://doi.org/10.3389/fevo.2021.765488",
+    "methods": "Table 2 and Common Reaches Across the Four Survey Years; no individual fish records accessed",
+    "nps_lower_dam_timing": "https://www.nps.gov/olym/learn/nature/jan13-aug14_blogentries.htm",
+    "usgs_rockfall": "https://www.usgs.gov/news/salmon-seen-upstream-former-dam-sites-washingtons-elwha-river"
+  },
+  "access": {
+    "public_catalog_confirmed": true,
+    "original_xml_url": "https://data.usgs.gov/datacatalog/metadata/USGS.615c9c83d34e7b019242b88f.xml",
+    "web_xml": "cache miss",
+    "local_xml": "URLError temporary failure in name resolution",
+    "sciencebase_automatic_repeat": {
+      "run_id": 45758756320,
+      "job_id": 139703512056,
+      "artifact_id": 15087909430,
+      "zip_bytes": 379,
+      "sha256": "cdd4c85c70fc40692fc3c50b9a0b1867311a815e2c101d9b918059e9cee86208",
+      "verified": true,
+      "http_error_code": 403,
+      "status": "HOLD_METADATA_REQUEST_OR_SCHEMA_FAILED",
+      "reason": "original broad PR path trigger reran on metadata-document update; disabled automatic retries at 0a18c5931402f2c27ec2557cca4bbb2da5d5ad3d"
+    },
+    "fish_response_files_opened": 0,
+    "fish_response_rows_parsed": 0,
+    "ecological_scores": 0
+  },
+  "years": [
+    2007,
+    2008,
+    2018,
+    2019
+  ],
+  "published_section_effort": {
+    "lower": {
+      "reaches": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "channel_units": [
+        null,
+        29,
+        91,
+        42
+      ],
+      "snorkeled_km": [
+        9.7,
+        6,
+        10.4,
+        6.1
+      ]
+    },
+    "middle": {
+      "reaches": [
+        5,
+        5,
+        6,
+        6
+      ],
+      "channel_units": [
+        null,
+        44,
+        98,
+        109
+      ],
+      "snorkeled_km": [
+        8.7,
+        11.7,
+        16.4,
+        16.9
+      ]
+    },
+    "upper": {
+      "reaches": [
+        11,
+        11,
+        13,
+        13
+      ],
+      "channel_units": [
+        null,
+        170,
+        300,
+        243
+      ],
+      "snorkeled_km": [
+        29.9,
+        29.2,
+        36.7,
+        36.3
+      ]
+    }
+  },
+  "derived_from_rounded_table": {
+    "surveyed_reach_counts": [
+      19,
+      19,
+      22,
+      22
+    ],
+    "snorkeled_km": [
+      48.3,
+      46.9,
+      63.5,
+      59.3
+    ],
+    "channel_units": [
+      null,
+      243,
+      489,
+      394
+    ]
+  },
+  "eligibility": {
+    "adult_categories": [
+      "Chinook Salmon",
+      "Steelhead",
+      "Bull Trout",
+      "pooled trout"
+    ],
+    "juvenile_presence": "2018/2019 only; not a before/after target",
+    "reach_registry": "22 common comparison units across studies does not mean 22 observed every year. No exact reach endpoints or effort masks verified; do not invent reach geometry.",
+    "source_policy": "adult migration status and resident forms distinguished; no inference of natural dispersal from all records; pooled trout not two separately identified species",
+    "time": "snorkel waves only pre and post; no direct within-removal temporal validation; first-detection series is distinct published evidence already exposed",
+    "physical_events": "lower removal reported complete by March 2012 in NPS blog, reservoir drawdown/removal through May 2012 in Duda et al.; retain both event definitions, no exact fish passability date. Upper completed August 2014; rockfall and removal sequence not a direct fish detection time series."
+  },
+  "decision": "Retain Elwha only; no raw payload, no independent predictive score. Official XML metadata gate may qualify definitions only; no response release."
+}

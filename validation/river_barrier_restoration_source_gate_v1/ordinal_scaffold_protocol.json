@@ -1,0 +1,59 @@
+{
+  "schema": "eog.elwha_ordinal_scaffold.v1",
+  "status": "FROZEN_BEFORE_SCENARIO_ENUMERATION",
+  "scope": "Published metadata and ordinal-only conditional graph, not observed coordinates, not calibrated fish passage, not EOG predictive score",
+  "sources": [
+    {
+      "doi": "10.3389/fevo.2021.765488",
+      "facts": "Common reaches section: numerical order increases upstream to downstream; Table 2 post-removal counts upper13 middle6 lower3; two former dams at article rkm7.9/21.4. 2018 management release below upper dam in reach14. Results already published, not blind."
+    },
+    {
+      "doi": "10.5066/P9MFJXK1",
+      "facts": "Pinned XML Reach_ID ordered upstream to downstream, snorkeled length distinct from river kilometer boundary fields."
+    }
+  ],
+  "registry": {
+    "ids": [
+      1,
+      22
+    ],
+    "section_assignment_inferred_from_published_order_and_post_counts": {
+      "upper": [
+        1,
+        13
+      ],
+      "middle": [
+        14,
+        19
+      ],
+      "lower": [
+        20,
+        22
+      ]
+    },
+    "edges": "Assume one upstream edge between every adjacent ordered reach, e.g.22->21. This is an ordinal scaffold only; no actual adjacency, geometry, distances, flow speeds, or survey availability authenticated. No other barriers or demographic processes represented.",
+    "barrier_edges": {
+      "lower": [
+        20,
+        19
+      ],
+      "upper": [
+        14,
+        13
+      ]
+    },
+    "source_policies": {
+      "mouth_proxy": [
+        22
+      ],
+      "mouth_plus_reach14": [
+        22,
+        14
+      ]
+    },
+    "source_note": "22 used as downstream-most ordinal entry proxy, not observed occupancy. Reach14 extra source represents a hypothetical effect of documented 2018 adult relocation, not allowed as a historical pre-removal source or presumed ongoing stock. No downstream movement in this explicit upstream-only model."
+  },
+  "scenarios": "All four binary passability combinations and both source policies; counterfactual structural conditions, not dated estimates or inferred actual permeability. Compare possible/robust projections across two source policies at each barrier setting.",
+  "estimand": "Exact set of ordinal labels reachable in declared graph. For each target and source policy enumerate inclusion-minimal barrier openings from both closed; validate with independent formula based on rank intervals. No observed target or response is used.",
+  "stop": "No raw fish values, measured GIS, cost or independent model validation; no fourth EOG-WF endpoint. 19/19/22/22 surveyed-reach counts do not identify exact missing IDs."
+}

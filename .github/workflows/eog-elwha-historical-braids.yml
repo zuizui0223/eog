@@ -1,0 +1,42 @@
+name: EOG Elwha historical braid geometry
+on:
+  pull_request:
+    types: [synchronize]
+    paths:
+      - ".github/workflows/eog-elwha-historical-braids.yml"
+      - "validation/river_barrier_restoration_source_gate_v1/historical_braids_gate.py"
+      - "validation/river_barrier_restoration_source_gate_v1/historical_braids_protocol.json"
+permissions:
+  contents: read
+jobs:
+  historical-braids-only:
+    if: github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install fixed geometry readers
+        run: python -m pip install pyshp==2.3.1 pyproj==3.7.2
+      - name: Offline geometry safety fixtures
+        run: python validation/river_barrier_restoration_source_gate_v1/historical_braids_gate.py --self-test
+      - name: One geometry-only archive request on enable commit
+        shell: bash
+        run: |
+          if [ "$(git log -1 --format=%s)" != "Enable one-shot Elwha historical braid geometry gate" ]; then
+            echo "SKIP_NOT_FROZEN_ENABLE_COMMIT"
+            exit 0
+          fi
+          python validation/river_barrier_restoration_source_gate_v1/historical_braids_gate.py --output elwha_braids_receipt.json
+      - name: Archive sanitized geometry summary only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elwha-historical-braids-receipt
+          path: elwha_braids_receipt.json
+          if-no-files-found: ignore
+          retention-days: 30
