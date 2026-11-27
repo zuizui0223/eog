@@ -1,0 +1,286 @@
+{
+  "schema": "eog.elwha_braid_metadata_coverage.v1",
+  "status": "METADATA_EXPECTATIONS_ONLY_NO_GEOMETRY",
+  "protocol_commit": "d3462461c39a78be84564731e610ee09e7243bfe",
+  "source_url": "https://cmgds.marine.usgs.gov/catalog/pcmsc/DataReleases/ScienceBase/DR_P13RXGHA/Elwha_margins_braids_metadata.faq.html",
+  "coverage_all": {
+    "labels": 30,
+    "lower": 30,
+    "middle": 29,
+    "control": 22,
+    "all_three": 22,
+    "all_three_valid_date": 21
+  },
+  "coverage_before": {
+    "labels": 5,
+    "lower": 5,
+    "middle": 4,
+    "control": 4,
+    "all_three": 4,
+    "all_three_valid_date": 3
+  },
+  "coverage_during_after": {
+    "labels": 25,
+    "lower": 25,
+    "middle": 25,
+    "control": 18,
+    "all_three": 18,
+    "all_three_valid_date": 18
+  },
+  "malformed_date_labels": [
+    "200800813"
+  ],
+  "date_label_duplicate_across_imagery_sources": "20130831",
+  "metadata_note": "Expected counts derived from provider descriptions of 30 distinct image sets and explicitly missing sections. Not actual file existence, actual dates or measured line lengths.",
+  "local_archive_request": {
+    "attempts": 1,
+    "status": "HOLD_DNS",
+    "error": "URLError [Errno -3] Temporary failure in name resolution",
+    "bytes": 0
+  },
+  "fish_response_files_opened": 0,
+  "fish_response_rows_parsed": 0,
+  "ecological_scores": 0,
+  "rows": [
+    {
+      "date_label": "20060625",
+      "iso_date": "2006-06-25",
+      "phase": "before_removal",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20080403",
+      "iso_date": "2008-04-03",
+      "phase": "before_removal",
+      "lower": true,
+      "middle": false,
+      "control": false
+    },
+    {
+      "date_label": "200800813",
+      "iso_date": null,
+      "phase": "before_removal",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20090827",
+      "iso_date": "2009-08-27",
+      "phase": "before_removal",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20110903",
+      "iso_date": "2011-09-03",
+      "phase": "before_removal",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20120407",
+      "iso_date": "2012-04-07",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": false
+    },
+    {
+      "date_label": "20120810",
+      "iso_date": "2012-08-10",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20121108",
+      "iso_date": "2012-11-08",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20121127",
+      "iso_date": "2012-11-27",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": false
+    },
+    {
+      "date_label": "20121224",
+      "iso_date": "2012-12-24",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20130116",
+      "iso_date": "2013-01-16",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": false
+    },
+    {
+      "date_label": "20130213",
+      "iso_date": "2013-02-13",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20130327",
+      "iso_date": "2013-03-27",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": false
+    },
+    {
+      "date_label": "20130430",
+      "iso_date": "2013-04-30",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": false
+    },
+    {
+      "date_label": "20130831",
+      "iso_date": "2013-08-31",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20140201",
+      "iso_date": "2014-02-01",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": false
+    },
+    {
+      "date_label": "20140930",
+      "iso_date": "2014-09-30",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": false
+    },
+    {
+      "date_label": "20150303",
+      "iso_date": "2015-03-03",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20150923",
+      "iso_date": "2015-09-23",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20160111",
+      "iso_date": "2016-01-11",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20160930",
+      "iso_date": "2016-09-30",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20170922",
+      "iso_date": "2017-09-22",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20171212",
+      "iso_date": "2017-12-12",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20180905",
+      "iso_date": "2018-09-05",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20190903",
+      "iso_date": "2019-09-03",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20200220",
+      "iso_date": "2020-02-20",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20200909",
+      "iso_date": "2020-09-09",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20210908",
+      "iso_date": "2021-09-08",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20220309",
+      "iso_date": "2022-03-09",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    },
+    {
+      "date_label": "20220912",
+      "iso_date": "2022-09-12",
+      "phase": "during_or_after",
+      "lower": true,
+      "middle": true,
+      "control": true
+    }
+  ]
+}
